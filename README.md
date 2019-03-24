@@ -46,4 +46,4 @@ function y(d) {
 
 <a name="linear_domain" href="#linear_domain">#</a> <i>linear</i>.<b>domain</b>([<i>domain</i>]) [<>](hhttps://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L45 "Source")
 
-If <em>domain</em> is specified, sets the minimum and maximum x-coordinates of the returned line to the specified array of numbers. The array must contain two or more elements. If the elements in the given array are not numbers, they will be coerced to numbers. If <em>domain</em> is not specified, returns a copy of the regression generators’s current domain.
+If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordinates of the returned line to the specified array of numbers. The array must contain two elements. If the elements in the given array are not numbers, they will be coerced to numbers. If <em>domain</em> is not specified, returns a copy of the regression generator’s current domain.
