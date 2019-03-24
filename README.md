@@ -8,7 +8,7 @@ If you use NPM, `npm install d3-regression`. Otherwise, download the [latest rel
 <script src="https://unpkg.com/d3-regression@0.0.4/dist/d3-regression.min.js"></script>
 <script>
 
-const regression = d3.linear()
+const regression = d3.regressionLinear()
   .x(d => d.x)
   .y(d => d.y);
 
