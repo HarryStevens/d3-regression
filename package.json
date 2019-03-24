@@ -30,10 +30,17 @@
   },
   "homepage": "https://github.com/HarryStevens/d3-regression#readme",
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel": "^6.23.0",
     "eslint": "^5.15.3",
     "package-preamble": "^0.1.0",
     "rollup": "^1.7.0",
+    "rollup-plugin-babel": "^4.3.2",
     "tape": "^4.10.1",
-    "uglify-js": "^3.5.2"
+    "uglify-js": "^2.8.11"
+  },
+  "dependencies": {
+    "prepublish": "^2.2.0"
   }
 }
