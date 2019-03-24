@@ -1,0 +1,39 @@
+{
+  "name": "d3-regression",
+  "version": "0.0.1",
+  "description": "Calculate statistical regressions for two-dimensional data",
+  "keywords": [
+    "d3",
+    "d3-module",
+    "statistics",
+    "regressions"
+  ],
+  "scripts": {
+    "pretest": "rm -rf dist && mkdir dist && rollup -c --banner \"$(preamble)\"",
+    "test": "tape 'test/**/*-test.js' && eslint index.js src",
+    "prepublish": "npm run test && uglifyjs dist/d3-regression.js -c -m -o dist/d3-regression.min.js",
+    "postpublish": "zip -j dist/d3-regression.zip -- LICENSE README.md dist/d3-regression.js dist/d3-regression.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarryStevens/d3-regression.git"
+  },
+  "author": {
+    "name": "Harry Stevens",
+    "url": "http://harryjstevens.com/"
+  },
+  "main": "dist/d3-regression.js",
+  "module": "index",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/HarryStevens/d3-regression/issues"
+  },
+  "homepage": "https://github.com/HarryStevens/d3-regression#readme",
+  "devDependencies": {
+    "eslint": "^5.15.3",
+    "package-preamble": "^0.1.0",
+    "rollup": "^1.7.0",
+    "tape": "^4.10.1",
+    "uglify-js": "^3.5.2"
+  }
+}
