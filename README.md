@@ -1,6 +1,8 @@
 # d3-regression
 Calculate statistical regressions for two-dimensional data.
 
+d3-regression is still in development mode (v0.x). This is not a stable release, and the API is subject to breaking changes.
+
 ## Installing
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
@@ -76,7 +78,9 @@ Creates a new quadratic regression generator with default [<em>x</em>-](#quadrat
 
 <a name="_quadratic" href="#_quadratic">#</a> <i>quadratic</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L8 "Source")
 
-Computes the quadratic regression for the specified *data* points. Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. Also returns the <em>a</em>, <em>b</em>, and <em>c</em> coefficients as well as the coefficient of determination, or <em>R squared</em>, accessible as the returned object's <em>a</em>, <em>b</em>, <em>c</em> and <em>rSquared</em> properties, respectively.
+Computes the quadratic regression for the specified *data* points. Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. You can use the [cardinal spline interpolator](https://github.com/d3/d3-shape#curveCardinal) from d3-shape to chart the returned points.
+
+Also returns the <em>a</em>, <em>b</em>, and <em>c</em> coefficients as well as the coefficient of determination, or <em>R squared</em>, accessible as the returned object's <em>a</em>, <em>b</em>, <em>c</em> and <em>rSquared</em> properties, respectively.
 
 <a name="quadratic_x" href="#quadratic_x">#</a> <i>quadratic</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L70 "Source")
 
