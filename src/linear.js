@@ -33,11 +33,28 @@ export default function(){
         slope = (a - b) / (c - d),
         e = ySum,
         f = slope * xSum,
-        intercept = (e - f) / n;
+        intercept = (e - f) / n,
+        fn = x => slope * x + intercept;
+
+    // Calculate R squared
+    let SSE = 0;
+    let SST = 0;
+    for (let i = 0; i < n; i++){
+      const d = data[i],
+            dx = x(d),
+            dy = y(d),
+            yComp = fn(dx);
+     
+      SSE += Math.pow(dy - yComp, 2);
+      SST += Math.pow(dy - ySum / n, 2);
+    }
+
+    const rSquared = 1 - SSE / SST;
 
     const out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
     out.slope = slope;
     out.intercept = intercept;
+    out.rSquared = rSquared;
 
     return out;
   }
@@ -54,5 +71,5 @@ export default function(){
     return arguments.length ? (y = fn, linear) : y;
   }
 
-  return linear;  
+  return linear;
 }

@@ -7,7 +7,7 @@ d3-regression is still in development mode (v0.x). This is not a stable release,
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@0.0.7/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@0.0.8/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()

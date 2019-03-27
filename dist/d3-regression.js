@@ -44,10 +44,30 @@
           slope = (a - b) / (c - d),
           e = ySum,
           f = slope * xSum,
-          intercept = (e - f) / n;
+          intercept = (e - f) / n,
+          fn = function fn(x) {
+        return slope * x + intercept;
+      }; // Calculate R squared
+
+
+      var SSE = 0;
+      var SST = 0;
+
+      for (var _i = 0; _i < n; _i++) {
+        var _d = data[_i],
+            _dx = x(_d),
+            _dy = y(_d),
+            yComp = fn(_dx);
+
+        SSE += Math.pow(_dy - yComp, 2);
+        SST += Math.pow(_dy - ySum / n, 2);
+      }
+
+      var rSquared = 1 - SSE / SST;
       var out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
       out.slope = slope;
       out.intercept = intercept;
+      out.rSquared = rSquared;
       return out;
     }
 
@@ -253,7 +273,7 @@
       return d[0];
     },
         y = function y(d) {
-      return d[0];
+      return d[1];
     },
         domain;
 
@@ -270,16 +290,16 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            xVal = x(d),
-            yVal = y(d),
-            x2Val = Math.pow(xVal, 2);
-        xSum += xVal;
-        ySum += yVal;
+            dx = x(d),
+            dy = y(d),
+            x2Val = Math.pow(dx, 2);
+        xSum += dx;
+        ySum += dy;
         x2Sum += x2Val;
-        x3Sum += Math.pow(xVal, 3);
-        x4Sum += Math.pow(xVal, 4);
-        xySum += xVal * yVal;
-        x2ySum += x2Val * yVal;
+        x3Sum += Math.pow(dx, 3);
+        x4Sum += Math.pow(dx, 4);
+        xySum += dx * dy;
+        x2ySum += x2Val * dy;
       }
 
       var sumXX = x2Sum - Math.pow(xSum, 2) / n,
@@ -301,13 +321,13 @@
 
       for (var _i = 0; _i < n; _i++) {
         var _d = data[_i],
-            _xVal = x(_d),
-            _yVal = y(_d),
-            yComp = fn(_xVal);
+            _dx = x(_d),
+            _dy = y(_d),
+            yComp = fn(_dx);
 
-        SSE += Math.pow(_yVal - yComp, 2);
-        SST += Math.pow(_yVal - ySum / n, 2);
-        out.push([_xVal, yComp]);
+        SSE += Math.pow(_dy - yComp, 2);
+        SST += Math.pow(_dy - ySum / n, 2);
+        out.push([_dx, yComp]);
       }
 
       var rSquared = 1 - SSE / SST;

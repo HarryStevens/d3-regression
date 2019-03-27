@@ -1,6 +1,6 @@
 export default function(){
   let x = d => d[0],
-      y = d => d[0],
+      y = d => d[1],
       domain;
   
   function quadratic(data){
@@ -18,19 +18,19 @@ export default function(){
     // Calculate sums for coefficients
     for (let i = 0; i < n; i++){
       const d = data[i],
-            xVal = x(d),
-            yVal = y(d),
-            x2Val = Math.pow(xVal, 2);
+            dx = x(d),
+            dy = y(d),
+            x2Val = Math.pow(dx, 2);
       
-      xSum += xVal;
-      ySum += yVal;
+      xSum += dx;
+      ySum += dy;
       x2Sum += x2Val;
-      x3Sum += Math.pow(xVal, 3);
-      x4Sum += Math.pow(xVal, 4);
-      xySum += xVal * yVal;
-      x2ySum += x2Val * yVal;
+      x3Sum += Math.pow(dx, 3);
+      x4Sum += Math.pow(dx, 4);
+      xySum += dx * dy;
+      x2ySum += x2Val * dy;
       
-      xValues.push(xVal);
+      xValues.push(dx);
     }
 
     const sumXX = x2Sum - ((Math.pow(xSum, 2)) / n),
@@ -49,13 +49,13 @@ export default function(){
     let SST = 0;
     for (let i = 0; i < n; i++){
       const d = data[i],
-            xVal = x(d),
-            yVal = y(d),
-            yComp = fn(xVal);
+            dx = x(d),
+            dy = y(d),
+            yComp = fn(dx);
      
-      SSE += Math.pow(yVal - yComp, 2);
-      SST += Math.pow(yVal - ySum / n, 2);
-      out.push([xVal, yComp]);
+      SSE += Math.pow(dy - yComp, 2);
+      SST += Math.pow(dy - ySum / n, 2);
+      out.push([dx, yComp]);
     }
 
     const rSquared = 1 - SSE / SST;
