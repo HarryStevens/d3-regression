@@ -1,4 +1,4 @@
-// Returns the medium value of an array of numbers.
+// Sort an array using an accessor.
 export function sort(arr, fn){
-  return arr.sort((a, b) => fn(a) - fn(b))
+  return arr.sort((a, b) => fn(a) - fn(b));
 }
