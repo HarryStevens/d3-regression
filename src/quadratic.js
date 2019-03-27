@@ -37,14 +37,14 @@ export default function(){
     }
 
     const sumXX = x2Sum - ((Math.pow(xSum, 2)) / n),
-          sumXY = xySum - ((xSum * ySum) / n),
-          sumXX2 = x3Sum - ((x2Sum * xSum) / n),
-          sumX2Y = x2ySum - ((x2Sum * ySum) / n),
-          sumX2X2 = x4Sum - ((Math.pow(x2Sum, 2)) / n),
-          a = ((sumX2Y * sumXX) - (sumXY * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
-          b = ((sumXY * sumX2X2) - (sumX2Y * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
-          c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
-          fn = x => (a * (Math.pow(x, 2))) + (b * x) + c;
+        sumXY = xySum - ((xSum * ySum) / n),
+        sumXX2 = x3Sum - ((x2Sum * xSum) / n),
+        sumX2Y = x2ySum - ((x2Sum * ySum) / n),
+        sumX2X2 = x4Sum - ((Math.pow(x2Sum, 2)) / n),
+        a = ((sumX2Y * sumXX) - (sumXY * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
+        b = ((sumXY * sumX2X2) - (sumX2Y * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
+        c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
+        fn = x => (a * (Math.pow(x, 2))) + (b * x) + c;
     
     // Calculate R squared
     let out = [];
@@ -52,9 +52,9 @@ export default function(){
     let SST = 0;
     for (let i = 0; i < n; i++){
       const d = data[i],
-            dx = x(d),
-            dy = y(d),
-            yComp = fn(dx);
+          dx = x(d),
+          dy = y(d),
+          yComp = fn(dx);
      
       SSE += Math.pow(dy - yComp, 2);
       SST += Math.pow(dy - ySum / n, 2);
@@ -65,7 +65,7 @@ export default function(){
     
     if (domain){
       const dx0 = domain[0],
-            dx1 = domain[1];
+          dx1 = domain[1];
       
       out.unshift([dx0, fn(dx0)]);
       out.push([dx1, fn(dx1)]);

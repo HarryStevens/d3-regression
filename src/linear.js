@@ -14,8 +14,8 @@ export default function(){
         maxX = domain ? +domain[1] : -Infinity;
 
     for (let i = 0; i < n; i++){
-      const dx = x(data[i]);
-      const dy = y(data[i]);
+      const dx = x(data[i]),
+          dy = y(data[i]);
       xSum += dx;
       ySum += dy;
       xySum += dx * dy;
