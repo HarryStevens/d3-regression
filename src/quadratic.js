@@ -15,8 +15,7 @@ export default function(){
         x3Sum = 0,
         x4Sum = 0,
         xySum = 0,
-        x2ySum = 0,
-        xValues = [];
+        x2ySum = 0;
     
     // Calculate sums for coefficients
     for (let i = 0; i < n; i++){
@@ -32,8 +31,6 @@ export default function(){
       x4Sum += Math.pow(dx, 4);
       xySum += dx * dy;
       x2ySum += x2Val * dy;
-      
-      xValues.push(dx);
     }
 
     const sumXX = x2Sum - ((Math.pow(xSum, 2)) / n),
