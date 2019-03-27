@@ -74,7 +74,7 @@ If <em>bandwidth</em> is specified, sets the LOESS regression's bandwidth, or sm
 
 <a name="regressionQuadratic" href="#regressionQuadratic">#</a> d3.<b>regressionQuadratic</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source")
 
-Creates a new quadratic regression generator with default [<em>x</em>-](#quadratic_x) and [<em>y</em>-](#quadratic_y) accessors and a null [domain](#linear_domain).
+Creates a new quadratic regression generator with default [<em>x</em>-](#quadratic_x) and [<em>y</em>-](#quadratic_y) accessors and a null [domain](#quadratic_domain).
 
 <a name="_quadratic" href="#_quadratic">#</a> <i>quadratic</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L8 "Source")
 
