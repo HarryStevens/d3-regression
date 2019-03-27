@@ -18,7 +18,7 @@ tape("quadartic(data) calculates the the a, b, and c coefficients, R^2, and retu
   test.equal(r.a.toFixed(3), "1.107");
   test.equal(r.b, 1);
   test.equal(r.c.toFixed(3), "0.571");
-  test.equal(r.rSquared.toFixed(3), "0.987");
+  test.equal(r.rSquared.toFixed(3), "0.988");
 
   test.deepEqual(r[0], [-4, 14.285714285714286]);
   test.deepEqual(r[1], [-3, 7.5357142857142865]);

@@ -1,8 +1,6 @@
-import {x as pointX, y as pointY} from "./point";
-
 export default function(){
-  let x = pointX,
-      y = pointY,
+  let x = d => d[0],
+      y = d => d[0],
       domain;
   
   function quadratic(data){
@@ -17,6 +15,7 @@ export default function(){
         x2ySum = 0,
         xValues = [];
     
+    // Calculate sums for coefficients
     for (let i = 0; i < n; i++){
       const d = data[i],
             xVal = x(d),
@@ -42,20 +41,33 @@ export default function(){
           a = ((sumX2Y * sumXX) - (sumXY * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
           b = ((sumXY * sumX2X2) - (sumX2Y * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
           c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
-          fn = x => (a * (Math.pow(x, 2))) + (b * x) + c,
-          rSquared = 1 - (Math.pow((ySum - (a * x2Sum) - (b * xSum) - c), 2) / Math.pow(ySum - (ySum / n), 2));
+          fn = x => (a * (Math.pow(x, 2))) + (b * x) + c;
+    
+    // Calculate R squared
+    let out = [];
+    let SSE = 0;
+    let SST = 0;
+    for (let i = 0; i < n; i++){
+      const d = data[i],
+            xVal = x(d),
+            yVal = y(d),
+            yComp = fn(xVal);
+     
+      SSE += Math.pow(yVal - yComp, 2);
+      SST += Math.pow(yVal - ySum / n, 2);
+      out.push([xVal, yComp]);
+    }
+
+    const rSquared = 1 - SSE / SST;
     
     if (domain){
-      xValues.unshift(domain[0]);
-      xValues.push(domain[1]);
+      const dx0 = domain[0],
+            dx1 = domain[1];
+      
+      out.unshift([dx0, fn(dx0)]);
+      out.push([dx1, fn(dx1)]);
     }
-    
-    let out = [];
-    for (let i = 0, l = xValues.length; i < l; i++){
-      const d = xValues[i];
-      out.push([d, fn(d)]);
-    }
-    
+        
     out.a = a;
     out.b = b;
     out.c = c;
