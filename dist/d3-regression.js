@@ -95,6 +95,13 @@
     return i % 1 === 0 ? (arr[i - 1] + arr[i]) / 2 : arr[Math.floor(i)];
   }
 
+  // Returns the medium value of an array of numbers.
+  function sort(arr, fn) {
+    return arr.sort(function (a, b) {
+      return fn(a) - fn(b);
+    });
+  }
+
   // Source: https://github.com/jasondavies/science.js/blob/master/src/stats/loess.js
   // License: https://github.com/jasondavies/science.js/blob/master/LICENSE
 
@@ -110,6 +117,7 @@
         accuracy = 1e-12;
 
     function loess(data) {
+      sort(data, x);
       var n = data.length;
       var xval = [],
           yval = [],
@@ -278,6 +286,7 @@
         domain;
 
     function quadratic(data) {
+      sort(data, x);
       var n = data.length;
       var xSum = 0,
           ySum = 0,

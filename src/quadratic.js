@@ -1,9 +1,12 @@
+import {sort} from "./utils/sort";
+
 export default function(){
   let x = d => d[0],
       y = d => d[1],
       domain;
   
   function quadratic(data){
+    sort(data, x);
     const n = data.length;
     
     let xSum = 0,

@@ -1,4 +1,5 @@
-import {median} from "./math/median";
+import {median} from "./utils/median";
+import {sort} from "./utils/sort";
 
 // Adapted from science.js by Jason Davies
 // Source: https://github.com/jasondavies/science.js/blob/master/src/stats/loess.js
@@ -11,6 +12,7 @@ export default function() {
       accuracy = 1e-12;
 
   function loess(data) {
+    sort(data, x);
     const n = data.length;
     let xval = [],
         yval = [],
