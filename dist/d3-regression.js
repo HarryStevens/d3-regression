@@ -1,20 +1,17 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 0.0.6. Copyright 2019 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 0.0.7. Copyright 2019 Harry Stevens.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = global || self, factory(global.d3 = global.d3 || {}));
 }(this, function (exports) { 'use strict';
 
-  function x(d) {
-    return d[0];
-  }
-  function y(d) {
-    return d[1];
-  }
-
   function linear () {
-    var x$1 = x,
-        y$1 = y,
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[1];
+    },
         domain;
 
     function linear(data) {
@@ -27,8 +24,8 @@
           maxX = domain ? +domain[1] : -Infinity;
 
       for (var i = 0; i < n; i++) {
-        var dx = x$1(data[i]);
-        var dy = y$1(data[i]);
+        var dx = x(data[i]);
+        var dy = y(data[i]);
         xSum += dx;
         ySum += dy;
         xySum += dx * dy;
@@ -59,11 +56,11 @@
     };
 
     linear.x = function (fn) {
-      return arguments.length ? (x$1 = fn, linear) : x$1;
+      return arguments.length ? (x = fn, linear) : x;
     };
 
     linear.y = function (fn) {
-      return arguments.length ? (y$1 = fn, linear) : y$1;
+      return arguments.length ? (y = fn, linear) : y;
     };
 
     return linear;
@@ -82,8 +79,12 @@
   // License: https://github.com/jasondavies/science.js/blob/master/LICENSE
 
   function loess () {
-    var x$1 = x,
-        y$1 = y,
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[1];
+    },
         bandwidth = .3,
         robustnessIters = 2,
         accuracy = 1e-12;
@@ -97,8 +98,8 @@
       for (var i = 0; i < n; i++) {
         weights[i] = 1;
         var d = data[i];
-        xval[i] = x$1(d);
-        yval[i] = y$1(d);
+        xval[i] = x(d);
+        yval[i] = y(d);
       }
 
       finiteReal(xval);
@@ -195,11 +196,11 @@
     };
 
     loess.x = function (fn) {
-      return arguments.length ? (x$1 = fn, loess) : x$1;
+      return arguments.length ? (x = fn, loess) : x;
     };
 
     loess.y = function (fn) {
-      return arguments.length ? (y$1 = fn, loess) : y$1;
+      return arguments.length ? (y = fn, loess) : y;
     };
 
     return loess;
@@ -248,8 +249,12 @@
   }
 
   function quadratic () {
-    var x$1 = x,
-        y$1 = y,
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[0];
+    },
         domain;
 
     function quadratic(data) {
@@ -265,8 +270,8 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            xVal = x$1(d),
-            yVal = y$1(d),
+            xVal = x(d),
+            yVal = y(d),
             x2Val = Math.pow(xVal, 2);
         xSum += xVal;
         ySum += yVal;
@@ -296,8 +301,8 @@
 
       for (var _i = 0; _i < n; _i++) {
         var _d = data[_i],
-            _xVal = x$1(_d),
-            _yVal = y$1(_d),
+            _xVal = x(_d),
+            _yVal = y(_d),
             yComp = fn(_xVal);
 
         SSE += Math.pow(_yVal - yComp, 2);
@@ -326,11 +331,11 @@
     };
 
     quadratic.x = function (fn) {
-      return arguments.length ? (x$1 = fn, quadratic) : x$1;
+      return arguments.length ? (x = fn, quadratic) : x;
     };
 
     quadratic.y = function (fn) {
-      return arguments.length ? (y$1 = fn, quadratic) : y$1;
+      return arguments.length ? (y = fn, quadratic) : y;
     };
 
     return quadratic;
