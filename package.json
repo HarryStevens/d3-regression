@@ -1,6 +1,6 @@
 {
   "name": "d3-regression",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Calculate statistical regressions for two-dimensional data",
   "keywords": [
     "d3",
