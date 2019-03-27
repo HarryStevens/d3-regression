@@ -1,12 +1,11 @@
-import {median} from "./median";
-import {x as pointX, y as pointY} from "./point";
+import {median} from "./math/median";
 
 // Adapted from science.js by Jason Davies
 // Source: https://github.com/jasondavies/science.js/blob/master/src/stats/loess.js
 // License: https://github.com/jasondavies/science.js/blob/master/LICENSE
 export default function() {
-  let x = pointX,
-      y = pointY,
+  let x = d => d[0],
+      y = d => d[1],
       bandwidth = .3,
       robustnessIters = 2,
       accuracy = 1e-12;

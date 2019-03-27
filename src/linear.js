@@ -1,8 +1,6 @@
-import {x as pointX, y as pointY} from "./point";
-
 export default function(){
-  let x = pointX,
-      y = pointY,
+  let x = d => d[0],
+      y = d => d[1],
       domain;
 
   function linear(data){

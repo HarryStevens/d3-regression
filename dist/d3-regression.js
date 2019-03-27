@@ -260,8 +260,8 @@
           x3Sum = 0,
           x4Sum = 0,
           xySum = 0,
-          x2ySum = 0,
-          xValues = [];
+          x2ySum = 0;
+   // Calculate sums for coefficients
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
@@ -275,7 +275,6 @@
         x4Sum += Math.pow(xVal, 4);
         xySum += xVal * yVal;
         x2ySum += x2Val * yVal;
-        xValues.push(xVal);
       }
 
       var sumXX = x2Sum - Math.pow(xSum, 2) / n,
@@ -288,19 +287,31 @@
           c = ySum / n - b * (xSum / n) - a * (x2Sum / n),
           fn = function fn(x) {
         return a * Math.pow(x, 2) + b * x + c;
-      },
-          rSquared = 1 - Math.pow(ySum - a * x2Sum - b * xSum - c, 2) / Math.pow(ySum - ySum / n, 2);
+      }; // Calculate R squared
 
-      if (domain) {
-        xValues.unshift(domain[0]);
-        xValues.push(domain[1]);
-      }
 
       var out = [];
+      var SSE = 0;
+      var SST = 0;
 
-      for (var _i = 0, l = xValues.length; _i < l; _i++) {
-        var _d = xValues[_i];
-        out.push([_d, fn(_d)]);
+      for (var _i = 0; _i < n; _i++) {
+        var _d = data[_i],
+            _xVal = x$1(_d),
+            _yVal = y$1(_d),
+            yComp = fn(_xVal);
+
+        SSE += Math.pow(_yVal - yComp, 2);
+        SST += Math.pow(_yVal - ySum / n, 2);
+        out.push([_xVal, yComp]);
+      }
+
+      var rSquared = 1 - SSE / SST;
+
+      if (domain) {
+        var dx0 = domain[0],
+            dx1 = domain[1];
+        out.unshift([dx0, fn(dx0)]);
+        out.push([dx1, fn(dx1)]);
       }
 
       out.a = a;
