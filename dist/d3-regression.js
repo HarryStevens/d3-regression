@@ -5,6 +5,96 @@
   (global = global || self, factory(global.d3 = global.d3 || {}));
 }(this, function (exports) { 'use strict';
 
+  // Sort an array using an accessor.
+  function sort(arr, fn) {
+    return arr.sort(function (a, b) {
+      return fn(a) - fn(b);
+    });
+  }
+
+  function exponential () {
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[1];
+    },
+        domain;
+
+    function exponential(data) {
+      sort(data, x);
+      var n = data.length; // Calculate sums for coefficients
+
+      var ySum = 0,
+          x2ySum = 0,
+          ylogySum = 0,
+          xylogySum = 0,
+          xySum = 0;
+
+      for (var i = 0; i < data.length; i++) {
+        var d = data[i],
+            dx = x(d),
+            dy = y(d);
+        ySum += dy;
+        x2ySum += dx * dx * dy;
+        ylogySum += dy * Math.log(dy);
+        xylogySum += dx * dy * Math.log(dy);
+        xySum += dx * dy;
+      }
+
+      var denominator = ySum * x2ySum - xySum * xySum,
+          a = Math.exp((x2ySum * ylogySum - xySum * xylogySum) / denominator),
+          b = (ySum * xylogySum - xySum * ylogySum) / denominator,
+          fn = function fn(x) {
+        return a * Math.exp(b * x);
+      }; // Calculate R squared and populate output array
+
+
+      var out = [],
+          SSE = 0,
+          SST = 0;
+
+      for (var _i = 0; _i < n; _i++) {
+        var _d = data[_i],
+            _dx = x(_d),
+            _dy = y(_d),
+            yComp = fn(_dx);
+
+        SSE += Math.pow(_dy - yComp, 2);
+        SST += Math.pow(_dy - ySum / n, 2);
+        out[_i] = [_dx, yComp];
+      }
+
+      var rSquared = 1 - SSE / SST;
+
+      if (domain) {
+        var dx0 = domain[0],
+            dx1 = domain[1];
+        if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+      }
+
+      out.a = a;
+      out.b = b;
+      out.rSquared = rSquared;
+      return out;
+    }
+
+    exponential.domain = function (arr) {
+      return arguments.length ? (domain = arr, exponential) : domain;
+    };
+
+    exponential.x = function (fn) {
+      return arguments.length ? (x = fn, exponential) : x;
+    };
+
+    exponential.y = function (fn) {
+      return arguments.length ? (y = fn, exponential) : y;
+    };
+
+    return exponential;
+  }
+
   function linear () {
     var x = function x(d) {
       return d[0];
@@ -24,8 +114,8 @@
           maxX = domain ? +domain[1] : -Infinity;
 
       for (var i = 0; i < n; i++) {
-        var dx = x(data[i]);
-        var dy = y(data[i]);
+        var dx = x(data[i]),
+            dy = y(data[i]);
         xSum += dx;
         ySum += dy;
         xySum += dx * dy;
@@ -50,8 +140,8 @@
       }; // Calculate R squared
 
 
-      var SSE = 0;
-      var SST = 0;
+      var SSE = 0,
+          SST = 0;
 
       for (var _i = 0; _i < n; _i++) {
         var _d = data[_i],
@@ -93,13 +183,6 @@
     });
     var i = arr.length / 2;
     return i % 1 === 0 ? (arr[i - 1] + arr[i]) / 2 : arr[Math.floor(i)];
-  }
-
-  // Returns the medium value of an array of numbers.
-  function sort(arr, fn) {
-    return arr.sort(function (a, b) {
-      return fn(a) - fn(b);
-    });
   }
 
   // Source: https://github.com/jasondavies/science.js/blob/master/src/stats/loess.js
@@ -287,7 +370,8 @@
 
     function quadratic(data) {
       sort(data, x);
-      var n = data.length;
+      var n = data.length; // Calculate sums for coefficients
+
       var xSum = 0,
           ySum = 0,
           x2Sum = 0,
@@ -295,7 +379,6 @@
           x4Sum = 0,
           xySum = 0,
           x2ySum = 0;
-   // Calculate sums for coefficients
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
@@ -321,12 +404,12 @@
           c = ySum / n - b * (xSum / n) - a * (x2Sum / n),
           fn = function fn(x) {
         return a * Math.pow(x, 2) + b * x + c;
-      }; // Calculate R squared
+      }; // Calculate R squared and populate output array
 
 
-      var out = [];
-      var SSE = 0;
-      var SST = 0;
+      var out = [],
+          SSE = 0,
+          SST = 0;
 
       for (var _i = 0; _i < n; _i++) {
         var _d = data[_i],
@@ -336,7 +419,7 @@
 
         SSE += Math.pow(_dy - yComp, 2);
         SST += Math.pow(_dy - ySum / n, 2);
-        out.push([_dx, yComp]);
+        out[_i] = [_dx, yComp];
       }
 
       var rSquared = 1 - SSE / SST;
@@ -344,8 +427,8 @@
       if (domain) {
         var dx0 = domain[0],
             dx1 = domain[1];
-        out.unshift([dx0, fn(dx0)]);
-        out.push([dx1, fn(dx1)]);
+        if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
       }
 
       out.a = a;
@@ -370,6 +453,7 @@
     return quadratic;
   }
 
+  exports.regressionExponential = exponential;
   exports.regressionLinear = linear;
   exports.regressionLoess = loess;
   exports.regressionQuadratic = quadratic;
