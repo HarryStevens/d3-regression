@@ -7,7 +7,7 @@ tape("quadratic.domain(domain) sets the domain explicitly", function(test) {
   test.end();
 });
 
-tape("quadartic(data) calculates the the a, b, and c coefficients, R^2, and returns a line representing the regression", function(test) {
+tape("quadratic(data) calculates the the a, b, and c coefficients, R^2, and returns a line representing the regression", function(test) {
   const data = [{x: -3, y: 7.5}, {x: -2, y: 3}, {x: -1, y: 0.5}, {x: 0, y: 1}, {x: 1, y: 3}, {x: 2, y: 6}, {x: 3, y: 14}]
   const r = d3.regressionQuadratic()
     .x(d => d.x)

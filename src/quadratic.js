@@ -9,6 +9,7 @@ export default function(){
     sort(data, x);
     const n = data.length;
     
+    // Calculate sums for coefficients
     let xSum = 0,
         ySum = 0,
         x2Sum = 0,
@@ -16,8 +17,6 @@ export default function(){
         x4Sum = 0,
         xySum = 0,
         x2ySum = 0;
-    
-    // Calculate sums for coefficients
     for (let i = 0; i < n; i++){
       const d = data[i],
             dx = x(d),
