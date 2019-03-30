@@ -43,10 +43,10 @@ export default function(){
         c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
         fn = x => (a * (Math.pow(x, 2))) + (b * x) + c;
     
-    // Calculate R squared
-    let out = [];
-    let SSE = 0;
-    let SST = 0;
+    // Calculate R squared and populate output array
+    let out = [],
+        SSE = 0,
+        SST = 0;
     for (let i = 0; i < n; i++){
       const d = data[i],
           dx = x(d),
@@ -55,7 +55,7 @@ export default function(){
      
       SSE += Math.pow(dy - yComp, 2);
       SST += Math.pow(dy - ySum / n, 2);
-      out.push([dx, yComp]);
+      out[i] = [dx, yComp];
     }
 
     const rSquared = 1 - SSE / SST;

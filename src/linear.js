@@ -37,13 +37,13 @@ export default function(){
         fn = x => slope * x + intercept;
 
     // Calculate R squared
-    let SSE = 0;
-    let SST = 0;
+    let SSE = 0,
+        SST = 0;
     for (let i = 0; i < n; i++){
       const d = data[i],
-            dx = x(d),
-            dy = y(d),
-            yComp = fn(dx);
+          dx = x(d),
+          dy = y(d),
+          yComp = fn(dx);
      
       SSE += Math.pow(dy - yComp, 2);
       SST += Math.pow(dy - ySum / n, 2);
