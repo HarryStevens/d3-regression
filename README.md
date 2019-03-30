@@ -52,6 +52,50 @@ If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordin
 
 If data is passed to the linear regression generator before a <em>domain</em> has been specified, the domain will be set to the minimum and maximum <em>x</em>-coordinate values of the data.
 
+<a name="regressionQuadratic" href="#regressionQuadratic">#</a> d3.<b>regressionQuadratic</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source")
+
+Creates a new quadratic regression generator with default [<em>x</em>-](#quadratic_x) and [<em>y</em>-](#quadratic_y) accessors and a null [domain](#quadratic_domain).
+
+<a name="_quadratic" href="#_quadratic">#</a> <i>quadratic</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L8 "Source")
+
+Computes the quadratic regression for the specified *data* points. Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. You can use the [Catmull–Rom spline interpolator](https://github.com/d3/d3-shape#curveCatmullRom) from d3-shape to chart the returned points.
+
+Also returns the <em>a</em>, <em>b</em>, and <em>c</em> coefficients as well as the coefficient of determination, or <em>R squared</em>, accessible as the returned object's <em>a</em>, <em>b</em>, <em>c</em> and <em>rSquared</em> properties, respectively.
+
+<a name="quadratic_x" href="#quadratic_x">#</a> <i>quadratic</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L81 "Source")
+
+See [<em>linear</em>.x()](#linear_x).
+
+<a name="quadratic_y" href="#quadratic_y">#</a> <i>quadratic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L85 "Source")
+
+See [<em>linear</em>.y()](#linear_y).
+
+<a name="quadratic_domain" href="#quadratic_domain">#</a> <i>quadratic</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L77 "Source")
+
+See [<em>linear</em>.domain()](#linear_domain).
+
+<a name="regressionExponential" href="#regressionExponential">#</a> d3.<b>regressionExponential</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js "Source")
+
+Creates a new exponential regression generator with default [<em>x</em>-](#exponential_x) and [<em>y</em>-](#exponential_y) accessors and a null [domain](#exponential_domain).
+
+<a name="_exponential" href="#_exponential">#</a> <i>exponential</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L8 "Source")
+
+Computes the exponential regression for the specified *data* points. Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. You can use the [Catmull–Rom spline interpolator](https://github.com/d3/d3-shape#curveCatmullRom) from d3-shape to chart the returned points.
+
+Also returns the <em>a</em> and <em>b</em> coefficients as well as the coefficient of determination, or <em>R squared</em>, accessible as the returned object's <em>a</em>, <em>b</em>, and <em>rSquared</em> properties, respectively.
+
+<a name="exponential_x" href="#exponential_x">#</a> <i>exponential</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L71 "Source")
+
+See [<em>linear</em>.x()](#linear_x).
+
+<a name="exponential_y" href="#exponential_y">#</a> <i>exponential</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L75 "Source")
+
+See [<em>linear</em>.y()](#linear_y).
+
+<a name="exponential_domain" href="#exponential_domain">#</a> <i>exponential</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L67 "Source")
+
+See [<em>linear</em>.domain()](#linear_domain).
+
 <a name="regressionLoess" href="#regressionLoess">#</a> d3.<b>regressionLoess</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js "Source")
 
 Creates a new [LOESS regression](https://en.wikipedia.org/wiki/Local_regression) generator with default [<em>x</em>-](#loess_x) and [<em>y</em>-](#loess_y) accessors and a [bandwidth](#loess_bandwidth) of .3. This implementation was adapted from [science.js](https://github.com/jasondavies/science.js).
@@ -71,25 +115,3 @@ See [<em>linear</em>.y()](#linear_y).
 <a name="loess_bandwidth" href="#loess_bandwidth">#</a> <i>loess</i>.<b>bandwidth</b>([<i>bandwidth</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L117 "Source")
 
 If <em>bandwidth</em> is specified, sets the LOESS regression's bandwidth, or smoothing parameter, to the specific number between 0 and 1. The bandwidth represents the share of the total data points that are used to calculate each local fit. Higher bandwidths produce smoother lines, and vice versa. If <em>bandwidth</em> is not specified, returns a copy of the regression generator’s current bandwidth, which defaults to .3.
-
-<a name="regressionQuadratic" href="#regressionQuadratic">#</a> d3.<b>regressionQuadratic</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source")
-
-Creates a new quadratic regression generator with default [<em>x</em>-](#quadratic_x) and [<em>y</em>-](#quadratic_y) accessors and a null [domain](#quadratic_domain).
-
-<a name="_quadratic" href="#_quadratic">#</a> <i>quadratic</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L8 "Source")
-
-Computes the quadratic regression for the specified *data* points. Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. You can use the [cardinal spline interpolator](https://github.com/d3/d3-shape#curveCardinal) from d3-shape to chart the returned points.
-
-Also returns the <em>a</em>, <em>b</em>, and <em>c</em> coefficients as well as the coefficient of determination, or <em>R squared</em>, accessible as the returned object's <em>a</em>, <em>b</em>, <em>c</em> and <em>rSquared</em> properties, respectively.
-
-<a name="quadratic_x" href="#quadratic_x">#</a> <i>quadratic</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L70 "Source")
-
-See [<em>linear</em>.x()](#linear_x).
-
-<a name="quadratic_y" href="#quadratic_y">#</a> <i>quadratic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L74 "Source")
-
-See [<em>linear</em>.y()](#linear_y).
-
-<a name="quadratic_domain" href="#quadratic_domain">#</a> <i>quadratic</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L66 "Source")
-
-See [<em>linear</em>.domain()](#linear_domain).
