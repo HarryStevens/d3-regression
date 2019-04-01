@@ -52,9 +52,10 @@ export default function(){
     const rSquared = 1 - SSE / SST;
 
     const out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
-    out.slope = slope;
-    out.intercept = intercept;
+    out.a = slope;
+    out.b = intercept;
     out.rSquared = rSquared;
+    out.predict = fn;
 
     return out;
   }

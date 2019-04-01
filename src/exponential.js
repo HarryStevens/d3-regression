@@ -9,7 +9,6 @@ export default function() {
     sort(data, x);
     const n = data.length;
     
-    // Calculate sums for coefficients
     let ySum = 0,
         x2ySum = 0,
         ylogySum = 0,
@@ -61,6 +60,8 @@ export default function() {
     out.a = a;
     out.b = b;
     out.rSquared = rSquared;
+    out.predict = fn;
+    
     return out;  
   }
 

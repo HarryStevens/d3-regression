@@ -23,8 +23,7 @@
 
     function exponential(data) {
       sort(data, x);
-      var n = data.length; // Calculate sums for coefficients
-
+      var n = data.length;
       var ySum = 0,
           x2ySum = 0,
           ylogySum = 0,
@@ -155,8 +154,8 @@
 
       var rSquared = 1 - SSE / SST;
       var out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
-      out.slope = slope;
-      out.intercept = intercept;
+      out.a = slope;
+      out.b = intercept;
       out.rSquared = rSquared;
       return out;
     }
@@ -359,6 +358,85 @@
     return j;
   }
 
+  function logarithmic () {
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[1];
+    },
+        domain;
+
+    function logarithmic(data) {
+      sort(data, x);
+      var n = data.length;
+      var xlogSum = 0,
+          yxlogSum = 0,
+          ySum = 0,
+          xlog2Sum = 0;
+
+      for (var i = 0; i < n; i++) {
+        var d = data[i],
+            dx = x(d),
+            dy = y(d);
+        xlogSum += Math.log(dx);
+        yxlogSum += dy * Math.log(dx);
+        ySum += dy;
+        xlog2Sum += Math.pow(Math.log(dx), 2);
+      }
+
+      var a = (n * yxlogSum - ySum * xlogSum) / (n * xlog2Sum - xlogSum * xlogSum),
+          b = (ySum - a * xlogSum) / n,
+          fn = function fn(x) {
+        return a * Math.log(x) + b;
+      }; // Calculate R squared and populate output array
+
+
+      var out = [],
+          SSE = 0,
+          SST = 0;
+
+      for (var _i = 0; _i < n; _i++) {
+        var _d = data[_i],
+            _dx = x(_d),
+            _dy = y(_d),
+            yComp = fn(_dx);
+
+        SSE += Math.pow(_dy - yComp, 2);
+        SST += Math.pow(_dy - ySum / n, 2);
+        out[_i] = [_dx, yComp];
+      }
+
+      var rSquared = 1 - SSE / SST;
+
+      if (domain) {
+        var dx0 = domain[0],
+            dx1 = domain[1];
+        if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+      }
+
+      out.a = a;
+      out.b = b;
+      out.rSquared = rSquared;
+      return out;
+    }
+
+    logarithmic.domain = function (arr) {
+      return arguments.length ? (domain = arr, logarithmic) : domain;
+    };
+
+    logarithmic.x = function (fn) {
+      return arguments.length ? (x = fn, logarithmic) : x;
+    };
+
+    logarithmic.y = function (fn) {
+      return arguments.length ? (y = fn, logarithmic) : y;
+    };
+
+    return logarithmic;
+  }
+
   function quadratic () {
     var x = function x(d) {
       return d[0];
@@ -370,8 +448,7 @@
 
     function quadratic(data) {
       sort(data, x);
-      var n = data.length; // Calculate sums for coefficients
-
+      var n = data.length;
       var xSum = 0,
           ySum = 0,
           x2Sum = 0,
@@ -456,6 +533,7 @@
   exports.regressionExponential = exponential;
   exports.regressionLinear = linear;
   exports.regressionLoess = loess;
+  exports.regressionLogarithmic = logarithmic;
   exports.regressionQuadratic = quadratic;
 
   Object.defineProperty(exports, '__esModule', { value: true });

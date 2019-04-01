@@ -9,7 +9,6 @@ export default function(){
     sort(data, x);
     const n = data.length;
     
-    // Calculate sums for coefficients
     let xSum = 0,
         ySum = 0,
         x2Sum = 0,
@@ -54,6 +53,7 @@ export default function(){
      
       SSE += Math.pow(dy - yComp, 2);
       SST += Math.pow(dy - ySum / n, 2);
+      
       out[i] = [dx, yComp];
     }
 
@@ -71,6 +71,8 @@ export default function(){
     out.b = b;
     out.c = c;
     out.rSquared = rSquared;
+    out.predict = fn;
+    
     return out;    
   }
   

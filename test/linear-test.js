@@ -16,8 +16,8 @@ tape("linear(data) calculates the slope, y-intercept, and returns a line represe
   
   test.deepEqual(r[0], [0, 2]);
   test.deepEqual(r[1], [2, 0]);
-  test.equal(r.slope, -1);
-  test.equal(r.intercept, 2);
+  test.equal(r.a, -1);
+  test.equal(r.b, 2);
   test.equal(r.rSquared, 1);
   test.end();
 });
