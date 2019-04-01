@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 0.0.10. Copyright 2019 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 0.0.11. Copyright 2019 Harry Stevens.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -76,6 +76,7 @@
       out.a = a;
       out.b = b;
       out.rSquared = rSquared;
+      out.predict = fn;
       return out;
     }
 
@@ -157,6 +158,7 @@
       out.a = slope;
       out.b = intercept;
       out.rSquared = rSquared;
+      out.predict = fn;
       return out;
     }
 
@@ -419,6 +421,7 @@
       out.a = a;
       out.b = b;
       out.rSquared = rSquared;
+      out.predict = fn;
       return out;
     }
 
@@ -512,6 +515,7 @@
       out.b = b;
       out.c = c;
       out.rSquared = rSquared;
+      out.predict = fn;
       return out;
     }
 
