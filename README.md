@@ -12,7 +12,8 @@ If you use NPM, `npm install d3-regression`. Otherwise, download the [latest rel
 
 const regression = d3.regressionLinear()
   .x(d => d.x)
-  .y(d => d.y);
+  .y(d => d.y)
+  .domain([0, 100]);
 
 </script>
 ```
