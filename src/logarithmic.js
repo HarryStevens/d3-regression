@@ -50,15 +50,15 @@ export default function() {
       const dx0 = domain[0],
           dx1 = domain[1];
       
-      if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
-      if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+      if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
+      if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
     }
         
     out.a = a;
     out.b = b;
     out.rSquared = rSquared;
     out.predict = fn;
-    
+
     return out; 
   }
   

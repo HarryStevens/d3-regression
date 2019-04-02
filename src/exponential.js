@@ -14,6 +14,7 @@ export default function() {
         ylogySum = 0,
         xylogySum = 0,
         xySum = 0;
+
     for (let i = 0; i < data.length; i++) {
       const d = data[i],
           dx = x(d),
@@ -53,8 +54,8 @@ export default function() {
       const dx0 = domain[0],
           dx1 = domain[1];
       
-      if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
-      if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+      if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
+      if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
     }   
     
     out.a = a;
