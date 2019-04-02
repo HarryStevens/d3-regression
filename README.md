@@ -23,7 +23,7 @@ const regression = d3.regressionLinear()
 - [Exponential](#regressionExp)
 - [Logarithmic](#regressionLog)
 - [Quadratic](#regressionQuad)
-- [Power](#regressionPow)
+- [Power law](#regressionPow)
 - [LOESS](#regressionLoess)
 
 <a name="regressionLinear" href="#regressionLinear">#</a> d3.<b>regressionLinear</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js "Source")
