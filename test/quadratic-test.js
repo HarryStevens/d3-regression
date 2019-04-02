@@ -1,15 +1,15 @@
 const tape = require("tape"),
       d3 = require("../");
 
-tape("quadratic.domain(domain) sets the domain explicitly", function(test) {
-  const r = d3.regressionQuadratic().domain([0, 50]);
+tape("quad.domain(domain) sets the domain explicitly", function(test) {
+  const r = d3.regressionQuad().domain([0, 50]);
   test.deepEqual(r.domain(), [0, 50]);
   test.end();
 });
 
-tape("quadratic(data) calculates the the a, b, and c coefficients, R^2, and returns a line representing the regression", function(test) {
+tape("quad(data) calculates the the a, b, and c coefficients, R^2, and returns a line representing the regression", function(test) {
   const data = [{x: -3, y: 7.5}, {x: -2, y: 3}, {x: -1, y: 0.5}, {x: 0, y: 1}, {x: 1, y: 3}, {x: 2, y: 6}, {x: 3, y: 14}]
-  const r = d3.regressionQuadratic()
+  const r = d3.regressionQuad()
     .x(d => d.x)
     .y(d => d.y)
     .domain([-4, 4])

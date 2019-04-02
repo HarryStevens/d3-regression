@@ -7,7 +7,7 @@ d3-regression is still in development mode (v0.x). This is not a stable release,
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@0.0.12/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@0.0.13/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
@@ -63,11 +63,11 @@ If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordin
 
 If data is passed to the linear regression generator before a <em>domain</em> has been specified, the domain will be set to the minimum and maximum <em>x</em>-coordinate values of the data.
 
-<a name="regressionExponential" href="#regressionExponential">#</a> d3.<b>regressionExponential</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js "Source")
+<a name="regressionExp" href="#regressionExp">#</a> d3.<b>regressionExp</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js "Source")
 
-Creates a new exponential regression generator with default [<em>x</em>-](#exponential_x) and [<em>y</em>-](#exponential_y) accessors and a null [domain](#exponential_domain).
+Creates a new exponential regression generator with default [<em>x</em>-](#exp_x) and [<em>y</em>-](#exp_y) accessors and a null [domain](#exp_domain).
 
-<a name="_exponential" href="#_exponential">#</a> <i>exponential</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L8 "Source")
+<a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L8 "Source")
 
 Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points.
 
@@ -75,21 +75,21 @@ Returns a line represented as an array of <em>n</em> points, where each point is
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="exponential_x" href="#exponential_x">#</a> <i>exponential</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L71 "Source")
+<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L71 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="exponential_y" href="#exponential_y">#</a> <i>exponential</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L75 "Source")
+<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L75 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="exponential_domain" href="#exponential_domain">#</a> <i>exponential</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L67 "Source")
+<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L67 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
 <a name="regressionLog" href="#regressionLog">#</a> d3.<b>regressionLog</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js "Source")
 
-Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x) and [<em>y</em>-](#log_y) accessors and a null [domain](#logarithmic_domain).
+Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x) and [<em>y</em>-](#log_y) accessors and a null [domain](#log_domain).
 
 <a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L8 "Source")
 
@@ -111,11 +111,11 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionQuadratic" href="#regressionQuadratic">#</a> d3.<b>regressionQuadratic</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source")
+<a name="regressionQuad" href="#regressionQuad">#</a> d3.<b>regressionQuad</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source")
 
-Creates a new quadratic regression generator with default [<em>x</em>-](#quadratic_x) and [<em>y</em>-](#quadratic_y) accessors and a null [domain](#quadratic_domain).
+Creates a new quadratic regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors and a null [domain](#quad_domain).
 
-<a name="_quadratic" href="#_quadratic">#</a> <i>quadratic</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L8 "Source")
+<a name="_quad" href="#_quad">#</a> <i>quad</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L8 "Source")
 
 Computes the quadratic regression, which takes the form <em>y</em> = <em>ax</em><sup>2</sup> + <em>bx</em> + <em>c</em>, for the specified *data* points.
 
@@ -123,15 +123,15 @@ Returns a line represented as an array of <em>n</em> points, where each point is
 
 Also returns properties <em>a</em>, <em>b</em>, and <e>c</e>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="quadratic_x" href="#quadratic_x">#</a> <i>quadratic</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L81 "Source")
+<a name="quad_x" href="#quad_x">#</a> <i>quad</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L81 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="quadratic_y" href="#quadratic_y">#</a> <i>quadratic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L85 "Source")
+<a name="quad_y" href="#quad_y">#</a> <i>quad</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L85 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="quadratic_domain" href="#quadratic_domain">#</a> <i>quadratic</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L77 "Source")
+<a name="quad_domain" href="#quad_domain">#</a> <i>quad</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L77 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 

@@ -534,11 +534,11 @@
     return quadratic;
   }
 
-  exports.regressionExponential = exponential;
+  exports.regressionExp = exponential;
   exports.regressionLinear = linear;
   exports.regressionLoess = loess;
   exports.regressionLog = logarithmic;
-  exports.regressionQuadratic = quadratic;
+  exports.regressionQuad = quadratic;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
