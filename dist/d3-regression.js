@@ -537,7 +537,7 @@
   exports.regressionExponential = exponential;
   exports.regressionLinear = linear;
   exports.regressionLoess = loess;
-  exports.regressionLogarithmic = logarithmic;
+  exports.regressionLog = logarithmic;
   exports.regressionQuadratic = quadratic;
 
   Object.defineProperty(exports, '__esModule', { value: true });
