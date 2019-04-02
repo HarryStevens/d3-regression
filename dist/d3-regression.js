@@ -522,6 +522,75 @@
     return power;
   }
 
+  // Given a dataset, x- and y-accessors, the sum of the y values, and a predict function,
+  // return the coefficient of determination, or R squared.
+  function determination(data, x, y, ySum, predict) {
+    var n = data.length;
+    var SSE = 0,
+        SST = 0;
+
+    for (var i = 0; i < n; i++) {
+      var d = data[i],
+          dx = x(d),
+          dy = y(d),
+          yComp = predict(dx);
+      SSE += Math.pow(dy - yComp, 2);
+      SST += Math.pow(dy - ySum / n, 2);
+    }
+
+    return 1 - SSE / SST;
+  }
+
+  // Returns the angle of a line in degrees.
+  function angle(line) {
+    return Math.atan2(line[1][1] - line[0][1], line[1][0] - line[0][0]) * 180 / Math.PI;
+  } // Returns the midpoint of a line.
+
+  function midpoint(line) {
+    return [(line[0][0] + line[1][0]) / 2, (line[0][1] + line[1][1]) / 2];
+  }
+
+  // returns a smooth line.
+
+  function interpose(minX, maxX, predict) {
+    var precision = .2,
+        maxIter = 1e4;
+    var points = [px(minX), px(maxX)],
+        iter = 0;
+
+    while (find(points) && iter < maxIter) {
+    }
+
+    return points;
+
+    function px(x) {
+      return [x, predict(x)];
+    }
+
+    function find(points) {
+      iter++;
+      var n = points.length;
+      var found = false;
+
+      for (var i = 0; i < n - 1; i++) {
+        var p0 = points[i],
+            p1 = points[i + 1],
+            m = midpoint([p0, p1]),
+            mp = px(m[0]),
+            a0 = angle([p0, m]),
+            a1 = angle([p0, mp]),
+            a = Math.abs(a0 - a1);
+
+        if (a > precision) {
+          points.splice(i + 1, 0, mp);
+          found = true;
+        }
+      }
+
+      return found;
+    }
+  }
+
   function quadratic () {
     var x = function x(d) {
       return d[0];
@@ -540,7 +609,9 @@
           x3Sum = 0,
           x4Sum = 0,
           xySum = 0,
-          x2ySum = 0;
+          x2ySum = 0,
+          minX = domain ? +domain[0] : Infinity,
+          maxX = domain ? +domain[1] : -Infinity;
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
@@ -554,6 +625,11 @@
         x4Sum += Math.pow(dx, 4);
         xySum += dx * dy;
         x2ySum += x2Val * dy;
+
+        if (!domain) {
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
       }
 
       var sumXX = x2Sum - Math.pow(xSum, 2) / n,
@@ -566,38 +642,14 @@
           c = ySum / n - b * (xSum / n) - a * (x2Sum / n),
           fn = function fn(x) {
         return a * Math.pow(x, 2) + b * x + c;
-      }; // Calculate R squared and populate output array
-
-
-      var out = [],
-          SSE = 0,
-          SST = 0;
-
-      for (var _i = 0; _i < n; _i++) {
-        var _d = data[_i],
-            _dx = x(_d),
-            _dy = y(_d),
-            yComp = fn(_dx);
-
-        SSE += Math.pow(_dy - yComp, 2);
-        SST += Math.pow(_dy - ySum / n, 2);
-        out[_i] = [_dx, yComp];
-      }
-
-      var rSquared = 1 - SSE / SST;
-
-      if (domain) {
-        var dx0 = domain[0],
-            dx1 = domain[1];
-        if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
-        if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
-      }
+      },
+          out = interpose(minX, maxX, fn);
 
       out.a = a;
       out.b = b;
       out.c = c;
-      out.rSquared = rSquared;
       out.predict = fn;
+      out.rSquared = determination(data, x, y, ySum, fn);
       return out;
     }
 

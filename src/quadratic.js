@@ -1,3 +1,5 @@
+import {determination} from "./utils/determination";
+import {interpose} from "./utils/interpose";
 import {sort} from "./utils/sort";
 
 export default function(){
@@ -15,7 +17,9 @@ export default function(){
         x3Sum = 0,
         x4Sum = 0,
         xySum = 0,
-        x2ySum = 0;
+        x2ySum = 0,
+        minX = domain ? +domain[0] : Infinity,
+        maxX = domain ? +domain[1] : -Infinity;
 
     for (let i = 0; i < n; i++){
       const d = data[i],
@@ -30,6 +34,11 @@ export default function(){
       x4Sum += Math.pow(dx, 4);
       xySum += dx * dy;
       x2ySum += x2Val * dy;
+      
+      if (!domain){
+        if (dx < minX) minX = dx;
+        if (dx > maxX) maxX = dx;
+      }
     }
 
     const sumXX = x2Sum - ((Math.pow(xSum, 2)) / n),
@@ -40,39 +49,14 @@ export default function(){
         a = ((sumX2Y * sumXX) - (sumXY * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
         b = ((sumXY * sumX2X2) - (sumX2Y * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
         c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
-        fn = x => (a * (Math.pow(x, 2))) + (b * x) + c;
-    
-    // Calculate R squared and populate output array
-    let out = [],
-        SSE = 0,
-        SST = 0;
-    for (let i = 0; i < n; i++){
-      const d = data[i],
-          dx = x(d),
-          dy = y(d),
-          yComp = fn(dx);
-     
-      SSE += Math.pow(dy - yComp, 2);
-      SST += Math.pow(dy - ySum / n, 2);
-      
-      out[i] = [dx, yComp];
-    }
+        fn = x => (a * (Math.pow(x, 2))) + (b * x) + c,
+        out = interpose(minX, maxX, fn);
 
-    const rSquared = 1 - SSE / SST;
-    
-    if (domain){
-      const dx0 = domain[0],
-          dx1 = domain[1];
-      
-      if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
-      if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
-    }
-        
     out.a = a;
     out.b = b;
     out.c = c;
-    out.rSquared = rSquared;
     out.predict = fn;
+    out.rSquared = determination(data, x, y, ySum, fn);
 
     return out;    
   }
