@@ -142,7 +142,7 @@ Creates a new power law regression generator with default [<em>x</em>-](#pow_x) 
 
 <a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L8 "Source")
 
-Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup>b</sup>, for the specified *data* points.
+Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points.
 
 Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. You can use the [Catmull–Rom spline interpolator](https://github.com/d3/d3-shape#curveCatmullRom) from d3-shape to chart the returned points.
 
