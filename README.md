@@ -1,6 +1,8 @@
 # d3-regression
 Calculate statistical regressions for two-dimensional data.
 
+[<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882" height="585">](https://observablehq.com/d/7b51129a2feec1d0)
+
 d3-regression is still in development mode (v0.x). This is not a stable release, and the API is subject to breaking changes.
 
 ## Installing
