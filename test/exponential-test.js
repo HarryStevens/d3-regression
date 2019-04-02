@@ -7,7 +7,7 @@ tape("exp.domain(domain) sets the domain explicitly", function(test) {
   test.end();
 });
 
-tape("exp(data) calculates the the a, b, and c coefficients, R^2, and returns a line representing the regression", function(test) {
+tape("exp(data) calculates the the a and b coefficients, R^2, and returns a line representing the regression", function(test) {
   const data = [{x: 0, y: 3}, {x: 1, y: 7}, {x: 2, y: 10}, {x: 3, y: 24}, {x: 4, y: 50}, {x: 5, y: 95}];
   const r = d3.regressionExp()
     .x(d => d.x)

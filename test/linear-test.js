@@ -7,7 +7,7 @@ tape("linear.domain(domain) sets the domain explicitly", function(test) {
   test.end();
 });
 
-tape("linear(data) calculates the slope, y-intercept, and returns a line representing the regression", function(test) {
+tape("linear(data) calculates the slope, y-intercept, and R^2, and returns a line representing the regression", function(test) {
   const data = [[0, 2], [1, 1], [2, 0]];
   const r = d3.regressionLinear()
     .x(d => d[0])
