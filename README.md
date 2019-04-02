@@ -21,7 +21,7 @@ const regression = d3.regressionLinear()
 ## API Reference
 - [Linear](#regressionLinear)
 - [Exponential](#regressionExponential)
-- [Logarithmic](#regressionLogarithmic)
+- [Logarithmic](#regressionLog)
 - [Quadratic](#regressionQuadratic)
 - [LOESS](#regressionLoess)
 
@@ -87,11 +87,11 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionLogarithmic" href="#regressionLogarithmic">#</a> d3.<b>regressionLogarithmic</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js "Source")
+<a name="regressionLog" href="#regressionLog">#</a> d3.<b>regressionLog</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js "Source")
 
-Creates a new logarithmic regression generator with default [<em>x</em>-](#logarithmic_x) and [<em>y</em>-](#logarithmic_y) accessors and a null [domain](#logarithmic_domain).
+Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x) and [<em>y</em>-](#log_y) accessors and a null [domain](#logarithmic_domain).
 
-<a name="_logarithmic" href="#_logarithmic">#</a> <i>logarithmic</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L8 "Source")
+<a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L8 "Source")
 
 Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points. 
 
@@ -99,15 +99,15 @@ Returns a line represented as an array of <em>n</em> points, where each point is
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="logarithmic_x" href="#logarithmic_x">#</a> <i>logarithmic</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L71 "Source")
+<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L71 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="logarithmic_y" href="#logarithmic_y">#</a> <i>logarithmic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L75 "Source")
+<a name="log_y" href="#log_y">#</a> <i>logarithmic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L75 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="logarithmic_domain" href="#logarithmic_domain">#</a> <i>logarithmic</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L67 "Source")
+<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L67 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
