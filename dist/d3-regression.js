@@ -69,8 +69,8 @@
       if (domain) {
         var dx0 = domain[0],
             dx1 = domain[1];
-        if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
-        if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+        if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
       }
 
       out.a = a;
@@ -414,8 +414,8 @@
       if (domain) {
         var dx0 = domain[0],
             dx1 = domain[1];
-        if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
-        if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+        if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
       }
 
       out.a = a;
@@ -438,6 +438,88 @@
     };
 
     return logarithmic;
+  }
+
+  function power () {
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[1];
+    },
+        domain;
+
+    function power(data) {
+      sort(data, x);
+      var n = data.length;
+      var xlogSum = 0,
+          xlogylogSum = 0,
+          ylogSum = 0,
+          xlog2Sum = 0,
+          ySum = 0;
+
+      for (var i = 0; i < n; i++) {
+        var d = data[i],
+            dx = x(d),
+            dy = y(d);
+        xlogSum += Math.log(dx);
+        xlogylogSum += Math.log(dy) * Math.log(dx);
+        ylogSum += Math.log(dy);
+        xlog2Sum += Math.pow(Math.log(dx), 2);
+        ySum += dy;
+      }
+
+      var b = (n * xlogylogSum - xlogSum * ylogSum) / (n * xlog2Sum - Math.pow(xlogSum, 2)),
+          a = Math.exp((ylogSum - b * xlogSum) / n),
+          fn = function fn(x) {
+        return a * Math.pow(x, b);
+      }; // Calculate R squared and populate output array
+
+
+      var out = [],
+          SSE = 0,
+          SST = 0;
+
+      for (var _i = 0; _i < n; _i++) {
+        var _d = data[_i],
+            _dx = x(_d),
+            _dy = y(_d),
+            yComp = fn(_dx);
+
+        SSE += Math.pow(_dy - yComp, 2);
+        SST += Math.pow(_dy - ySum / n, 2);
+        out[_i] = [_dx, yComp];
+      }
+
+      var rSquared = 1 - SSE / SST;
+
+      if (domain) {
+        var dx0 = domain[0],
+            dx1 = domain[1];
+        if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+      }
+
+      out.a = a;
+      out.b = b;
+      out.rSquared = rSquared;
+      out.predict = fn;
+      return out;
+    }
+
+    power.domain = function (arr) {
+      return arguments.length ? (domain = arr, power) : domain;
+    };
+
+    power.x = function (fn) {
+      return arguments.length ? (x = fn, power) : x;
+    };
+
+    power.y = function (fn) {
+      return arguments.length ? (y = fn, power) : y;
+    };
+
+    return power;
   }
 
   function quadratic () {
@@ -507,8 +589,8 @@
       if (domain) {
         var dx0 = domain[0],
             dx1 = domain[1];
-        if (dx0 !== x(data[0])) out.unshift([dx0, fn(dx0)]);
-        if (dx1 !== x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
+        if (dx0 < x(data[0])) out.unshift([dx0, fn(dx0)]);
+        if (dx1 > x(data[data.length - 1])) out.push([dx1, fn(dx1)]);
       }
 
       out.a = a;
@@ -538,6 +620,7 @@
   exports.regressionLinear = linear;
   exports.regressionLoess = loess;
   exports.regressionLog = logarithmic;
+  exports.regressionPow = power;
   exports.regressionQuad = quadratic;
 
   Object.defineProperty(exports, '__esModule', { value: true });

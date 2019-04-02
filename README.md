@@ -20,16 +20,17 @@ const regression = d3.regressionLinear()
 
 ## API Reference
 - [Linear](#regressionLinear)
-- [Exponential](#regressionExponential)
+- [Exponential](#regressionExp)
 - [Logarithmic](#regressionLog)
-- [Quadratic](#regressionQuadratic)
+- [Quadratic](#regressionQuad)
+- [Power](#regressionPow)
 - [LOESS](#regressionLoess)
 
 <a name="regressionLinear" href="#regressionLinear">#</a> d3.<b>regressionLinear</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js "Source")
 
 Creates a new linear regression generator with default [<em>x</em>-](#linear_x) and [<em>y</em>-](#linear_y) accessors and a null [domain](#linear_domain).
 
-<a name="_linear" href="#_linear">#</a> <i>linear</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L8 "Source")
+<a name="_linear" href="#_linear">#</a> <i>linear</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L6 "Source")
 
 Computes the linear regression, which takes the form <em>y</em> = <em>ax</em> + <em>b</em>, for the specified *data* points.
 
@@ -37,7 +38,7 @@ Returns a line represented as an array of two points, where each point is an arr
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="linear_x" href="#linear_x">#</a> <i>linear</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L51 "Source")
+<a name="linear_x" href="#linear_x">#</a> <i>linear</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L67 "Source")
 
 If <em>x</em> is specified, sets the <em>x</em>-coordinate accessor. If <em>x</em> is not specified, returns the current <em>x</em>-coordinate accessor, which defaults to:
 
@@ -47,7 +48,7 @@ function x(d) {
 }
 ```
 
-<a name="linear_y" href="#linear_y">#</a> <i>linear</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L55 "Source")
+<a name="linear_y" href="#linear_y">#</a> <i>linear</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L71 "Source")
 
 If <em>y</em> is specified, sets the <em>y</em>-coordinate accessor. If <em>y</em> is not specified, returns the current <em>y</em>-coordinate accessor, which defaults to:
 
@@ -57,7 +58,7 @@ function y(d) {
 }
 ```
 
-<a name="linear_domain" href="#linear_domain">#</a> <i>linear</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L47 "Source")
+<a name="linear_domain" href="#linear_domain">#</a> <i>linear</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L63 "Source")
 
 If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordinates of the returned line to the specified array of numbers. The array must contain two elements. If the elements in the given array are not numbers, they will be coerced to numbers. If <em>domain</em> is not specified, returns a copy of the regression generator’s current domain.
 
@@ -75,15 +76,15 @@ Returns a line represented as an array of <em>n</em> points, where each point is
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L71 "Source")
+<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L73 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L75 "Source")
+<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L77 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L67 "Source")
+<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L69 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
@@ -99,15 +100,15 @@ Returns a line represented as an array of <em>n</em> points, where each point is
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L71 "Source")
+<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L69 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="log_y" href="#log_y">#</a> <i>logarithmic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L75 "Source")
+<a name="log_y" href="#log_y">#</a> <i>logarithmic</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L73 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L67 "Source")
+<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L65 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
@@ -123,15 +124,39 @@ Returns a line represented as an array of <em>n</em> points, where each point is
 
 Also returns properties <em>a</em>, <em>b</em>, and <e>c</e>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="quad_x" href="#quad_x">#</a> <i>quad</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L81 "Source")
+<a name="quad_x" href="#quad_x">#</a> <i>quad</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L84 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="quad_y" href="#quad_y">#</a> <i>quad</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L85 "Source")
+<a name="quad_y" href="#quad_y">#</a> <i>quad</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L88 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="quad_domain" href="#quad_domain">#</a> <i>quad</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L77 "Source")
+<a name="quad_domain" href="#quad_domain">#</a> <i>quad</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L80 "Source")
+
+See [<em>linear</em>.domain()](#linear_domain).
+
+<a name="regressionPow" href="#regressionPow">#</a> d3.<b>regressionPow</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js "Source")
+
+Creates a new power law regression generator with default [<em>x</em>-](#pow_x) and [<em>y</em>-](#pow_y) accessors and a null [domain](#pow_domain).
+
+<a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L8 "Source")
+
+Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup>b</sup>, for the specified *data* points.
+
+Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. You can use the [Catmull–Rom spline interpolator](https://github.com/d3/d3-shape#curveCatmullRom) from d3-shape to chart the returned points.
+
+Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
+
+<a name="pow_x" href="#pow_x">#</a> <i>pow</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L71 "Source")
+
+See [<em>linear</em>.x()](#linear_x).
+
+<a name="pow_y" href="#pow_y">#</a> <i>pow</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L75 "Source")
+
+See [<em>linear</em>.y()](#linear_y).
+
+<a name="pow_domain" href="#pow_domain">#</a> <i>pow</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L67 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
@@ -143,14 +168,14 @@ Creates a new [LOESS regression](https://en.wikipedia.org/wiki/Local_regression)
 
 Computes the LOESS regression for the specified *data* points. Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates.
 
-<a name="loess_x" href="#loess_x">#</a> <i>loess</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L121 "Source")
+<a name="loess_x" href="#loess_x">#</a> <i>loess</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L122 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="loess_y" href="#loess_y">#</a> <i>loess</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L125 "Source")
+<a name="loess_y" href="#loess_y">#</a> <i>loess</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L126 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="loess_bandwidth" href="#loess_bandwidth">#</a> <i>loess</i>.<b>bandwidth</b>([<i>bandwidth</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L117 "Source")
+<a name="loess_bandwidth" href="#loess_bandwidth">#</a> <i>loess</i>.<b>bandwidth</b>([<i>bandwidth</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L118 "Source")
 
 If <em>bandwidth</em> is specified, sets the LOESS regression's bandwidth, or smoothing parameter, to the specific number between 0 and 1. The bandwidth represents the share of the total data points that are used to calculate each local fit. Higher bandwidths produce smoother lines, and vice versa. If <em>bandwidth</em> is not specified, returns a copy of the regression generator’s current bandwidth, which defaults to .3.
