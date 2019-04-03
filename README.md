@@ -1,5 +1,5 @@
 # d3-regression
-Calculate statistical regressions for two-dimensional data.
+Calculate statistical regressions from two-dimensional data.
 
 [<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882">](https://observablehq.com/d/7b51129a2feec1d0)
 
@@ -31,6 +31,8 @@ const regression = d3.regressionLinear()
 <a name="regressionLinear" href="#regressionLinear">#</a> d3.<b>regressionLinear</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js "Source")
 
 Creates a new linear regression generator with default [<em>x</em>-](#linear_x) and [<em>y</em>-](#linear_y) accessors and a null [domain](#linear_domain).
+
+[<img alt="Linear regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/linear.png" width="263">](https://observablehq.com/d/a2ccc2b456a3c927)
 
 <a name="_linear" href="#_linear">#</a> <i>linear</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L6 "Source")
 
@@ -70,6 +72,8 @@ If data is passed to the linear regression generator before a <em>domain</em> ha
 
 Creates a new exponential regression generator with default [<em>x</em>-](#exp_x) and [<em>y</em>-](#exp_y) accessors and a null [domain](#exp_domain).
 
+[<img alt="Exponential regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/exponential.png" width="262">](https://observablehq.com/d/53a55eb2fe6dc02c)
+
 <a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L10 "Source")
 
 Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points.
@@ -93,6 +97,8 @@ See [<em>linear</em>.domain()](#linear_domain).
 <a name="regressionLog" href="#regressionLog">#</a> d3.<b>regressionLog</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js "Source")
 
 Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x) and [<em>y</em>-](#log_y) accessors and a null [domain](#log_domain).
+
+[<img alt="Logarithmic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/logarithmic.png" width="254">](https://observablehq.com/d/9d575ab9baa6a001)
 
 <a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L10 "Source")
 
@@ -118,6 +124,8 @@ See [<em>linear</em>.domain()](#linear_domain).
 
 Creates a new quadratic regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors and a null [domain](#quad_domain).
 
+[<img alt="Quadratic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/quadratic.png" width="259">](https://observablehq.com/d/1579404ed3ac2fe5)
+
 <a name="_quad" href="#_quad">#</a> <i>quad</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L10 "Source")
 
 Computes the quadratic regression, which takes the form <em>y</em> = <em>ax</em><sup>2</sup> + <em>bx</em> + <em>c</em>, for the specified *data* points.
@@ -142,6 +150,8 @@ See [<em>linear</em>.domain()](#linear_domain).
 
 Creates a new power law regression generator with default [<em>x</em>-](#pow_x) and [<em>y</em>-](#pow_y) accessors and a null [domain](#pow_domain).
 
+[<img alt="Power law regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/power.png" width="252">](https://observablehq.com/d/78c66e8a94c5ab6c)
+
 <a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L10 "Source")
 
 Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points.
@@ -165,6 +175,8 @@ See [<em>linear</em>.domain()](#linear_domain).
 <a name="regressionLoess" href="#regressionLoess">#</a> d3.<b>regressionLoess</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js "Source")
 
 Creates a new [LOESS regression](https://en.wikipedia.org/wiki/Local_regression) generator with default [<em>x</em>-](#loess_x) and [<em>y</em>-](#loess_y) accessors and a [bandwidth](#loess_bandwidth) of .3. This implementation was adapted from [science.js](https://github.com/jasondavies/science.js).
+
+[<img alt="LOESS regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/loess.png" width="254">](https://observablehq.com/d/4abb4da3e38e2fa8)
 
 <a name="_loess" href="#_loess">#</a> <i>loess</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L14 "Source")
 
