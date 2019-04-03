@@ -72,7 +72,7 @@ If data is passed to the linear regression generator before a <em>domain</em> ha
 
 Creates a new exponential regression generator with default [<em>x</em>-](#exp_x) and [<em>y</em>-](#exp_y) accessors and a null [domain](#exp_domain).
 
-[<img alt="Exponential regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/exponential.png#1" width="250">](https://observablehq.com/d/53a55eb2fe6dc02c)
+[<img alt="Exponential regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/exponential.png?1" width="250">](https://observablehq.com/d/53a55eb2fe6dc02c)
 
 <a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L10 "Source")
 
