@@ -54,8 +54,8 @@ export default function(){
     const out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
     out.a = slope;
     out.b = intercept;
-    out.rSquared = rSquared;
     out.predict = fn;
+    out.rSquared = rSquared;
 
     return out;
   }
