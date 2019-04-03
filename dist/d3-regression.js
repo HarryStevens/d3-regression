@@ -74,13 +74,6 @@
     }
   }
 
-  // Sort an array using an accessor.
-  function sort(arr, fn) {
-    return arr.sort(function (a, b) {
-      return fn(a) - fn(b);
-    });
-  }
-
   function exponential () {
     var x = function x(d) {
       return d[0];
@@ -91,7 +84,6 @@
         domain;
 
     function exponential(data) {
-      sort(data, x);
       var n = data.length;
       var ySum = 0,
           x2ySum = 0,
@@ -236,6 +228,13 @@
     });
     var i = arr.length / 2;
     return i % 1 === 0 ? (arr[i - 1] + arr[i]) / 2 : arr[Math.floor(i)];
+  }
+
+  // Sort an array using an accessor.
+  function sort(arr, fn) {
+    return arr.sort(function (a, b) {
+      return fn(a) - fn(b);
+    });
   }
 
   // Source: https://github.com/jasondavies/science.js/blob/master/src/stats/loess.js
@@ -422,7 +421,6 @@
         domain;
 
     function logarithmic(data) {
-      sort(data, x);
       var n = data.length;
       var xlogSum = 0,
           yxlogSum = 0,
@@ -485,7 +483,6 @@
         domain;
 
     function power(data) {
-      sort(data, x);
       var n = data.length;
       var xlogSum = 0,
           xlogylogSum = 0,
@@ -550,7 +547,6 @@
         domain;
 
     function quadratic(data) {
-      sort(data, x);
       var n = data.length;
       var xSum = 0,
           ySum = 0,

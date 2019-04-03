@@ -8,7 +8,6 @@ export default function() {
       domain;
   
   function logarithmic(data){
-    sort(data, x);
     const n = data.length;
     
     let xlogSum = 0,

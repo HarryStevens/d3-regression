@@ -1,6 +1,5 @@
 import {determination} from "./utils/determination";
 import {interpose} from "./utils/interpose";
-import {sort} from "./utils/sort";
 
 export default function() {
   let x = d => d[0],
@@ -8,7 +7,6 @@ export default function() {
       domain;
    
   function exponential(data){
-    sort(data, x);
     const n = data.length;
     
     let ySum = 0,
