@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 0.0.16. Copyright 2019 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 0.0.17. Copyright 2019 Harry Stevens.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -37,7 +37,7 @@
 
   function interpose(minX, maxX, predict) {
     var precision = .01,
-        maxIter = 1e5;
+        maxIter = 1e4;
     var points = [px(minX), px(maxX)],
         iter = 0;
 
