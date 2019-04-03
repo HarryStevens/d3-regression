@@ -1,6 +1,5 @@
 import {determination} from "./utils/determination";
 import {interpose} from "./utils/interpose";
-import {sort} from "./utils/sort";
 
 export default function() {
   let x = d => d[0],
