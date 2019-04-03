@@ -72,7 +72,9 @@ Creates a new exponential regression generator with default [<em>x</em>-](#exp_x
 
 <a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L10 "Source")
 
-Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points. Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
+Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points.
+
+Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
@@ -94,7 +96,9 @@ Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x
 
 <a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L10 "Source")
 
-Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points. Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
+Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points.
+
+Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
@@ -116,7 +120,9 @@ Creates a new quadratic regression generator with default [<em>x</em>-](#quad_x)
 
 <a name="_quad" href="#_quad">#</a> <i>quad</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L10 "Source")
 
-Computes the quadratic regression, which takes the form <em>y</em> = <em>ax</em><sup>2</sup> + <em>bx</em> + <em>c</em>, for the specified *data* points. Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
+Computes the quadratic regression, which takes the form <em>y</em> = <em>ax</em><sup>2</sup> + <em>bx</em> + <em>c</em>, for the specified *data* points.
+
+Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
 Also returns properties <em>a</em>, <em>b</em>, and <e>c</e>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
@@ -138,7 +144,9 @@ Creates a new power law regression generator with default [<em>x</em>-](#pow_x) 
 
 <a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L10 "Source")
 
-Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points. Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
+Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points.
+
+Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
