@@ -66,7 +66,7 @@ function y(d) {
 
 If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordinates of the returned line to the specified array of numbers. The array must contain two elements. If the elements in the given array are not numbers, they will be coerced to numbers. If <em>domain</em> is not specified, returns a copy of the regression generator’s current domain.
 
-If data is passed to the linear regression generator before a <em>domain</em> has been specified, the domain will be set to the minimum and maximum <em>x</em>-coordinate values of the data.
+If data is passed to the regression generator before a <em>domain</em> has been specified, the domain will be set to the minimum and maximum <em>x</em>-coordinate values of the data.
 
 <a name="regressionExp" href="#regressionExp">#</a> d3.<b>regressionExp</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js "Source")
 
