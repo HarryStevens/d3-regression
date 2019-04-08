@@ -1,7 +1,7 @@
 # d3-regression
 Calculate statistical regressions from two-dimensional data.
 
-[<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882">](https://observablehq.com/d/7b51129a2feec1d0)
+[<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882">](https://observablehq.com/@harrystevens/introducing-d3-regression)
 
 ## Installing
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
@@ -30,7 +30,7 @@ const regression = d3.regressionLinear()
 
 Creates a new linear regression generator with default [<em>x</em>-](#linear_x) and [<em>y</em>-](#linear_y) accessors and a null [domain](#linear_domain).
 
-[<img alt="Linear regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/linear.png" width="250">](https://observablehq.com/d/a2ccc2b456a3c927)
+[<img alt="Linear regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/linear.png" width="250">](https://observablehq.com/@harrystevens/linear-regression)
 
 <a name="_linear" href="#_linear">#</a> <i>linear</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L6 "Source")
 
@@ -70,7 +70,7 @@ If data is passed to the regression generator before a <em>domain</em> has been 
 
 Creates a new exponential regression generator with default [<em>x</em>-](#exp_x) and [<em>y</em>-](#exp_y) accessors and a null [domain](#exp_domain).
 
-[<img alt="Exponential regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/exponential-2.png" width="250">](https://observablehq.com/d/53a55eb2fe6dc02c)
+[<img alt="Exponential regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/exponential-2.png" width="250">](https://observablehq.com/@harrystevens/exponential-regression)
 
 <a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L9 "Source")
 
@@ -96,7 +96,7 @@ See [<em>linear</em>.domain()](#linear_domain).
 
 Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x) and [<em>y</em>-](#log_y) accessors and a null [domain](#log_domain).
 
-[<img alt="Logarithmic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/logarithmic.png" width="250">](https://observablehq.com/d/9d575ab9baa6a001)
+[<img alt="Logarithmic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/logarithmic.png" width="250">](https://observablehq.com/@harrystevens/logarithmic-regression)
 
 <a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L9 "Source")
 
@@ -122,7 +122,7 @@ See [<em>linear</em>.domain()](#linear_domain).
 
 Creates a new quadratic regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors and a null [domain](#quad_domain).
 
-[<img alt="Quadratic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/quadratic.png" width="250">](https://observablehq.com/d/1579404ed3ac2fe5)
+[<img alt="Quadratic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/quadratic.png" width="250">](https://observablehq.com/@harrystevens/quadratic-regression)
 
 <a name="_quad" href="#_quad">#</a> <i>quad</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L9 "Source")
 
@@ -148,7 +148,7 @@ See [<em>linear</em>.domain()](#linear_domain).
 
 Creates a new power law regression generator with default [<em>x</em>-](#pow_x) and [<em>y</em>-](#pow_y) accessors and a null [domain](#pow_domain).
 
-[<img alt="Power law regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/power.png" width="250">](https://observablehq.com/d/78c66e8a94c5ab6c)
+[<img alt="Power law regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/power.png" width="250">](https://observablehq.com/@harrystevens/power-law-regression)
 
 <a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L9 "Source")
 
