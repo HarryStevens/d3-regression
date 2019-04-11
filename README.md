@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data.
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.0.0/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.0.1/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
