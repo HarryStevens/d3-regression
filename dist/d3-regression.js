@@ -181,23 +181,9 @@
           intercept = (e - f) / n,
           fn = function fn(x) {
         return slope * x + intercept;
-      }; // Calculate R squared
+      };
 
-
-      var SSE = 0,
-          SST = 0;
-
-      for (var _i = 0; _i < n; _i++) {
-        var _d = data[_i],
-            _dx = x(_d),
-            _dy = y(_d),
-            yComp = fn(_dx);
-
-        SSE += Math.pow(_dy - yComp, 2);
-        SST += Math.pow(_dy - ySum / n, 2);
-      }
-
-      var rSquared = 1 - SSE / SST;
+      var rSquared = determination(data, x, y, ySum, fn);
       var out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
       out.a = slope;
       out.b = intercept;

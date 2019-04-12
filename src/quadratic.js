@@ -39,15 +39,15 @@ export default function(){
       }
     }
 
-    const sumXX = x2Sum - ((Math.pow(xSum, 2)) / n),
-        sumXY = xySum - ((xSum * ySum) / n),
-        sumXX2 = x3Sum - ((x2Sum * xSum) / n),
-        sumX2Y = x2ySum - ((x2Sum * ySum) / n),
-        sumX2X2 = x4Sum - ((Math.pow(x2Sum, 2)) / n),
-        a = ((sumX2Y * sumXX) - (sumXY * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
-        b = ((sumXY * sumX2X2) - (sumX2Y * sumXX2)) / ((sumXX * sumX2X2) - (Math.pow(sumXX2, 2))),
+    const sumXX = x2Sum - (Math.pow(xSum, 2) / n),
+        sumXY = xySum - (xSum * ySum / n),
+        sumXX2 = x3Sum - (x2Sum * xSum / n),
+        sumX2Y = x2ySum - (x2Sum * ySum / n),
+        sumX2X2 = x4Sum - (Math.pow(x2Sum, 2) / n),
+        a = (sumX2Y * sumXX - sumXY * sumXX2) / (sumXX * sumX2X2 - Math.pow(sumXX2, 2)),
+        b = (sumXY * sumX2X2 - sumX2Y * sumXX2) / (sumXX * sumX2X2 - Math.pow(sumXX2, 2)),
         c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
-        fn = x => (a * (Math.pow(x, 2))) + (b * x) + c,
+        fn = x => a * Math.pow(x, 2) + b * x + c,
         out = interpose(minX, maxX, fn);
 
     out.a = a;
@@ -56,7 +56,7 @@ export default function(){
     out.predict = fn;
     out.rSquared = determination(data, x, y, ySum, fn);
 
-    return out;    
+    return out;
   }
   
   quadratic.domain = function(arr){

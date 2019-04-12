@@ -32,8 +32,8 @@ export default function() {
       }
     }
 
-    const a = ((n * yxlogSum) - (ySum * xlogSum)) / ((n * xlog2Sum) - (xlogSum * xlogSum)),
-        b = (ySum - (a * xlogSum)) / n,
+    const a = (n * yxlogSum - ySum * xlogSum) / (n * xlog2Sum - xlogSum * xlogSum),
+        b = (ySum - a * xlogSum) / n,
         fn = x => a * Math.log(x) + b,
         out = interpose(minX, maxX, fn);
         

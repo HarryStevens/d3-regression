@@ -34,9 +34,9 @@ export default function() {
       }
     }
     
-    const denominator = ((ySum * x2ySum) - (xySum * xySum)),
-        a = Math.exp(((x2ySum * ylogySum) - (xySum * xylogySum)) / denominator),
-        b = ((ySum * xylogySum) - (xySum * ylogySum)) / denominator,
+    const denominator = ySum * x2ySum - xySum * xySum,
+        a = Math.exp((x2ySum * ylogySum - xySum * xylogySum) / denominator),
+        b = (ySum * xylogySum - xySum * ylogySum) / denominator,
         fn = x => a * Math.exp(b * x),
         out = interpose(minX, maxX, fn);
     

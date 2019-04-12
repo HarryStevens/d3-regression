@@ -34,8 +34,8 @@ export default function() {
       }
     }
 
-    const b = ((n * xlogylogSum) - (xlogSum * ylogSum)) / ((n * xlog2Sum) - Math.pow(xlogSum, 2)),
-        a = Math.exp((ylogSum - (b * xlogSum)) / n),
+    const b = (n * xlogylogSum - xlogSum * ylogSum) / (n * xlog2Sum - Math.pow(xlogSum, 2)),
+        a = Math.exp((ylogSum - b * xlogSum) / n),
         fn = x => a * Math.pow(x, b),
         out = interpose(minX, maxX, fn);
 
