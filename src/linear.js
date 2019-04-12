@@ -1,3 +1,5 @@
+import {determination} from "./utils/determination";
+
 export default function(){
   let x = d => d[0],
       y = d => d[1],
@@ -36,20 +38,7 @@ export default function(){
         intercept = (e - f) / n,
         fn = x => slope * x + intercept;
 
-    // Calculate R squared
-    let SSE = 0,
-        SST = 0;
-    for (let i = 0; i < n; i++){
-      const d = data[i],
-          dx = x(d),
-          dy = y(d),
-          yComp = fn(dx);
-     
-      SSE += Math.pow(dy - yComp, 2);
-      SST += Math.pow(dy - ySum / n, 2);
-    }
-
-    const rSquared = 1 - SSE / SST;
+    const rSquared = determination(data, x, y, ySum, fn);
 
     const out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
     out.a = slope;
