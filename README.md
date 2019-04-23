@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data.
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.1.0/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.1.1/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
@@ -145,10 +145,6 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionPow" href="#regressionPow">#</a> d3.<b>regressionPow</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js "Source")
-
-Creates a new power law regression generator with default [<em>x</em>-](#pow_x) and [<em>y</em>-](#pow_y) accessors and a null [domain](#pow_domain).
-
 <a name="regressionPoly" href="#regressionPoly">#</a> d3.<b>regressionPoly</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js "Source")
 
 Creates a new polynomial regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors, a null [domain](#quad_domain), and an [order](#poly_order) of 3. This implementation was adapted from [regression-js](https://github.com/Tom-Alexander/regression-js/).
@@ -177,7 +173,7 @@ See [<em>linear</em>.domain()](#linear_domain).
 
 <a name="poly_order" href="#poly_order">#</a> <i>poly</i>.<b>order</b>([<i>order</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L85 "Source")
 
-If <em>order</em> is specified, sets the regression's order to the specified number. For example, if <em>order</em> is set to 4, the regression generator will perform a fourth-degree polynomial regression. Likewise, if the <em>order</em> is set to 2, the regression generator will perform a quadratic regression (note, however, that d3-regression's <em>regressionQuad<em> is faster). Be careful about attempting to fit your data with higher order polynomials; though the regression line will fit your data with a high determination coefficient, it will likely have very little predictive power for data outside of your domain.
+If <em>order</em> is specified, sets the regression's order to the specified number. For example, if <em>order</em> is set to 4, the regression generator will perform a fourth-degree polynomial regression. Likewise, if the <em>order</em> is set to 2, the regression generator will perform a quadratic regression (note, however, that d3-regression's [<em>regressionQuad</em>](#regressionQuad) is faster). Be careful about attempting to fit your data with higher order polynomials; though the regression line will fit your data with a high determination coefficient, it will likely have very little predictive power for data outside of your domain.
 
 If <em>order</em> is not specified, returns the regression generator's current <em>order</em>, which defaults to 3.
 
