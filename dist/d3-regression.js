@@ -459,6 +459,145 @@
     return logarithmic;
   }
 
+  // Source: https://github.com/Tom-Alexander/regression-js/blob/master/src/regression.js#L246
+  // License: https://github.com/Tom-Alexander/regression-js/blob/master/LICENSE
+
+  function polynomial () {
+    var x = function x(d) {
+      return d[0];
+    },
+        y = function y(d) {
+      return d[1];
+    },
+        order = 3,
+        domain;
+
+    function polynomial(data) {
+      // First pass through the data
+      var n = data.length;
+      var arr = [],
+          ySum = 0,
+          minX = domain ? +domain[0] : Infinity,
+          maxX = domain ? +domain[1] : -Infinity;
+
+      for (var i = 0; i < n; i++) {
+        var d = data[i],
+            dx = x(d),
+            dy = y(d);
+        arr[i] = [dx, dy];
+        ySum += dy;
+
+        if (!domain) {
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
+      } // Calculate the coefficients
+
+
+      var lhs = [],
+          rhs = [],
+          k = order + 1;
+      var a = 0,
+          b = 0;
+
+      for (var _i = 0; _i < k; _i++) {
+        for (var l = 0; l < n; l++) {
+          a += Math.pow(arr[l][0], _i) * arr[l][1];
+        }
+
+        lhs.push(a);
+        a = 0;
+        var c = [];
+
+        for (var j = 0; j < k; j++) {
+          for (var _l = 0; _l < n; _l++) {
+            b += Math.pow(arr[_l][0], _i + j);
+          }
+
+          c[j] = b;
+          b = 0;
+        }
+
+        rhs.push(c);
+      }
+
+      rhs.push(lhs);
+
+      var coefficients = gaussianElimination(rhs, k),
+          fn = function fn(x) {
+        return coefficients.reduce(function (sum, coeff, power) {
+          return sum + coeff * Math.pow(x, power);
+        }, 0);
+      },
+          out = interpose(minX, maxX, fn);
+
+      out.coefficients = coefficients;
+      out.predict;
+      out.rSquared = determination(data, x, y, ySum, fn);
+      return out;
+    }
+
+    polynomial.domain = function (arr) {
+      return arguments.length ? (domain = arr, polynomial) : domain;
+    };
+
+    polynomial.x = function (fn) {
+      return arguments.length ? (x = fn, polynomial) : x;
+    };
+
+    polynomial.y = function (fn) {
+      return arguments.length ? (y = fn, polynomial) : y;
+    };
+
+    polynomial.order = function (n) {
+      return arguments.length ? (order = n, polynomial) : order;
+    };
+
+    return polynomial;
+  } // Given an array representing a two-dimensional matrix,
+  // and an order parameter representing how many degrees to solver for,
+  // determine the solution of a system of linear equations A * x = b using
+  // Gaussian elimination.
+
+  function gaussianElimination(matrix, order) {
+    var n = matrix.length - 1,
+        coefficients = [order];
+
+    for (var i = 0; i < n; i++) {
+      var maxrow = i;
+
+      for (var j = i + 1; j < n; j++) {
+        if (Math.abs(matrix[i][j]) > Math.abs(matrix[i][maxrow])) {
+          maxrow = j;
+        }
+      }
+
+      for (var k = i; k < n + 1; k++) {
+        var tmp = matrix[k][i];
+        matrix[k][i] = matrix[k][maxrow];
+        matrix[k][maxrow] = tmp;
+      }
+
+      for (var _j = i + 1; _j < n; _j++) {
+        for (var _k = n; _k >= i; _k--) {
+          matrix[_k][_j] -= matrix[_k][i] * matrix[i][_j] / matrix[i][i];
+        }
+      }
+    }
+
+    for (var _j2 = n - 1; _j2 >= 0; _j2--) {
+      var total = 0;
+
+      for (var _k2 = _j2 + 1; _k2 < n; _k2++) {
+        total += matrix[_k2][_j2] * coefficients[_k2];
+      }
+
+      coefficients[_j2] = (matrix[n][_j2] - total) / matrix[_j2][_j2];
+    }
+
+    return coefficients;
+  }
+
   function power () {
     var x = function x(d) {
       return d[0];
@@ -603,6 +742,7 @@
   exports.regressionLinear = linear;
   exports.regressionLoess = loess;
   exports.regressionLog = logarithmic;
+  exports.regressionPoly = polynomial;
   exports.regressionPow = power;
   exports.regressionQuad = quadratic;
 

@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data.
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.0.2/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.1.0/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
@@ -23,6 +23,7 @@ const regression = d3.regressionLinear()
 - [Exponential](#regressionExp)
 - [Logarithmic](#regressionLog)
 - [Quadratic](#regressionQuad)
+- [Polynomial](#regressionPoly)
 - [Power law](#regressionPow)
 - [LOESS](#regressionLoess)
 
@@ -143,6 +144,42 @@ See [<em>linear</em>.y()](#linear_y).
 <a name="quad_domain" href="#quad_domain">#</a> <i>quad</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L62 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
+
+<a name="regressionPow" href="#regressionPow">#</a> d3.<b>regressionPow</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js "Source")
+
+Creates a new power law regression generator with default [<em>x</em>-](#pow_x) and [<em>y</em>-](#pow_y) accessors and a null [domain](#pow_domain).
+
+<a name="regressionPoly" href="#regressionPoly">#</a> d3.<b>regressionPoly</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js "Source")
+
+Creates a new polynomial regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors, a null [domain](#quad_domain), and an [order](#poly_order) of 3. This implementation was adapted from [regression-js](https://github.com/Tom-Alexander/regression-js/).
+
+[<img alt="Polynomial regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/polynomial.png" width="250">](https://observablehq.com/@harrystevens/polynomial-regression)
+
+<a name="_poly" href="#_poly">#</a> <i>poly</i>(<i>data</i>) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L13 "Source")
+
+Computes the polynomial regression, which takes the form <em>y</em> = <em>a<sub>n</sub>x<sup>n</sup></em> + ... + <em>a</em><sub>1</sub><em>x</em> + <em>a</em><sub>0</sub>, for the specified *data* points.
+
+Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
+
+Also returns three properties: <em>coefficients</em>, an array representing the equation's coefficients with the intercept as the first item and nth degree coefficient as the last item; <em>rSquared</em>, representing the coefficient of determination; and <em>predict</em>, a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
+
+<a name="poly_x" href="#poly_x">#</a> <i>poly</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L77 "Source")
+
+See [<em>linear</em>.x()](#linear_x).
+
+<a name="poly_y" href="#poly_y">#</a> <i>poly</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L81 "Source")
+
+See [<em>linear</em>.y()](#linear_y).
+
+<a name="poly_domain" href="#poly_domain">#</a> <i>poly</i>.<b>domain</b>([<i>domain</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L73 "Source")
+
+See [<em>linear</em>.domain()](#linear_domain).
+
+<a name="poly_order" href="#poly_order">#</a> <i>poly</i>.<b>order</b>([<i>order</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L85 "Source")
+
+If <em>order</em> is specified, sets the regression's order to the specified number. For example, if <em>order</em> is set to 4, the regression generator will perform a fourth-degree polynomial regression. Likewise, if the <em>order</em> is set to 2, the regression generator will perform a quadratic regression (note, however, that d3-regression's <em>regressionQuad<em> is faster). Be careful about attempting to fit your data with higher order polynomials; though the regression line will fit your data with a high determination coefficient, it will likely have very little predictive power for data outside of your domain.
+
+If <em>order</em> is not specified, returns the regression generator's current <em>order</em>, which defaults to 3.
 
 <a name="regressionPow" href="#regressionPow">#</a> d3.<b>regressionPow</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js "Source")
 
