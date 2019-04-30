@@ -1,5 +1,5 @@
 # d3-regression
-Calculate statistical regressions from two-dimensional data.
+Calculate statistical regressions from two-dimensional data. [![Build Status](https://travis-ci.org/HarryStevens/d3-regression.svg?branch=master)](https://travis-ci.org/HarryStevens/d3-regression)
 
 [<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882">](https://observablehq.com/@harrystevens/introducing-d3-regression)
 
