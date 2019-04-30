@@ -19,8 +19,8 @@ export default function() {
 
     for (let i = 0; i < n; i++) {
       const d = data[i],
-          dx = x(d),
-          dy = y(d);
+          dx = x(d, i, data),
+          dy = y(d, i, data);
       
       xlogSum += Math.log(dx);
       xlogylogSum += Math.log(dy) * Math.log(dx);

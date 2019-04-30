@@ -19,8 +19,8 @@ export default function() {
 
     for (let i = 0; i < n; i++) {
       const d = data[i],
-          dx = x(d),
-          dy = y(d);
+          dx = x(d, i, data),
+          dy = y(d, i, data);
       
       ySum += dy;
       x2ySum += dx * dx * dy;

@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data.
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.1.1/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.2.0/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
@@ -43,20 +43,20 @@ Also returns properties <em>a</em> and <em>b</em>, representing the equation's c
 
 <a name="linear_x" href="#linear_x">#</a> <i>linear</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L67 "Source")
 
-If <em>x</em> is specified, sets the <em>x</em>-coordinate accessor. If <em>x</em> is not specified, returns the current <em>x</em>-coordinate accessor, which defaults to:
+If <em>x</em> is specified, sets the <em>x</em>-coordinate accessor, which is passed passed the current datum (<em>d</em>), the current index (<em>i</em>), and the entire data array (<em>data</em>). If <em>x</em> is not specified, returns the current <em>x</em>-coordinate accessor, which defaults to:
 
 ```js
-function x(d) {
+function x(d, i, data) {
   return d[0];
 }
 ```
 
 <a name="linear_y" href="#linear_y">#</a> <i>linear</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L71 "Source")
 
-If <em>y</em> is specified, sets the <em>y</em>-coordinate accessor. If <em>y</em> is not specified, returns the current <em>y</em>-coordinate accessor, which defaults to:
+If <em>y</em> is specified, sets the <em>y</em>-coordinate accessor, which is passed passed the current datum (<em>d</em>), the current index (<em>i</em>), and the entire data array (<em>data</em>). If <em>y</em> is not specified, returns the current <em>y</em>-coordinate accessor, which defaults to:
 
 ```js
-function y(d) {
+function y(d, i, data) {
   return d[1];
 }
 ```

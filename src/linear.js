@@ -16,12 +16,15 @@ export default function(){
         maxX = domain ? +domain[1] : -Infinity;
 
     for (let i = 0; i < n; i++){
-      const dx = x(data[i], i),
-          dy = y(data[i], i);
+      const d = data[i],
+          dx = x(d, i, data),
+          dy = y(d, i, data);
+
       xSum += dx;
       ySum += dy;
       xySum += dx * dy;
       x2Sum += dx * dx;
+
       if (!domain){
         if (dx < minX) minX = dx;
         if (dx > maxX) maxX = dx;

@@ -22,8 +22,8 @@ export default function() {
       weights[i] = 1;
 
       const d = data[i];
-      xval[i] = x(d);
-      yval[i] = y(d);
+      xval[i] = x(d, i, data);
+      yval[i] = y(d, i, data);
     }
 
     finiteReal(xval);

@@ -95,8 +95,8 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            dx = x(d),
-            dy = y(d);
+            dx = x(d, i, data),
+            dy = y(d, i, data);
         ySum += dy;
         x2ySum += dx * dx * dy;
         ylogySum += dy * Math.log(dy);
@@ -158,8 +158,9 @@
           maxX = domain ? +domain[1] : -Infinity;
 
       for (var i = 0; i < n; i++) {
-        var dx = x(data[i]),
-            dy = y(data[i]);
+        var _d = data[i],
+            dx = x(_d, i, data),
+            dy = y(_d, i, data);
         xSum += dx;
         ySum += dy;
         xySum += dx * dy;
@@ -247,8 +248,8 @@
       for (var i = 0; i < n; i++) {
         weights[i] = 1;
         var d = data[i];
-        xval[i] = x(d);
-        yval[i] = y(d);
+        xval[i] = x(d, i, data);
+        yval[i] = y(d, i, data);
       }
 
       finiteReal(xval);
@@ -417,8 +418,8 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            dx = x(d),
-            dy = y(d);
+            dx = x(d, i, data),
+            dy = y(d, i, data);
         xlogSum += Math.log(dx);
         yxlogSum += dy * Math.log(dx);
         ySum += dy;
@@ -482,8 +483,8 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            dx = x(d),
-            dy = y(d);
+            dx = x(d, i, data),
+            dy = y(d, i, data);
         arr[i] = [dx, dy];
         ySum += dy;
 
@@ -619,8 +620,8 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            dx = x(d),
-            dy = y(d);
+            dx = x(d, i, data),
+            dy = y(d, i, data);
         xlogSum += Math.log(dx);
         xlogylogSum += Math.log(dy) * Math.log(dx);
         ylogSum += Math.log(dy);
@@ -685,8 +686,8 @@
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
-            dx = x(d),
-            dy = y(d),
+            dx = x(d, i, data),
+            dy = y(d, i, data),
             x2Val = Math.pow(dx, 2);
         xSum += dx;
         ySum += dy;
