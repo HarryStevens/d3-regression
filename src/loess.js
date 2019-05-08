@@ -12,70 +12,53 @@ export default function() {
       accuracy = 1e-12;
 
   function loess(data) {
-    sort(data, x);
-    const n = data.length;
-    let xval = [],
-        yval = [],
-        weights = [];
-    
-    for (let i = 0; i < n; i++){
-      weights[i] = 1;
+    const n = data.length,
+          k = Math.max(2, ~~(bandwidth * n)), // # nearest neighbors
+          xval = [],
+          yval = [],
+          yhat = [],
+          residuals = [],
+          robustWeights = [];
 
-      const d = data[i];
-      xval[i] = x(d, i, data);
-      yval[i] = y(d, i, data);
+    // slice before sort to avoid modifying input
+    sort(data = data.slice(), x);
+
+    for (let i = 0, j = 0; i < n; ++i) {
+      const d = data[i],
+            xi = x(d, i, data),
+            yi = y(d, i, data);
+
+      // filter out points with invalid x or y values
+      if (xi != null && isFinite(xi) && yi != null && isFinite(yi)) {
+        xval[j] = xi;
+        yval[j] = yi;
+        yhat[j] = 0;
+        residuals[j] = 0;
+        robustWeights[j] = 1;
+        ++j;
+      }
     }
 
-    finiteReal(xval);
-    finiteReal(yval);
-    finiteReal(weights);
-    strictlyIncreasing(xval);
+    const m = xval.length; // # loess input points
 
-    const bandwidthInPoints = Math.floor(bandwidth * n);
+    for (let iter = -1; ++iter <= robustnessIters; ) {
+      const interval = [0, k - 1];
 
-    if (bandwidthInPoints < 2) throw {error: "Bandwidth too small."};
+      for (let i = 0; i < m; ++i) {
+        const dx = xval[i],
+              i0 = interval[0],
+              i1 = interval[1],
+              edge = (dx - xval[i0]) > (xval[i1] - dx) ? i0 : i1;
 
-    let res = [],
-        residuals = [],
-        robustnessWeights = [];
+        let sumWeights = 0, sumX = 0, sumXSquared = 0, sumY = 0, sumXY = 0,
+            denom = 1 / Math.abs(xval[edge] - dx || 1); // avoid singularity!
 
-    for (let i = 0; i < n; i++){
-      res[i] = 0;
-      residuals[i] = 0;
-      robustnessWeights[i] = 1;
-    }
-
-    let iter = -1;
-    while (++iter <= robustnessIters) {
-      const bandwidthInterval = [0, bandwidthInPoints - 1];
-      let dx;
-
-      for (let i = 0; i < n; i++){
-        dx = xval[i];
-
-        if (i > 0) {
-          updateBandwidthInterval(xval, weights, i, bandwidthInterval);
-        }
-
-        const ileft = bandwidthInterval[0],
-            iright = bandwidthInterval[1];
-
-        const edge = (xval[i] - xval[ileft]) > (xval[iright] - xval[i]) ? ileft : iright;
-  
-        let sumWeights = 0,
-            sumX = 0,
-            sumXSquared = 0,
-            sumY = 0,
-            sumXY = 0,
-            denom = Math.abs(1 / (xval[edge] - dx));
-
-        for (let k = ileft; k <= iright; ++k) {
+        for (let k = i0; k <= i1; ++k) {
           const xk = xval[k],
-              yk = yval[k],
-              dist = k < i ? dx - xk : xk - dx,
-              w = tricube(dist * denom) * robustnessWeights[k] * weights[k],
-              xkw = xk * w;
-          
+                yk = yval[k],
+                w = tricube(Math.abs(dx - xk) * denom) * robustWeights[k],
+                xkw = xk * w;
+
           sumWeights += w;
           sumX += xkw;
           sumXSquared += xk * xkw;
@@ -83,15 +66,18 @@ export default function() {
           sumXY += yk * xkw;
         }
 
+        // linear regression fit
         const meanX = sumX / sumWeights,
-            meanY = sumY / sumWeights,
-            meanXY = sumXY / sumWeights,
-            meanXSquared = sumXSquared / sumWeights,
-            beta = (Math.sqrt(Math.abs(meanXSquared - meanX * meanX)) < accuracy) ? 0 : ((meanXY - meanX * meanY) / (meanXSquared - meanX * meanX)),
-            alpha = meanY - beta * meanX;
+              meanY = sumY / sumWeights,
+              meanXY = sumXY / sumWeights,
+              meanXSquared = sumXSquared / sumWeights,
+              beta = (Math.sqrt(Math.abs(meanXSquared - meanX * meanX)) < accuracy) ? 0 : ((meanXY - meanX * meanY) / (meanXSquared - meanX * meanX)),
+              alpha = meanY - beta * meanX;
 
-        res[i] = beta * dx + alpha;
-        residuals[i] = Math.abs(yval[i] - res[i]);
+        yhat[i] = beta * dx + alpha;
+        residuals[i] = Math.abs(yval[i] - yhat[i]);
+
+        updateInterval(xval, i + 1, interval);
       }
 
       if (iter === robustnessIters) {
@@ -99,71 +85,73 @@ export default function() {
       }
 
       const medianResidual = median(residuals);
+      if (Math.abs(medianResidual) < accuracy) break;
 
-      if (Math.abs(medianResidual) < accuracy){ break; }
-
-      let arg,
-          w;
-
-      for (let i = 0; i < n; i++){
+      for (let i = 0, arg, w; i < m; ++i){
         arg = residuals[i] / (6 * medianResidual);
-        robustnessWeights[i] = (arg >= 1) ? 0 : ((w = 1 - arg * arg) * w);
+        // default to accuracy epsilon (rather than zero) for large deviations
+        // keeping weights tiny but non-zero prevents singularites
+        robustWeights[i] = (arg >= 1) ? accuracy : ((w = 1 - arg * arg) * w);
       }
-      
     }
 
-    return res.map((d, i) => [xval[i], d]);
+    return output(xval, yhat);
   }
 
-  loess.bandwidth = function(n) {
-    return arguments.length ? (bandwidth = n, loess) : bandwidth;
+  loess.bandwidth = function(bw) {
+    return arguments.length ? (bandwidth = bw, loess) : bandwidth;
   };
 
-  loess.x = function(fn){
+  loess.x = function(fn) {
     return arguments.length ? (x = fn, loess) : x;
-  }
+  };
 
-  loess.y = function(fn){
+  loess.y = function(fn) {
     return arguments.length ? (y = fn, loess) : y;
-  }
+  };
 
   return loess;
 }
 
-function finiteReal(values) {
-  for (let i = 0, n = values.length; i < n; i++){
-    if (!isFinite(values[i])) return false;
-  }
-
-  return true;
-}
-
-function strictlyIncreasing(xval) {
-  for (let i = 0, n = xval.length; i < n; i++){
-    if (xval[i - 1] >= xval[i]) return false;
-  }
-
-  return true;
-}
-
+// weighting kernel for local regression
 function tricube(x) {
   return (x = 1 - x * x * x) * x * x;
 }
 
-function updateBandwidthInterval(xval, weights, i, bandwidthInterval) {
-  let left = bandwidthInterval[0],
-      right = bandwidthInterval[1],
-      nextRight = nextNonzero(weights, right);
+// advance sliding window interval of nearest neighbors
+function updateInterval(xval, i, interval) {
+  let val = xval[i],
+      left = interval[0],
+      right = interval[1] + 1;
 
-  if ((nextRight < xval.length) && (xval[nextRight] - xval[i]) < (xval[i] - xval[left])) {
-    const nextLeft = nextNonzero(weights, left);
-    bandwidthInterval[0] = nextLeft;
-    bandwidthInterval[1] = nextRight;
+  if (right >= xval.length) return;
+
+  // step right if distance to new right edge is <= distance to old left edge
+  // step when distance is equal to ensure movement over duplicate x values
+  while (i > left && (xval[right] - val) <= (val - xval[left])) {
+    interval[0] = ++left;
+    interval[1] = right;
+    ++right;
   }
 }
 
-function nextNonzero(weights, i) {
-  let j = i + 1;
-  while (j < weights.length && weights[j] === 0) j++;
-  return j;
+// generate smoothed output points
+// average points with repeated x values
+function output(xval, yhat) {
+  const n = xval.length,
+        out = [];
+
+  for (let i=0, cnt=0, prev=[], v; i<n; ++i) {
+    v = xval[i];
+    if (prev[0] === v) {
+      // average output values via online update
+      prev[1] += (yhat[i] - prev[1]) / (++cnt);
+    } else {
+      // add new output point
+      cnt = 0;
+      prev = [v, yhat[i]];
+      out.push(prev);
+    }
+  }
+  return out;
 }
