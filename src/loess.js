@@ -13,7 +13,7 @@ export default function() {
 
   function loess(data) {
     const n = data.length,
-          k = Math.max(2, ~~(bandwidth * n)), // # nearest neighbors
+          bw = Math.max(2, ~~(bandwidth * n)), // # nearest neighbors
           xval = [],
           yval = [],
           yhat = [],
@@ -42,7 +42,7 @@ export default function() {
     const m = xval.length; // # loess input points
 
     for (let iter = -1; ++iter <= robustnessIters; ) {
-      const interval = [0, k - 1];
+      const interval = [0, bw - 1];
 
       for (let i = 0; i < m; ++i) {
         const dx = xval[i],
