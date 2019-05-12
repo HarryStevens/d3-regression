@@ -7,9 +7,9 @@ export default function() {
     domain;
   
   function power(data){
-    const n = data.length;
-    
-    let xlogSum = 0,
+    let n = data.length,
+        valid = 0,
+        xlogSum = 0,
         xlogylogSum = 0,
         ylogSum = 0,
         xlog2Sum = 0,
@@ -22,17 +22,24 @@ export default function() {
           dx = x(d, i, data),
           dy = y(d, i, data);
       
-      xlogSum += Math.log(dx);
-      xlogylogSum += Math.log(dy) * Math.log(dx);
-      ylogSum += Math.log(dy);
-      xlog2Sum += Math.pow(Math.log(dx), 2);
-      ySum += dy;
+      // Filter out points with invalid x or y values
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        valid++;
+        xlogSum += Math.log(dx);
+        xlogylogSum += Math.log(dy) * Math.log(dx);
+        ylogSum += Math.log(dy);
+        xlog2Sum += Math.pow(Math.log(dx), 2);
+        ySum += dy;
 
-      if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+        if (!domain){
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
       }
     }
+
+    // Update n in case there were invalid x or y values
+    n = valid;
 
     const b = (n * xlogylogSum - xlogSum * ylogSum) / (n * xlog2Sum - Math.pow(xlogSum, 2)),
         a = Math.exp((ylogSum - b * xlogSum) / n),

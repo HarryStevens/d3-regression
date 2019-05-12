@@ -22,15 +22,18 @@ export default function() {
           dx = x(d, i, data),
           dy = y(d, i, data);
       
-      ySum += dy;
-      x2ySum += dx * dx * dy;
-      ylogySum += dy * Math.log(dy)
-      xylogySum += dx * dy * Math.log(dy);
-      xySum += dx * dy;
+      // filter out points with invalid x or y values
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        ySum += dy;
+        x2ySum += dx * dx * dy;
+        ylogySum += dy * Math.log(dy)
+        xylogySum += dx * dy * Math.log(dy);
+        xySum += dx * dy;
 
-      if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+        if (!domain){
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
       }
     }
     

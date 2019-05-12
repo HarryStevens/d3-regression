@@ -7,9 +7,9 @@ export default function(){
       domain;
   
   function quadratic(data){
-    const n = data.length;
-    
-    let xSum = 0,
+    let n = data.length,
+        valid = 0,
+        xSum = 0,
         ySum = 0,
         x2Sum = 0,
         x3Sum = 0,
@@ -21,23 +21,30 @@ export default function(){
 
     for (let i = 0; i < n; i++){
       const d = data[i],
-            dx = x(d, i, data),
-            dy = y(d, i, data),
-            x2Val = Math.pow(dx, 2);
+          dx = x(d, i, data),
+          dy = y(d, i, data),
+          x2Val = Math.pow(dx, 2);
       
-      xSum += dx;
-      ySum += dy;
-      x2Sum += x2Val;
-      x3Sum += Math.pow(dx, 3);
-      x4Sum += Math.pow(dx, 4);
-      xySum += dx * dy;
-      x2ySum += x2Val * dy;
-      
-      if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+      // Filter out points with invalid x or y values
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        valid++;
+        xSum += dx;
+        ySum += dy;
+        x2Sum += x2Val;
+        x3Sum += Math.pow(dx, 3);
+        x4Sum += Math.pow(dx, 4);
+        xySum += dx * dy;
+        x2ySum += x2Val * dy;
+        
+        if (!domain){
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
       }
     }
+
+    // Update n in case there were invalid x or y values
+    n = valid;
 
     const sumXX = x2Sum - (Math.pow(xSum, 2) / n),
         sumXY = xySum - (xSum * ySum / n),

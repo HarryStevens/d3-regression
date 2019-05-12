@@ -12,25 +12,31 @@ export default function(){
   
   function polynomial(data) {    
     // First pass through the data
-    const n = data.length;
     let arr = [],
         ySum = 0,
         minX = domain ? +domain[0] : Infinity,
-        maxX = domain ? +domain[1] : -Infinity;
+        maxX = domain ? +domain[1] : -Infinity,
+        n = data.length;
     
     for (let i = 0; i < n; i++){
       const d = data[i],
           dx = x(d, i, data),
           dy = y(d, i, data);
       
-      arr[i] = [dx, dy];
-      ySum += dy;
-      
-      if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+      // Filter out points with invalid x or y values
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        arr[i] = [dx, dy];
+        ySum += dy;
+        
+        if (!domain){
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
       }
-    }    
+    }
+
+    // Update n in case there were invalid x or y values
+    n = arr.length;
 
     // Calculate the coefficients
     const lhs = [],
@@ -90,7 +96,7 @@ export default function(){
 }
 
 // Given an array representing a two-dimensional matrix,
-// and an order parameter representing how many degrees to solver for,
+// and an order parameter representing how many degrees to solve for,
 // determine the solution of a system of linear equations A * x = b using
 // Gaussian elimination.
 function gaussianElimination(matrix, order) {

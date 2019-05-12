@@ -96,16 +96,19 @@
       for (var i = 0; i < n; i++) {
         var d = data[i],
             dx = x(d, i, data),
-            dy = y(d, i, data);
-        ySum += dy;
-        x2ySum += dx * dx * dy;
-        ylogySum += dy * Math.log(dy);
-        xylogySum += dx * dy * Math.log(dy);
-        xySum += dx * dy;
+            dy = y(d, i, data); // filter out points with invalid x or y values
 
-        if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+          ySum += dy;
+          x2ySum += dx * dx * dy;
+          ylogySum += dy * Math.log(dy);
+          xylogySum += dx * dy * Math.log(dy);
+          xySum += dx * dy;
+
+          if (!domain) {
+            if (dx < minX) minX = dx;
+            if (dx > maxX) maxX = dx;
+          }
         }
       }
 
@@ -149,8 +152,9 @@
         domain;
 
     function linear(data) {
-      var n = data.length;
-      var xSum = 0,
+      var n = data.length,
+          valid = 0,
+          xSum = 0,
           ySum = 0,
           xySum = 0,
           x2Sum = 0,
@@ -160,17 +164,24 @@
       for (var i = 0; i < n; i++) {
         var _d = data[i],
             dx = x(_d, i, data),
-            dy = y(_d, i, data);
-        xSum += dx;
-        ySum += dy;
-        xySum += dx * dy;
-        x2Sum += dx * dx;
+            dy = y(_d, i, data); // Filter out points with invalid x or y values
 
-        if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+          valid++;
+          xSum += dx;
+          ySum += dy;
+          xySum += dx * dy;
+          x2Sum += dx * dx;
+
+          if (!domain) {
+            if (dx < minX) minX = dx;
+            if (dx > maxX) maxX = dx;
+          }
         }
-      }
+      } // Update n in case there were invalid x or y values
+
+
+      n = valid;
 
       var a = n * xySum,
           b = xSum * ySum,
@@ -239,73 +250,61 @@
         accuracy = 1e-12;
 
     function loess(data) {
-      sort(data, x);
-      var n = data.length;
-      var xval = [],
+      var n = data.length,
+          bw = Math.max(2, ~~(bandwidth * n)),
+          // # Nearest neighbors
+      xval = [],
           yval = [],
-          weights = [];
-
-      for (var i = 0; i < n; i++) {
-        weights[i] = 1;
-        var d = data[i];
-        xval[i] = x(d, i, data);
-        yval[i] = y(d, i, data);
-      }
-
-      finiteReal(xval);
-      finiteReal(yval);
-      finiteReal(weights);
-      strictlyIncreasing(xval);
-      var bandwidthInPoints = Math.floor(bandwidth * n);
-      if (bandwidthInPoints < 2) throw {
-        error: "Bandwidth too small."
-      };
-      var res = [],
+          yhat = [],
           residuals = [],
-          robustnessWeights = [];
+          robustWeights = []; // Slice before sort to avoid modifying input
 
-      for (var _i = 0; _i < n; _i++) {
-        res[_i] = 0;
-        residuals[_i] = 0;
-        robustnessWeights[_i] = 1;
+      sort(data = data.slice(), x);
+
+      for (var i = 0, j = 0; i < n; ++i) {
+        var d = data[i],
+            xi = x(d, i, data),
+            yi = y(d, i, data); // Filter out points with invalid x or y values
+
+        if (xi != null && isFinite(xi) && yi != null && isFinite(yi)) {
+          xval[j] = xi;
+          yval[j] = yi;
+          yhat[j] = 0;
+          residuals[j] = 0;
+          robustWeights[j] = 1;
+          ++j;
+        }
       }
 
-      var iter = -1;
+      var m = xval.length; // # LOESS input points
 
-      while (++iter <= robustnessIters) {
-        var bandwidthInterval = [0, bandwidthInPoints - 1];
-        var dx = void 0;
+      for (var iter = -1; ++iter <= robustnessIters;) {
+        var interval = [0, bw - 1];
 
-        for (var _i2 = 0; _i2 < n; _i2++) {
-          dx = xval[_i2];
-
-          if (_i2 > 0) {
-            updateBandwidthInterval(xval, weights, _i2, bandwidthInterval);
-          }
-
-          var ileft = bandwidthInterval[0],
-              iright = bandwidthInterval[1];
-          var edge = xval[_i2] - xval[ileft] > xval[iright] - xval[_i2] ? ileft : iright;
+        for (var _i = 0; _i < m; ++_i) {
+          var dx = xval[_i],
+              i0 = interval[0],
+              i1 = interval[1],
+              edge = dx - xval[i0] > xval[i1] - dx ? i0 : i1;
           var sumWeights = 0,
               sumX = 0,
               sumXSquared = 0,
               sumY = 0,
               sumXY = 0,
-              denom = Math.abs(1 / (xval[edge] - dx));
+              denom = 1 / Math.abs(xval[edge] - dx || 1); // Avoid singularity!
 
-          for (var k = ileft; k <= iright; ++k) {
+          for (var k = i0; k <= i1; ++k) {
             var xk = xval[k],
                 yk = yval[k],
-                dist = k < _i2 ? dx - xk : xk - dx,
-                _w = tricube(dist * denom) * robustnessWeights[k] * weights[k],
-                xkw = xk * _w;
-
-            sumWeights += _w;
+                w = tricube(Math.abs(dx - xk) * denom) * robustWeights[k],
+                xkw = xk * w;
+            sumWeights += w;
             sumX += xkw;
             sumXSquared += xk * xkw;
-            sumY += yk * _w;
+            sumY += yk * w;
             sumXY += yk * xkw;
-          }
+          } // Linear regression fit
+
 
           var meanX = sumX / sumWeights,
               meanY = sumY / sumWeights,
@@ -313,8 +312,9 @@
               meanXSquared = sumXSquared / sumWeights,
               beta = Math.sqrt(Math.abs(meanXSquared - meanX * meanX)) < accuracy ? 0 : (meanXY - meanX * meanY) / (meanXSquared - meanX * meanX),
               alpha = meanY - beta * meanX;
-          res[_i2] = beta * dx + alpha;
-          residuals[_i2] = Math.abs(yval[_i2] - res[_i2]);
+          yhat[_i] = beta * dx + alpha;
+          residuals[_i] = Math.abs(yval[_i] - yhat[_i]);
+          updateInterval(xval, _i + 1, interval);
         }
 
         if (iter === robustnessIters) {
@@ -322,27 +322,21 @@
         }
 
         var medianResidual = median(residuals);
+        if (Math.abs(medianResidual) < accuracy) break;
 
-        if (Math.abs(medianResidual) < accuracy) {
-          break;
-        }
+        for (var _i2 = 0, arg, _w; _i2 < m; ++_i2) {
+          arg = residuals[_i2] / (6 * medianResidual); // Default to accuracy epsilon (rather than zero) for large deviations
+          // keeping weights tiny but non-zero prevents singularites
 
-        var arg = void 0,
-            w = void 0;
-
-        for (var _i3 = 0; _i3 < n; _i3++) {
-          arg = residuals[_i3] / (6 * medianResidual);
-          robustnessWeights[_i3] = arg >= 1 ? 0 : (w = 1 - arg * arg) * w;
+          robustWeights[_i2] = arg >= 1 ? accuracy : (_w = 1 - arg * arg) * _w;
         }
       }
 
-      return res.map(function (d, i) {
-        return [xval[i], d];
-      });
+      return output(xval, yhat);
     }
 
-    loess.bandwidth = function (n) {
-      return arguments.length ? (bandwidth = n, loess) : bandwidth;
+    loess.bandwidth = function (bw) {
+      return arguments.length ? (bandwidth = bw, loess) : bandwidth;
     };
 
     loess.x = function (fn) {
@@ -354,48 +348,48 @@
     };
 
     return loess;
-  }
-
-  function finiteReal(values) {
-    for (var i = 0, n = values.length; i < n; i++) {
-      if (!isFinite(values[i])) return false;
-    }
-
-    return true;
-  }
-
-  function strictlyIncreasing(xval) {
-    for (var i = 0, n = xval.length; i < n; i++) {
-      if (xval[i - 1] >= xval[i]) return false;
-    }
-
-    return true;
-  }
+  } // Weighting kernel for local regression
 
   function tricube(x) {
     return (x = 1 - x * x * x) * x * x;
-  }
+  } // Advance sliding window interval of nearest neighbors
 
-  function updateBandwidthInterval(xval, weights, i, bandwidthInterval) {
-    var left = bandwidthInterval[0],
-        right = bandwidthInterval[1],
-        nextRight = nextNonzero(weights, right);
 
-    if (nextRight < xval.length && xval[nextRight] - xval[i] < xval[i] - xval[left]) {
-      var nextLeft = nextNonzero(weights, left);
-      bandwidthInterval[0] = nextLeft;
-      bandwidthInterval[1] = nextRight;
+  function updateInterval(xval, i, interval) {
+    var val = xval[i],
+        left = interval[0],
+        right = interval[1] + 1;
+    if (right >= xval.length) return; // Step right if distance to new right edge is <= distance to old left edge.
+    // Step when distance is equal to ensure movement over duplicate x values.
+
+    while (i > left && xval[right] - val <= val - xval[left]) {
+      interval[0] = ++left;
+      interval[1] = right;
+      ++right;
     }
-  }
+  } // Generate smoothed output points.
+  // Average points with repeated x values.
 
-  function nextNonzero(weights, i) {
-    var j = i + 1;
 
-    while (j < weights.length && weights[j] === 0) {
-      j++;
+  function output(xval, yhat) {
+    var n = xval.length,
+        out = [];
+
+    for (var i = 0, cnt = 0, prev = [], v; i < n; ++i) {
+      v = xval[i];
+
+      if (prev[0] === v) {
+        // Average output values via online update
+        prev[1] += (yhat[i] - prev[1]) / ++cnt;
+      } else {
+        // Add new output point
+        cnt = 0;
+        prev = [v, yhat[i]];
+        out.push(prev);
+      }
     }
 
-    return j;
+    return out;
   }
 
   function logarithmic () {
@@ -408,8 +402,9 @@
         domain;
 
     function logarithmic(data) {
-      var n = data.length;
-      var xlogSum = 0,
+      var n = data.length,
+          valid = 0,
+          xlogSum = 0,
           yxlogSum = 0,
           ySum = 0,
           xlog2Sum = 0,
@@ -419,17 +414,24 @@
       for (var i = 0; i < n; i++) {
         var d = data[i],
             dx = x(d, i, data),
-            dy = y(d, i, data);
-        xlogSum += Math.log(dx);
-        yxlogSum += dy * Math.log(dx);
-        ySum += dy;
-        xlog2Sum += Math.pow(Math.log(dx), 2);
+            dy = y(d, i, data); // Filter out points with invalid x or y values
 
-        if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+          valid++;
+          xlogSum += Math.log(dx);
+          yxlogSum += dy * Math.log(dx);
+          ySum += dy;
+          xlog2Sum += Math.pow(Math.log(dx), 2);
+
+          if (!domain) {
+            if (dx < minX) minX = dx;
+            if (dx > maxX) maxX = dx;
+          }
         }
-      }
+      } // Update n in case there were invalid x or y values
+
+
+      n = valid;
 
       var a = (n * yxlogSum - ySum * xlogSum) / (n * xlog2Sum - xlogSum * xlogSum),
           b = (ySum - a * xlogSum) / n,
@@ -475,25 +477,30 @@
 
     function polynomial(data) {
       // First pass through the data
-      var n = data.length;
       var arr = [],
           ySum = 0,
           minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity;
+          maxX = domain ? +domain[1] : -Infinity,
+          n = data.length;
 
       for (var i = 0; i < n; i++) {
         var d = data[i],
             dx = x(d, i, data),
-            dy = y(d, i, data);
-        arr[i] = [dx, dy];
-        ySum += dy;
+            dy = y(d, i, data); // Filter out points with invalid x or y values
 
-        if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+          arr[i] = [dx, dy];
+          ySum += dy;
+
+          if (!domain) {
+            if (dx < minX) minX = dx;
+            if (dx > maxX) maxX = dx;
+          }
         }
-      } // Calculate the coefficients
+      } // Update n in case there were invalid x or y values
 
+
+      n = arr.length; // Calculate the coefficients
 
       var lhs = [],
           rhs = [],
@@ -556,7 +563,7 @@
 
     return polynomial;
   } // Given an array representing a two-dimensional matrix,
-  // and an order parameter representing how many degrees to solver for,
+  // and an order parameter representing how many degrees to solve for,
   // determine the solution of a system of linear equations A * x = b using
   // Gaussian elimination.
 
@@ -609,8 +616,9 @@
         domain;
 
     function power(data) {
-      var n = data.length;
-      var xlogSum = 0,
+      var n = data.length,
+          valid = 0,
+          xlogSum = 0,
           xlogylogSum = 0,
           ylogSum = 0,
           xlog2Sum = 0,
@@ -621,18 +629,25 @@
       for (var i = 0; i < n; i++) {
         var d = data[i],
             dx = x(d, i, data),
-            dy = y(d, i, data);
-        xlogSum += Math.log(dx);
-        xlogylogSum += Math.log(dy) * Math.log(dx);
-        ylogSum += Math.log(dy);
-        xlog2Sum += Math.pow(Math.log(dx), 2);
-        ySum += dy;
+            dy = y(d, i, data); // Filter out points with invalid x or y values
 
-        if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+          valid++;
+          xlogSum += Math.log(dx);
+          xlogylogSum += Math.log(dy) * Math.log(dx);
+          ylogSum += Math.log(dy);
+          xlog2Sum += Math.pow(Math.log(dx), 2);
+          ySum += dy;
+
+          if (!domain) {
+            if (dx < minX) minX = dx;
+            if (dx > maxX) maxX = dx;
+          }
         }
-      }
+      } // Update n in case there were invalid x or y values
+
+
+      n = valid;
 
       var b = (n * xlogylogSum - xlogSum * ylogSum) / (n * xlog2Sum - Math.pow(xlogSum, 2)),
           a = Math.exp((ylogSum - b * xlogSum) / n),
@@ -673,8 +688,9 @@
         domain;
 
     function quadratic(data) {
-      var n = data.length;
-      var xSum = 0,
+      var n = data.length,
+          valid = 0,
+          xSum = 0,
           ySum = 0,
           x2Sum = 0,
           x3Sum = 0,
@@ -688,20 +704,27 @@
         var d = data[i],
             dx = x(d, i, data),
             dy = y(d, i, data),
-            x2Val = Math.pow(dx, 2);
-        xSum += dx;
-        ySum += dy;
-        x2Sum += x2Val;
-        x3Sum += Math.pow(dx, 3);
-        x4Sum += Math.pow(dx, 4);
-        xySum += dx * dy;
-        x2ySum += x2Val * dy;
+            x2Val = Math.pow(dx, 2); // Filter out points with invalid x or y values
 
-        if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+          valid++;
+          xSum += dx;
+          ySum += dy;
+          x2Sum += x2Val;
+          x3Sum += Math.pow(dx, 3);
+          x4Sum += Math.pow(dx, 4);
+          xySum += dx * dy;
+          x2ySum += x2Val * dy;
+
+          if (!domain) {
+            if (dx < minX) minX = dx;
+            if (dx > maxX) maxX = dx;
+          }
         }
-      }
+      } // Update n in case there were invalid x or y values
+
+
+      n = valid;
 
       var sumXX = x2Sum - Math.pow(xSum, 2) / n,
           sumXY = xySum - xSum * ySum / n,

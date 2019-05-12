@@ -6,9 +6,9 @@ export default function(){
       domain;
 
   function linear(data){
-    const n = data.length;
-
-    let xSum = 0,
+    let n = data.length,
+        valid = 0,
+        xSum = 0,
         ySum = 0,
         xySum = 0,
         x2Sum = 0,
@@ -19,17 +19,24 @@ export default function(){
       const d = data[i],
           dx = x(d, i, data),
           dy = y(d, i, data);
+      
+      // Filter out points with invalid x or y values
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        valid++;
+        xSum += dx;
+        ySum += dy;
+        xySum += dx * dy;
+        x2Sum += dx * dx;
 
-      xSum += dx;
-      ySum += dy;
-      xySum += dx * dy;
-      x2Sum += dx * dx;
-
-      if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+        if (!domain){
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
+        }
       }
     }
+
+    // Update n in case there were invalid x or y values
+    n = valid;
 
     const a = n * xySum,
         b = xSum * ySum,
