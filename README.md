@@ -27,7 +27,7 @@ const regression = d3.regressionLinear()
 - [Power law](#regressionPow)
 - [LOESS](#regressionLoess)
 
-<a name="regressionLinear" href="#regressionLinear">#</a> d3.<b>regressionLinear</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js "Source")
+<a name="regressionLinear" href="#regressionLinear">#</a> d3.<b>regressionLinear</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js "Source"), [Example](https://observablehq.com/@harrystevens/linear-regression "Example")
 
 Creates a new linear regression generator with default [<em>x</em>-](#linear_x) and [<em>y</em>-](#linear_y) accessors and a null [domain](#linear_domain).
 
@@ -67,7 +67,7 @@ If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordin
 
 If data is passed to the regression generator before a <em>domain</em> has been specified, the domain will be set to the minimum and maximum <em>x</em>-coordinate values of the data.
 
-<a name="regressionExp" href="#regressionExp">#</a> d3.<b>regressionExp</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js "Source")
+<a name="regressionExp" href="#regressionExp">#</a> d3.<b>regressionExp</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js "Source"), [Example](https://observablehq.com/@harrystevens/exponential-regression "Example")
 
 Creates a new exponential regression generator with default [<em>x</em>-](#exp_x) and [<em>y</em>-](#exp_y) accessors and a null [domain](#exp_domain).
 
@@ -93,7 +93,7 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionLog" href="#regressionLog">#</a> d3.<b>regressionLog</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js "Source")
+<a name="regressionLog" href="#regressionLog">#</a> d3.<b>regressionLog</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js "Source"), [Example](https://observablehq.com/@harrystevens/logarithmic-regression "Example")
 
 Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x) and [<em>y</em>-](#log_y) accessors and a null [domain](#log_domain).
 
@@ -119,7 +119,7 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionQuad" href="#regressionQuad">#</a> d3.<b>regressionQuad</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source")
+<a name="regressionQuad" href="#regressionQuad">#</a> d3.<b>regressionQuad</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source"), [Example](https://observablehq.com/@harrystevens/quadratic-regression "Example")
 
 Creates a new quadratic regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors and a null [domain](#quad_domain).
 
@@ -145,7 +145,7 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionPoly" href="#regressionPoly">#</a> d3.<b>regressionPoly</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js "Source")
+<a name="regressionPoly" href="#regressionPoly">#</a> d3.<b>regressionPoly</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js "Source"), [Example](https://observablehq.com/@harrystevens/polynomial-regression "Example")
 
 Creates a new polynomial regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors, a null [domain](#quad_domain), and an [order](#poly_order) of 3. This implementation was adapted from [regression-js](https://github.com/Tom-Alexander/regression-js/).
 
@@ -177,7 +177,7 @@ If <em>order</em> is specified, sets the regression's order to the specified num
 
 If <em>order</em> is not specified, returns the regression generator's current <em>order</em>, which defaults to 3.
 
-<a name="regressionPow" href="#regressionPow">#</a> d3.<b>regressionPow</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/power.js "Source")
+<a name="regressionPow" href="#regressionPow">#</a> d3.<b>regressionPow</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js "Source"), [Example](https://observablehq.com/@harrystevens/power-law-regression "Example")
 
 Creates a new power law regression generator with default [<em>x</em>-](#pow_x) and [<em>y</em>-](#pow_y) accessors and a null [domain](#pow_domain).
 
@@ -203,7 +203,7 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionLoess" href="#regressionLoess">#</a> d3.<b>regressionLoess</b>() [<>](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js "Source")
+<a name="regressionLoess" href="#regressionLoess">#</a> d3.<b>regressionLoess</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js "Source"), [Example](https://observablehq.com/@harrystevens/loess-regression "Example")
 
 Creates a new [LOESS regression](https://en.wikipedia.org/wiki/Local_regression) generator with default [<em>x</em>-](#loess_x) and [<em>y</em>-](#loess_y) accessors and a [bandwidth](#loess_bandwidth) of .3. This implementation was adapted from [science.js](https://github.com/jasondavies/science.js).
 
