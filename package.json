@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "pretest": "rm -rf dist && mkdir dist && rollup -c --banner \"$(preamble)\"",
-    "test": "tape 'test/**/*-test.js' && eslint index.js src",
+    "test": "tape 'test/**/*-test.js'",
     "prepublish": "npm run test && uglifyjs dist/d3-regression.js -c -m -o dist/d3-regression.min.js",
     "postpublish": "zip -j dist/d3-regression.zip -- LICENSE README.md dist/d3-regression.js dist/d3-regression.min.js"
   },
@@ -33,7 +33,6 @@
     "@babel/core": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
     "babel": "^6.23.0",
-    "eslint": "^5.16.0",
     "package-preamble": "^0.1.0",
     "rollup": "^1.11.0",
     "rollup-plugin-babel": "^4.3.2",
