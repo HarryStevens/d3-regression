@@ -71,7 +71,7 @@ export default function(){
         out = interpose(minX, maxX, fn);
     
     out.coefficients = coefficients;
-    out.predict;
+    out.predict = fn;
     out.rSquared = determination(data, x, y, ySum, fn);
     return out;
   }
