@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 1.2.5. Copyright 2019 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 1.2.6. Copyright 2019 Harry Stevens.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -562,7 +562,7 @@
     function polynomial(data) {
       // Use more efficient methods for lower orders
       if (order === 1) {
-        var o = linear().x(x).y(y)(data);
+        var o = linear().x(x).y(y).domain(domain)(data);
         o.coefficients = [o.b, o.a];
         delete o.a;
         delete o.b;
@@ -570,7 +570,7 @@
       }
 
       if (order === 2) {
-        var _o = quad().x(x).y(y)(data);
+        var _o = quad().x(x).y(y).domain(domain)(data);
 
         _o.coefficients = [_o.c, _o.b, _o.a];
         delete _o.a;

@@ -15,13 +15,13 @@ export default function(){
   function polynomial(data) {
     // Use more efficient methods for lower orders
     if (order === 1) {
-      const o = linear().x(x).y(y)(data);
+      const o = linear().x(x).y(y).domain(domain)(data);
       o.coefficients = [o.b, o.a];
       delete o.a; delete o.b;
       return o;
     }
     if (order === 2) {
-      const o = quad().x(x).y(y)(data);
+      const o = quad().x(x).y(y).domain(domain)(data);
       o.coefficients = [o.c, o.b, o.a];
       delete o.a; delete o.b; delete o.c;
       return o;
