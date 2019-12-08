@@ -107,15 +107,15 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L49 "Source")
+<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L50 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="log_y" href="#log_y">#</a> <i>log</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L53 "Source")
+<a name="log_y" href="#log_y">#</a> <i>log</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L54 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L45 "Source")
+<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L46 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
