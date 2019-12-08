@@ -1,5 +1,7 @@
-import {determination} from "./utils/determination";
-import {interpose} from "./utils/interpose";
+import { determination } from "./utils/determination";
+import { interpose } from "./utils/interpose";
+import linear from "./linear";
+import quad from "./quadratic";
 
 // Adapted from regression-js by Tom Alexander
 // Source: https://github.com/Tom-Alexander/regression-js/blob/master/src/regression.js#L246
@@ -10,7 +12,21 @@ export default function(){
       order = 3,
       domain;
   
-  function polynomial(data) {    
+  function polynomial(data) {
+    // Use more efficient methods for lower orders
+    if (order === 1) {
+      const o = linear().x(x).y(y)(data);
+      o.coefficients = [o.b, o.a];
+      delete o.a; delete o.b;
+      return o;
+    }
+    if (order === 2) {
+      const o = quad().x(x).y(y)(data);
+      o.coefficients = [o.c, o.b, o.a];
+      delete o.a; delete o.b; delete o.c;
+      return o;
+    }
+
     // First pass through the data
     let arr = [],
         ySum = 0,
