@@ -1,5 +1,6 @@
 import { determination } from "./utils/determination";
 import { interpose } from "./utils/interpose";
+import { ols } from "./utils/ols";
 import { visitPoints } from "./utils/points";
 
 export default function() {
@@ -9,19 +10,20 @@ export default function() {
   
   function logarithmic(data){
     let n = 0,
-        XL = 0,
-        XLY = 0,
+        X = 0,
         Y = 0,
-        XL2 = 0,
+        XY = 0,
+        X2 = 0,
         minX = domain ? +domain[0] : Infinity,
         maxX = domain ? +domain[1] : -Infinity;
     
     visitPoints(data, x, y, (dx, dy) => {
       ++n;
-      XL += Math.log(dx);
-      XLY += dy * Math.log(dx);
-      Y += dy;
-      XL2 += Math.pow(Math.log(dx), 2);
+      const lx = Math.log(dx);
+      X += (lx - X) / n;
+      Y += (dy - Y) / n;
+      XY += (lx * dy - XY) / n;
+      X2 += (lx * lx - X2) / n;
       
       if (!domain){
         if (dx < minX) minX = dx;
@@ -29,13 +31,12 @@ export default function() {
       }
     });
     
-    const a = (n * XLY - Y * XL) / (n * XL2 - XL * XL),
-        b = (Y - a * XL) / n,
-        fn = x => a * Math.log(x) + b,
+    const [intercept, slope] = ols(X, Y, XY, X2),
+        fn = x => slope * Math.log(x) + intercept,
         out = interpose(minX, maxX, fn);
         
-    out.a = a;
-    out.b = b;
+    out.a = slope;
+    out.b = intercept;
     out.predict = fn;
     out.rSquared = determination(data, x, y, Y, fn);
 

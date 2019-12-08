@@ -5,22 +5,34 @@
   (global = global || self, factory(global.d3 = global.d3 || {}));
 }(this, function (exports) { 'use strict';
 
-  // Given a dataset, x- and y-accessors, the sum of the y values, and a predict function,
-  // return the coefficient of determination, or R squared.
-  function determination(data, x, y, Y, predict) {
-    var n = data.length;
-    var SSE = 0,
-        SST = 0;
+  // Adapted from vega-statistics by Jeffrey Heer
+  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
+  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
+  function visitPoints(data, x, y, cb) {
+    var iterations = 0;
 
-    for (var i = 0; i < n; i++) {
+    for (var i = 0, n = data.length; i < n; i++) {
       var d = data[i],
           dx = x(d),
-          dy = y(d),
-          yComp = predict(dx);
-      SSE += Math.pow(dy - yComp, 2);
-      SST += Math.pow(dy - Y / n, 2);
-    }
+          dy = y(d);
 
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        cb(dx, dy, iterations++);
+      }
+    }
+  }
+
+  // return the coefficient of determination, or R squared.
+
+  function determination(data, x, y, uY, predict) {
+    var SSE = 0,
+        SST = 0;
+    visitPoints(data, x, y, function (dx, dy) {
+      var sse = dy - predict(dx),
+          sst = dy - uY;
+      SSE += sse * sse;
+      SST += sst * sst;
+    });
     return 1 - SSE / SST;
   }
 
@@ -71,23 +83,6 @@
       }
 
       return found;
-    }
-  }
-
-  // Adapted from vega-statistics by Jeffrey Heer
-  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
-  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
-  function visitPoints(data, x, y, cb) {
-    var iterations = 0;
-
-    for (var i = 0, n = data.length; i < n; i++) {
-      var d = data[i],
-          dx = x(d),
-          dy = y(d);
-
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        cb(dx, dy, iterations++);
-      }
     }
   }
 
@@ -448,18 +443,19 @@
 
     function logarithmic(data) {
       var n = 0,
-          XL = 0,
-          XLY = 0,
+          X = 0,
           Y = 0,
-          XL2 = 0,
+          XY = 0,
+          X2 = 0,
           minX = domain ? +domain[0] : Infinity,
           maxX = domain ? +domain[1] : -Infinity;
       visitPoints(data, x, y, function (dx, dy) {
         ++n;
-        XL += Math.log(dx);
-        XLY += dy * Math.log(dx);
-        Y += dy;
-        XL2 += Math.pow(Math.log(dx), 2);
+        var lx = Math.log(dx);
+        X += (lx - X) / n;
+        Y += (dy - Y) / n;
+        XY += (lx * dy - XY) / n;
+        X2 += (lx * lx - X2) / n;
 
         if (!domain) {
           if (dx < minX) minX = dx;
@@ -467,15 +463,17 @@
         }
       });
 
-      var a = (n * XLY - Y * XL) / (n * XL2 - XL * XL),
-          b = (Y - a * XL) / n,
+      var _ols = ols(X, Y, XY, X2),
+          _ols2 = _slicedToArray(_ols, 2),
+          intercept = _ols2[0],
+          slope = _ols2[1],
           fn = function fn(x) {
-        return a * Math.log(x) + b;
+        return slope * Math.log(x) + intercept;
       },
           out = interpose(minX, maxX, fn);
 
-      out.a = a;
-      out.b = b;
+      out.a = slope;
+      out.b = intercept;
       out.predict = fn;
       out.rSquared = determination(data, x, y, Y, fn);
       return out;

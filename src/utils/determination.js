@@ -1,20 +1,18 @@
-// Given a dataset, x- and y-accessors, the sum of the y values, and a predict function,
+import { visitPoints } from "./points";
+
+// Given a dataset, x- and y-accessors, the population mean of the y values, and a predict function,
 // return the coefficient of determination, or R squared.
-export function determination(data, x, y, Y, predict){
-  const n = data.length;
-  
+export function determination(data, x, y, uY, predict){
   let SSE = 0,
       SST = 0;
   
-  for (let i = 0; i < n; i++){
-    const d = data[i],
-        dx = x(d),
-        dy = y(d),
-        yComp = predict(dx);
+  visitPoints(data, x, y, (dx, dy) => {
+    const sse = dy - predict(dx),
+          sst = dy - uY;
 
-    SSE += Math.pow(dy - yComp, 2);
-    SST += Math.pow(dy - Y / n, 2);
-  }
+    SSE += sse * sse;
+    SST += sst * sst;
+  });
 
   return 1 - SSE / SST;
 }
