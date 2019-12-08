@@ -14,26 +14,26 @@ export default function() {
         Y = 0,
         XY = 0,
         X2 = 0,
-        minX = domain ? +domain[0] : Infinity,
-        maxX = domain ? +domain[1] : -Infinity;
+        xmin = domain ? +domain[0] : Infinity,
+        xmax = domain ? +domain[1] : -Infinity;
     
     visitPoints(data, x, y, (dx, dy) => {
-      ++n;
       const lx = Math.log(dx);
+      ++n;
       X += (lx - X) / n;
       Y += (dy - Y) / n;
       XY += (lx * dy - XY) / n;
       X2 += (lx * lx - X2) / n;
       
       if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+        if (dx < xmin) xmin = dx;
+        if (dx > xmax) xmax = dx;
       }
     });
     
     const [intercept, slope] = ols(X, Y, XY, X2),
         fn = x => slope * Math.log(x) + intercept,
-        out = interpose(minX, maxX, fn);
+        out = interpose(xmin, xmax, fn);
         
     out.a = slope;
     out.b = intercept;

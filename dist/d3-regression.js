@@ -5,6 +5,44 @@
   (global = global || self, factory(global.d3 = global.d3 || {}));
 }(this, function (exports) { 'use strict';
 
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  }
+
   // Adapted from vega-statistics by Jeffrey Heer
   // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
   // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
@@ -86,6 +124,16 @@
     }
   }
 
+  // Ordinary Least Squares from vega-statistics by Jeffrey Heer
+  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
+  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/ols.js
+  function ols(uX, uY, uXY, uX2) {
+    var delta = uX2 - uX * uX,
+        slope = Math.abs(delta) < 1e-24 ? 0 : (uXY - uX * uY) / delta,
+        intercept = uY - slope * uX;
+    return [intercept, slope];
+  }
+
   function exponential () {
     var x = function x(d) {
       return d[0];
@@ -96,33 +144,41 @@
         domain;
 
     function exponential(data) {
-      var Y = 0,
-          X2Y = 0,
-          YLY = 0,
-          XYLY = 0,
+      var n = 0,
+          Y = 0,
+          YL = 0,
           XY = 0,
-          minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity;
+          XYL = 0,
+          X2Y = 0,
+          xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
       visitPoints(data, x, y, function (dx, dy) {
-        Y += dy;
-        X2Y += dx * dx * dy;
-        YLY += dy * Math.log(dy);
-        XYLY += dx * dy * Math.log(dy);
-        XY += dx * dy;
+        var ly = Math.log(dy),
+            xy = dx * dy;
+        ++n;
+        Y += (dy - Y) / n;
+        XY += (xy - XY) / n;
+        X2Y += (dx * xy - X2Y) / n;
+        YL += (dy * ly - YL) / n;
+        XYL += (xy * ly - XYL) / n;
 
         if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
         }
       });
 
-      var denominator = Y * X2Y - XY * XY,
-          a = Math.exp((X2Y * YLY - XY * XYLY) / denominator),
-          b = (Y * XYLY - XY * YLY) / denominator,
-          fn = function fn(x) {
+      var _ols = ols(XY / Y, YL / Y, XYL / Y, X2Y / Y),
+          _ols2 = _slicedToArray(_ols, 2),
+          a = _ols2[0],
+          b = _ols2[1];
+
+      a = Math.exp(a);
+
+      var fn = function fn(x) {
         return a * Math.exp(b * x);
       },
-          out = interpose(minX, maxX, fn);
+          out = interpose(xmin, xmax, fn);
 
       out.a = a;
       out.b = b;
@@ -144,54 +200,6 @@
     };
 
     return exponential;
-  }
-
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
-  }
-
-  function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-  }
-
-  function _iterableToArrayLimit(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"] != null) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance");
-  }
-
-  // Ordinary Least Squares from vega-statistics by Jeffrey Heer
-  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
-  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/ols.js
-  function ols(uX, uY, uXY, uX2) {
-    var delta = uX2 - uX * uX,
-        slope = Math.abs(delta) < 1e-24 ? 0 : (uXY - uX * uY) / delta,
-        intercept = uY - slope * uX;
-    return [intercept, slope];
   }
 
   function linear () {
@@ -447,19 +455,19 @@
           Y = 0,
           XY = 0,
           X2 = 0,
-          minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity;
+          xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
       visitPoints(data, x, y, function (dx, dy) {
-        ++n;
         var lx = Math.log(dx);
+        ++n;
         X += (lx - X) / n;
         Y += (dy - Y) / n;
         XY += (lx * dy - XY) / n;
         X2 += (lx * lx - X2) / n;
 
         if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
         }
       });
 
@@ -470,7 +478,7 @@
           fn = function fn(x) {
         return slope * Math.log(x) + intercept;
       },
-          out = interpose(minX, maxX, fn);
+          out = interpose(xmin, xmax, fn);
 
       out.a = slope;
       out.b = intercept;
@@ -752,38 +760,45 @@
 
     function power(data) {
       var n = 0,
-          XL = 0,
-          XLYL = 0,
-          YL = 0,
-          XL2 = 0,
+          X = 0,
           Y = 0,
-          minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity;
+          XY = 0,
+          X2 = 0,
+          YS = 0,
+          xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
       visitPoints(data, x, y, function (dx, dy) {
-        n++;
-        XL += Math.log(dx);
-        XLYL += Math.log(dy) * Math.log(dx);
-        YL += Math.log(dy);
-        XL2 += Math.pow(Math.log(dx), 2);
-        Y += dy;
+        var lx = Math.log(dx),
+            ly = Math.log(dy);
+        ++n;
+        X += (lx - X) / n;
+        Y += (ly - Y) / n;
+        XY += (lx * ly - XY) / n;
+        X2 += (lx * lx - X2) / n;
+        YS += (dy - YS) / n;
 
         if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
         }
       });
 
-      var b = (n * XLYL - XL * YL) / (n * XL2 - Math.pow(XL, 2)),
-          a = Math.exp((YL - b * XL) / n),
-          fn = function fn(x) {
+      var _ols = ols(X, Y, XY, X2),
+          _ols2 = _slicedToArray(_ols, 2),
+          a = _ols2[0],
+          b = _ols2[1];
+
+      a = Math.exp(a);
+
+      var fn = function fn(x) {
         return a * Math.pow(x, b);
       },
-          out = interpose(minX, maxX, fn);
+          out = interpose(xmin, xmax, fn);
 
       out.a = a;
       out.b = b;
       out.predict = fn;
-      out.rSquared = determination(data, x, y, Y, fn);
+      out.rSquared = determination(data, x, y, YS, fn);
       return out;
     }
 

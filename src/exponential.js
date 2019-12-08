@@ -1,5 +1,6 @@
 import { determination } from "./utils/determination";
 import { interpose } from "./utils/interpose";
+import { ols } from "./utils/ols";
 import { visitPoints } from "./utils/points";
 
 export default function() {
@@ -10,32 +11,32 @@ export default function() {
   function exponential(data){
     let n = 0,
         Y = 0,
-        X2Y = 0,
-        YLY = 0,
-        XYLY = 0,
+        YL = 0,
         XY = 0,
-        minX = domain ? +domain[0] : Infinity,
-        maxX = domain ? +domain[1] : -Infinity;
+        XYL = 0,
+        X2Y = 0,
+        xmin = domain ? +domain[0] : Infinity,
+        xmax = domain ? +domain[1] : -Infinity;
 
     visitPoints(data, x, y, (dx, dy) => {
-      n++;
-      Y += dy;
-      X2Y += dx * dx * dy;
-      YLY += dy * Math.log(dy)
-      XYLY += dx * dy * Math.log(dy);
-      XY += dx * dy;
-
+      const ly = Math.log(dy), xy = dx * dy;
+      ++n;
+      Y += (dy - Y) / n;
+      XY += (xy - XY) / n;
+      X2Y += (dx * xy - X2Y) / n;
+      YL += (dy * ly - YL) / n;
+      XYL += (xy * ly - XYL) / n;
+      
       if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+        if (dx < xmin) xmin = dx;
+        if (dx > xmax) xmax = dx;
       }
     });
     
-    const denominator = Y * X2Y - XY * XY,
-        a = Math.exp((X2Y * YLY - XY * XYLY) / denominator),
-        b = (Y * XYLY - XY * YLY) / denominator,
-        fn = x => a * Math.exp(b * x),
-        out = interpose(minX, maxX, fn);
+    let [a, b] = ols(XY / Y, YL / Y, XYL / Y, X2Y / Y);
+    a = Math.exp(a);
+    const fn = x => a * Math.exp(b * x),
+          out = interpose(xmin, xmax, fn);
     
     out.a = a;
     out.b = b;

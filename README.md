@@ -81,15 +81,15 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L52 "Source")
+<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L53 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L56 "Source")
+<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L57 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L48 "Source")
+<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L49 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
@@ -191,15 +191,15 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="pow_x" href="#pow_x">#</a> <i>pow</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L51 "Source")
+<a name="pow_x" href="#pow_x">#</a> <i>pow</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L54 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="pow_y" href="#pow_y">#</a> <i>pow</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L55 "Source")
+<a name="pow_y" href="#pow_y">#</a> <i>pow</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L58 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="pow_domain" href="#pow_domain">#</a> <i>pow</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L47 "Source")
+<a name="pow_domain" href="#pow_domain">#</a> <i>pow</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L50 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
