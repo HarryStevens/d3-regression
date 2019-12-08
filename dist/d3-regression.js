@@ -7,7 +7,7 @@
 
   // Given a dataset, x- and y-accessors, the sum of the y values, and a predict function,
   // return the coefficient of determination, or R squared.
-  function determination(data, x, y, ySum, predict) {
+  function determination(data, x, y, Y, predict) {
     var n = data.length;
     var SSE = 0,
         SST = 0;
@@ -18,7 +18,7 @@
           dy = y(d),
           yComp = predict(dx);
       SSE += Math.pow(dy - yComp, 2);
-      SST += Math.pow(dy - ySum / n, 2);
+      SST += Math.pow(dy - Y / n, 2);
     }
 
     return 1 - SSE / SST;
@@ -74,6 +74,23 @@
     }
   }
 
+  // Adapted from vega-statistics by Jeffrey Heer
+  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
+  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
+  function visitPoints(data, x, y, cb) {
+    var iterations = 0;
+
+    for (var i = 0, n = data.length; i < n; i++) {
+      var d = data[i],
+          dx = x(d),
+          dy = y(d);
+
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        cb(dx, dy, iterations++);
+      }
+    }
+  }
+
   function exponential () {
     var x = function x(d) {
       return d[0];
@@ -84,37 +101,29 @@
         domain;
 
     function exponential(data) {
-      var n = data.length;
-      var ySum = 0,
-          x2ySum = 0,
-          ylogySum = 0,
-          xylogySum = 0,
-          xySum = 0,
+      var Y = 0,
+          X2Y = 0,
+          YLY = 0,
+          XYLY = 0,
+          XY = 0,
           minX = domain ? +domain[0] : Infinity,
           maxX = domain ? +domain[1] : -Infinity;
+      visitPoints(data, x, y, function (dx, dy) {
+        Y += dy;
+        X2Y += dx * dx * dy;
+        YLY += dy * Math.log(dy);
+        XYLY += dx * dy * Math.log(dy);
+        XY += dx * dy;
 
-      for (var i = 0; i < n; i++) {
-        var d = data[i],
-            dx = x(d, i, data),
-            dy = y(d, i, data); // filter out points with invalid x or y values
-
-        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-          ySum += dy;
-          x2ySum += dx * dx * dy;
-          ylogySum += dy * Math.log(dy);
-          xylogySum += dx * dy * Math.log(dy);
-          xySum += dx * dy;
-
-          if (!domain) {
-            if (dx < minX) minX = dx;
-            if (dx > maxX) maxX = dx;
-          }
+        if (!domain) {
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
         }
-      }
+      });
 
-      var denominator = ySum * x2ySum - xySum * xySum,
-          a = Math.exp((x2ySum * ylogySum - xySum * xylogySum) / denominator),
-          b = (ySum * xylogySum - xySum * ylogySum) / denominator,
+      var denominator = Y * X2Y - XY * XY,
+          a = Math.exp((X2Y * YLY - XY * XYLY) / denominator),
+          b = (Y * XYLY - XY * YLY) / denominator,
           fn = function fn(x) {
         return a * Math.exp(b * x);
       },
@@ -123,7 +132,7 @@
       out.a = a;
       out.b = b;
       out.predict = fn;
-      out.rSquared = determination(data, x, y, ySum, fn);
+      out.rSquared = determination(data, x, y, Y, fn);
       return out;
     }
 
@@ -140,23 +149,6 @@
     };
 
     return exponential;
-  }
-
-  // Adapted from vega-statistics by Jeffrey Heer
-  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
-  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
-  function visitPoints(data, x, y, cb) {
-    var iterations = 0;
-
-    for (var i = 0, n = data.length; i < n; i++) {
-      var d = data[i],
-          dx = x(d),
-          dy = y(d);
-
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        cb(dx, dy, iterations++);
-      }
-    }
   }
 
   function linear () {
@@ -406,18 +398,18 @@
 
     function logarithmic(data) {
       var n = 0,
-          xlogSum = 0,
-          yxlogSum = 0,
-          ySum = 0,
-          xlog2Sum = 0,
+          XL = 0,
+          XLY = 0,
+          Y = 0,
+          XL2 = 0,
           minX = domain ? +domain[0] : Infinity,
           maxX = domain ? +domain[1] : -Infinity;
       visitPoints(data, x, y, function (dx, dy) {
         ++n;
-        xlogSum += Math.log(dx);
-        yxlogSum += dy * Math.log(dx);
-        ySum += dy;
-        xlog2Sum += Math.pow(Math.log(dx), 2);
+        XL += Math.log(dx);
+        XLY += dy * Math.log(dx);
+        Y += dy;
+        XL2 += Math.pow(Math.log(dx), 2);
 
         if (!domain) {
           if (dx < minX) minX = dx;
@@ -425,8 +417,8 @@
         }
       });
 
-      var a = (n * yxlogSum - ySum * xlogSum) / (n * xlog2Sum - xlogSum * xlogSum),
-          b = (ySum - a * xlogSum) / n,
+      var a = (n * XLY - Y * XL) / (n * XL2 - XL * XL),
+          b = (Y - a * XL) / n,
           fn = function fn(x) {
         return a * Math.log(x) + b;
       },
@@ -435,7 +427,7 @@
       out.a = a;
       out.b = b;
       out.predict = fn;
-      out.rSquared = determination(data, x, y, ySum, fn);
+      out.rSquared = determination(data, x, y, Y, fn);
       return out;
     }
 
@@ -711,41 +703,30 @@
         domain;
 
     function power(data) {
-      var n = data.length,
-          valid = 0,
-          xlogSum = 0,
-          xlogylogSum = 0,
-          ylogSum = 0,
-          xlog2Sum = 0,
-          ySum = 0,
+      var n = 0,
+          XL = 0,
+          XLYL = 0,
+          YL = 0,
+          XL2 = 0,
+          Y = 0,
           minX = domain ? +domain[0] : Infinity,
           maxX = domain ? +domain[1] : -Infinity;
+      visitPoints(data, x, y, function (dx, dy) {
+        n++;
+        XL += Math.log(dx);
+        XLYL += Math.log(dy) * Math.log(dx);
+        YL += Math.log(dy);
+        XL2 += Math.pow(Math.log(dx), 2);
+        Y += dy;
 
-      for (var i = 0; i < n; i++) {
-        var d = data[i],
-            dx = x(d, i, data),
-            dy = y(d, i, data); // Filter out points with invalid x or y values
-
-        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-          valid++;
-          xlogSum += Math.log(dx);
-          xlogylogSum += Math.log(dy) * Math.log(dx);
-          ylogSum += Math.log(dy);
-          xlog2Sum += Math.pow(Math.log(dx), 2);
-          ySum += dy;
-
-          if (!domain) {
-            if (dx < minX) minX = dx;
-            if (dx > maxX) maxX = dx;
-          }
+        if (!domain) {
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
         }
-      } // Update n in case there were invalid x or y values
+      });
 
-
-      n = valid;
-
-      var b = (n * xlogylogSum - xlogSum * ylogSum) / (n * xlog2Sum - Math.pow(xlogSum, 2)),
-          a = Math.exp((ylogSum - b * xlogSum) / n),
+      var b = (n * XLYL - XL * YL) / (n * XL2 - Math.pow(XL, 2)),
+          a = Math.exp((YL - b * XL) / n),
           fn = function fn(x) {
         return a * Math.pow(x, b);
       },
@@ -754,7 +735,7 @@
       out.a = a;
       out.b = b;
       out.predict = fn;
-      out.rSquared = determination(data, x, y, ySum, fn);
+      out.rSquared = determination(data, x, y, Y, fn);
       return out;
     }
 

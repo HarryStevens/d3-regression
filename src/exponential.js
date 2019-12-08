@@ -1,5 +1,6 @@
-import {determination} from "./utils/determination";
-import {interpose} from "./utils/interpose";
+import { determination } from "./utils/determination";
+import { interpose } from "./utils/interpose";
+import { visitPoints } from "./utils/points";
 
 export default function() {
   let x = d => d[0],
@@ -7,46 +8,39 @@ export default function() {
       domain;
    
   function exponential(data){
-    const n = data.length;
-    
-    let ySum = 0,
-        x2ySum = 0,
-        ylogySum = 0,
-        xylogySum = 0,
-        xySum = 0,
+    let n = 0,
+        Y = 0,
+        X2Y = 0,
+        YLY = 0,
+        XYLY = 0,
+        XY = 0,
         minX = domain ? +domain[0] : Infinity,
         maxX = domain ? +domain[1] : -Infinity;
 
-    for (let i = 0; i < n; i++) {
-      const d = data[i],
-          dx = x(d, i, data),
-          dy = y(d, i, data);
-      
-      // filter out points with invalid x or y values
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        ySum += dy;
-        x2ySum += dx * dx * dy;
-        ylogySum += dy * Math.log(dy)
-        xylogySum += dx * dy * Math.log(dy);
-        xySum += dx * dy;
+    visitPoints(data, x, y, (dx, dy) => {
+      n++;
+      Y += dy;
+      X2Y += dx * dx * dy;
+      YLY += dy * Math.log(dy)
+      XYLY += dx * dy * Math.log(dy);
+      XY += dx * dy;
 
-        if (!domain){
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
-        }
+      if (!domain){
+        if (dx < minX) minX = dx;
+        if (dx > maxX) maxX = dx;
       }
-    }
+    });
     
-    const denominator = ySum * x2ySum - xySum * xySum,
-        a = Math.exp((x2ySum * ylogySum - xySum * xylogySum) / denominator),
-        b = (ySum * xylogySum - xySum * ylogySum) / denominator,
+    const denominator = Y * X2Y - XY * XY,
+        a = Math.exp((X2Y * YLY - XY * XYLY) / denominator),
+        b = (Y * XYLY - XY * YLY) / denominator,
         fn = x => a * Math.exp(b * x),
         out = interpose(minX, maxX, fn);
     
     out.a = a;
     out.b = b;
     out.predict = fn;
-    out.rSquared = determination(data, x, y, ySum, fn);
+    out.rSquared = determination(data, x, y, Y, fn);
     
     return out;  
   }

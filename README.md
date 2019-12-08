@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data. [![Build Status](ht
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.2.7/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.2.8/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
@@ -33,7 +33,7 @@ Creates a new linear regression generator with default [<em>x</em>-](#linear_x) 
 
 [<img alt="Linear regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/linear.png" width="250">](https://observablehq.com/@harrystevens/linear-regression)
 
-<a name="_linear" href="#_linear">#</a> <i>linear</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L8 "Source")
+<a name="_linear" href="#_linear">#</a> <i>linear</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L9 "Source")
 
 Computes the linear regression, which takes the form <em>y</em> = <em>ax</em> + <em>b</em>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
 
@@ -41,7 +41,7 @@ Returns a line represented as an array of two points, where each point is an arr
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="linear_x" href="#linear_x">#</a> <i>linear</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L66 "Source")
+<a name="linear_x" href="#linear_x">#</a> <i>linear</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L47 "Source")
 
 If <em>x</em> is specified, sets the <em>x</em>-coordinate accessor, which is passed passed the current datum (<em>d</em>), the current index (<em>i</em>), and the entire data array (<em>data</em>). If <em>x</em> is not specified, returns the current <em>x</em>-coordinate accessor, which defaults to:
 
@@ -51,7 +51,7 @@ function x(d, i, data) {
 }
 ```
 
-<a name="linear_y" href="#linear_y">#</a> <i>linear</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L70 "Source")
+<a name="linear_y" href="#linear_y">#</a> <i>linear</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L51 "Source")
 
 If <em>y</em> is specified, sets the <em>y</em>-coordinate accessor, which is passed passed the current datum (<em>d</em>), the current index (<em>i</em>), and the entire data array (<em>data</em>). If <em>y</em> is not specified, returns the current <em>y</em>-coordinate accessor, which defaults to:
 
@@ -61,7 +61,7 @@ function y(d, i, data) {
 }
 ```
 
-<a name="linear_domain" href="#linear_domain">#</a> <i>linear</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L62 "Source")
+<a name="linear_domain" href="#linear_domain">#</a> <i>linear</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L43 "Source")
 
 If <em>domain</em> is specified, sets the minimum and maximum <em>x</em>-coordinates of the returned line to the specified array of numbers. The array must contain two elements. If the elements in the given array are not numbers, they will be coerced to numbers. If <em>domain</em> is not specified, returns a copy of the regression generator’s current domain.
 
@@ -73,7 +73,7 @@ Creates a new exponential regression generator with default [<em>x</em>-](#exp_x
 
 [<img alt="Exponential regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/exponential-2.png" width="250">](https://observablehq.com/@harrystevens/exponential-regression)
 
-<a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L9 "Source")
+<a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L10 "Source")
 
 Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
 
@@ -81,15 +81,15 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L58 "Source")
+<a name="exp_x" href="#exp_x">#</a> <i>exp</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L52 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L62 "Source")
+<a name="exp_y" href="#exp_y">#</a> <i>exp</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L56 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L54 "Source")
+<a name="exp_domain" href="#exp_domain">#</a> <i>exp</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L48 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
@@ -99,7 +99,7 @@ Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x
 
 [<img alt="Logarithmic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/logarithmic.png" width="250">](https://observablehq.com/@harrystevens/logarithmic-regression)
 
-<a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L9 "Source")
+<a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L10 "Source")
 
 Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
 
@@ -107,15 +107,15 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L59 "Source")
+<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L49 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="log_y" href="#log_y">#</a> <i>log</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L63 "Source")
+<a name="log_y" href="#log_y">#</a> <i>log</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L53 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L55 "Source")
+<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L45 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
@@ -183,7 +183,7 @@ Creates a new power law regression generator with default [<em>x</em>-](#pow_x) 
 
 [<img alt="Power law regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/power.png" width="250">](https://observablehq.com/@harrystevens/power-law-regression)
 
-<a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L9 "Source")
+<a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L10 "Source")
 
 Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
 
@@ -191,15 +191,15 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="pow_x" href="#pow_x">#</a> <i>pow</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L61 "Source")
+<a name="pow_x" href="#pow_x">#</a> <i>pow</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L51 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="pow_y" href="#pow_y">#</a> <i>pow</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L65 "Source")
+<a name="pow_y" href="#pow_y">#</a> <i>pow</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L55 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="pow_domain" href="#pow_domain">#</a> <i>pow</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L57 "Source")
+<a name="pow_domain" href="#pow_domain">#</a> <i>pow</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L47 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 

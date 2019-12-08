@@ -1,6 +1,6 @@
 // Given a dataset, x- and y-accessors, the sum of the y values, and a predict function,
 // return the coefficient of determination, or R squared.
-export function determination(data, x, y, ySum, predict){
+export function determination(data, x, y, Y, predict){
   const n = data.length;
   
   let SSE = 0,
@@ -13,7 +13,7 @@ export function determination(data, x, y, ySum, predict){
         yComp = predict(dx);
 
     SSE += Math.pow(dy - yComp, 2);
-    SST += Math.pow(dy - ySum / n, 2);
+    SST += Math.pow(dy - Y / n, 2);
   }
 
   return 1 - SSE / SST;

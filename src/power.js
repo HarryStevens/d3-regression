@@ -1,55 +1,45 @@
-import {determination} from "./utils/determination";
-import {interpose} from "./utils/interpose";
+import { determination } from "./utils/determination";
+import { interpose } from "./utils/interpose";
+import { visitPoints } from "./utils/points";
 
 export default function() {
   let x = d => d[0],
-    y = d => d[1],
-    domain;
+      y = d => d[1],
+      domain;
   
   function power(data){
-    let n = data.length,
-        valid = 0,
-        xlogSum = 0,
-        xlogylogSum = 0,
-        ylogSum = 0,
-        xlog2Sum = 0,
-        ySum = 0,
+    let n = 0,
+        XL = 0,
+        XLYL = 0,
+        YL = 0,
+        XL2 = 0,
+        Y = 0,
         minX = domain ? +domain[0] : Infinity,
         maxX = domain ? +domain[1] : -Infinity;
+    
+    visitPoints(data, x, y, (dx, dy) => {
+      n++;
+      XL += Math.log(dx);
+      XLYL += Math.log(dy) * Math.log(dx);
+      YL += Math.log(dy);
+      XL2 += Math.pow(Math.log(dx), 2);
+      Y += dy;
 
-    for (let i = 0; i < n; i++) {
-      const d = data[i],
-          dx = x(d, i, data),
-          dy = y(d, i, data);
-      
-      // Filter out points with invalid x or y values
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        valid++;
-        xlogSum += Math.log(dx);
-        xlogylogSum += Math.log(dy) * Math.log(dx);
-        ylogSum += Math.log(dy);
-        xlog2Sum += Math.pow(Math.log(dx), 2);
-        ySum += dy;
-
-        if (!domain){
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
-        }
+      if (!domain){
+        if (dx < minX) minX = dx;
+        if (dx > maxX) maxX = dx;
       }
-    }
+    });
 
-    // Update n in case there were invalid x or y values
-    n = valid;
-
-    const b = (n * xlogylogSum - xlogSum * ylogSum) / (n * xlog2Sum - Math.pow(xlogSum, 2)),
-        a = Math.exp((ylogSum - b * xlogSum) / n),
+    const b = (n * XLYL - XL * YL) / (n * XL2 - Math.pow(XL, 2)),
+        a = Math.exp((YL - b * XL) / n),
         fn = x => a * Math.pow(x, b),
         out = interpose(minX, maxX, fn);
 
     out.a = a;
     out.b = b;
     out.predict = fn;
-    out.rSquared = determination(data, x, y, ySum, fn);
+    out.rSquared = determination(data, x, y, Y, fn);
 
     return out; 
   }
