@@ -26,10 +26,10 @@ tape("linear(data) calculates the slope, y-intercept, and R^2, and returns a lin
     .y(d => d[1])
     (shuffle(data));
   
-  test.deepEqual(r[0], [0, 2]);
-  test.deepEqual(r[1], [2, 0]);
-  test.equal(r.a, -1);
-  test.equal(r.b, 2);
+  test.deepEqual(r[0].map(d => Math.round(d)), [0, 2]);
+  test.deepEqual(r[1].map(d => Math.round(d)), [2, 0]);
+  test.equal(Math.round(r.a), -1);
+  test.equal(Math.round(r.b), 2);
   test.equal(r.rSquared, 1);
   test.end();
 });

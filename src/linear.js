@@ -1,4 +1,5 @@
 import { determination } from "./utils/determination";
+import { ols } from "./utils/ols";
 import { visitPoints } from "./utils/points";
 
 export default function(){
@@ -12,25 +13,25 @@ export default function(){
         Y = 0, // sum of y
         XY = 0, // sum of x * y
         X2 = 0, // sum of x * x
-        minX = domain ? +domain[0] : Infinity,
-        maxX = domain ? +domain[1] : -Infinity;
+        xmin = domain ? +domain[0] : Infinity,
+        xmax = domain ? +domain[1] : -Infinity;
 
     visitPoints(data, x, y, (dx, dy) => {
       ++n;
-      X += dx;
-      Y += dy;
-      XY += dx * dy;
-      X2 += dx * dx;
+      X += (dx - X) / n;
+      Y += (dy - Y) / n;
+      XY += (dx * dy - XY) / n;
+      X2 += (dx * dx - X2) / n;
+      
       if (!domain){
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
+        if (dx < xmin) xmin = dx;
+        if (dx > xmax) xmax = dx;
       }
     });
 
-    const slope = (n * XY - X * Y) / (n * X2 - X * X),
-        intercept = (Y - slope * X) / n,
+    const [intercept, slope] = ols(X, Y, XY, X2),
         fn = x => slope * x + intercept,
-        out = [[minX, fn(minX)], [maxX, fn(maxX)]];
+        out = [[xmin, fn(xmin)], [xmax, fn(xmax)]];
     
     out.a = slope;
     out.b = intercept;

@@ -151,6 +151,54 @@
     return exponential;
   }
 
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+  }
+
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+
+  function _iterableToArrayLimit(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+  }
+
+  // Ordinary Least Squares from vega-statistics by Jeffrey Heer
+  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
+  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/ols.js
+  function ols(uX, uY, uXY, uX2) {
+    var delta = uX2 - uX * uX,
+        slope = Math.abs(delta) < 1e-24 ? 0 : (uXY - uX * uY) / delta,
+        intercept = uY - slope * uX;
+    return [intercept, slope];
+  }
+
   function linear () {
     var x = function x(d) {
       return d[0];
@@ -170,27 +218,29 @@
           // sum of x * y
       X2 = 0,
           // sum of x * x
-      minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity;
+      xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
       visitPoints(data, x, y, function (dx, dy) {
         ++n;
-        X += dx;
-        Y += dy;
-        XY += dx * dy;
-        X2 += dx * dx;
+        X += (dx - X) / n;
+        Y += (dy - Y) / n;
+        XY += (dx * dy - XY) / n;
+        X2 += (dx * dx - X2) / n;
 
         if (!domain) {
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
         }
       });
 
-      var slope = (n * XY - X * Y) / (n * X2 - X * X),
-          intercept = (Y - slope * X) / n,
+      var _ols = ols(X, Y, XY, X2),
+          _ols2 = _slicedToArray(_ols, 2),
+          intercept = _ols2[0],
+          slope = _ols2[1],
           fn = function fn(x) {
         return slope * x + intercept;
       },
-          out = [[minX, fn(minX)], [maxX, fn(maxX)]];
+          out = [[xmin, fn(xmin)], [xmax, fn(xmax)]];
 
       out.a = slope;
       out.b = intercept;
