@@ -1,4 +1,5 @@
-import {determination} from "./utils/determination";
+import { determination } from "./utils/determination";
+import { visitPoints } from "./utils/points";
 
 export default function(){
   let x = d => d[0],
@@ -6,55 +7,35 @@ export default function(){
       domain;
 
   function linear(data){
-    let n = data.length,
-        valid = 0,
-        xSum = 0,
-        ySum = 0,
-        xySum = 0,
-        x2Sum = 0,
+    let n = 0,
+        X = 0, // sum of x
+        Y = 0, // sum of y
+        XY = 0, // sum of x * y
+        X2 = 0, // sum of x * x
         minX = domain ? +domain[0] : Infinity,
         maxX = domain ? +domain[1] : -Infinity;
 
-    for (let i = 0; i < n; i++){
-      const d = data[i],
-          dx = x(d, i, data),
-          dy = y(d, i, data);
-      
-      // Filter out points with invalid x or y values
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        valid++;
-        xSum += dx;
-        ySum += dy;
-        xySum += dx * dy;
-        x2Sum += dx * dx;
-
-        if (!domain){
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
-        }
+    visitPoints(data, x, y, (dx, dy) => {
+      ++n;
+      X += dx;
+      Y += dy;
+      XY += dx * dy;
+      X2 += dx * dx;
+      if (!domain){
+        if (dx < minX) minX = dx;
+        if (dx > maxX) maxX = dx;
       }
-    }
+    });
 
-    // Update n in case there were invalid x or y values
-    n = valid;
-
-    const a = n * xySum,
-        b = xSum * ySum,
-        c = n * x2Sum,
-        d = xSum * xSum,
-        slope = (a - b) / (c - d),
-        e = ySum,
-        f = slope * xSum,
-        intercept = (e - f) / n,
-        fn = x => slope * x + intercept;
-
-    const rSquared = determination(data, x, y, ySum, fn);
-
-    const out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
+    const slope = (n * XY - X * Y) / (n * X2 - X * X),
+        intercept = (Y - slope * X) / n,
+        fn = x => slope * x + intercept,
+        out = [[minX, fn(minX)], [maxX, fn(maxX)]];
+    
     out.a = slope;
     out.b = intercept;
     out.predict = fn;
-    out.rSquared = rSquared;
+    out.rSquared = determination(data, x, y, Y, fn);
 
     return out;
   }

@@ -142,6 +142,23 @@
     return exponential;
   }
 
+  // Adapted from vega-statistics by Jeffrey Heer
+  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
+  // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
+  function visitPoints(data, x, y, cb) {
+    var iterations = 0;
+
+    for (var i = 0, n = data.length; i < n; i++) {
+      var d = data[i],
+          dx = x(d),
+          dy = y(d);
+
+      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
+        cb(dx, dy, iterations++);
+      }
+    }
+  }
+
   function linear () {
     var x = function x(d) {
       return d[0];
@@ -152,55 +169,41 @@
         domain;
 
     function linear(data) {
-      var n = data.length,
-          valid = 0,
-          xSum = 0,
-          ySum = 0,
-          xySum = 0,
-          x2Sum = 0,
-          minX = domain ? +domain[0] : Infinity,
+      var n = 0,
+          X = 0,
+          // sum of x
+      Y = 0,
+          // sum of y
+      XY = 0,
+          // sum of x * y
+      X2 = 0,
+          // sum of x * x
+      minX = domain ? +domain[0] : Infinity,
           maxX = domain ? +domain[1] : -Infinity;
+      visitPoints(data, x, y, function (dx, dy) {
+        ++n;
+        X += dx;
+        Y += dy;
+        XY += dx * dy;
+        X2 += dx * dx;
 
-      for (var i = 0; i < n; i++) {
-        var _d = data[i],
-            dx = x(_d, i, data),
-            dy = y(_d, i, data); // Filter out points with invalid x or y values
-
-        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-          valid++;
-          xSum += dx;
-          ySum += dy;
-          xySum += dx * dy;
-          x2Sum += dx * dx;
-
-          if (!domain) {
-            if (dx < minX) minX = dx;
-            if (dx > maxX) maxX = dx;
-          }
+        if (!domain) {
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
         }
-      } // Update n in case there were invalid x or y values
+      });
 
-
-      n = valid;
-
-      var a = n * xySum,
-          b = xSum * ySum,
-          c = n * x2Sum,
-          d = xSum * xSum,
-          slope = (a - b) / (c - d),
-          e = ySum,
-          f = slope * xSum,
-          intercept = (e - f) / n,
+      var slope = (n * XY - X * Y) / (n * X2 - X * X),
+          intercept = (Y - slope * X) / n,
           fn = function fn(x) {
         return slope * x + intercept;
-      };
+      },
+          out = [[minX, fn(minX)], [maxX, fn(maxX)]];
 
-      var rSquared = determination(data, x, y, ySum, fn);
-      var out = [[minX, minX * slope + intercept], [maxX, maxX * slope + intercept]];
       out.a = slope;
       out.b = intercept;
       out.predict = fn;
-      out.rSquared = rSquared;
+      out.rSquared = determination(data, x, y, Y, fn);
       return out;
     }
 
