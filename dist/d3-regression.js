@@ -405,36 +405,25 @@
         domain;
 
     function logarithmic(data) {
-      var n = data.length,
-          valid = 0,
+      var n = 0,
           xlogSum = 0,
           yxlogSum = 0,
           ySum = 0,
           xlog2Sum = 0,
           minX = domain ? +domain[0] : Infinity,
           maxX = domain ? +domain[1] : -Infinity;
+      visitPoints(data, x, y, function (dx, dy) {
+        ++n;
+        xlogSum += Math.log(dx);
+        yxlogSum += dy * Math.log(dx);
+        ySum += dy;
+        xlog2Sum += Math.pow(Math.log(dx), 2);
 
-      for (var i = 0; i < n; i++) {
-        var d = data[i],
-            dx = x(d, i, data),
-            dy = y(d, i, data); // Filter out points with invalid x or y values
-
-        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-          valid++;
-          xlogSum += Math.log(dx);
-          yxlogSum += dy * Math.log(dx);
-          ySum += dy;
-          xlog2Sum += Math.pow(Math.log(dx), 2);
-
-          if (!domain) {
-            if (dx < minX) minX = dx;
-            if (dx > maxX) maxX = dx;
-          }
+        if (!domain) {
+          if (dx < minX) minX = dx;
+          if (dx > maxX) maxX = dx;
         }
-      } // Update n in case there were invalid x or y values
-
-
-      n = valid;
+      });
 
       var a = (n * yxlogSum - ySum * xlogSum) / (n * xlog2Sum - xlogSum * xlogSum),
           b = (ySum - a * xlogSum) / n,
