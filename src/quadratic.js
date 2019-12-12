@@ -1,5 +1,6 @@
 import { determination } from "./utils/determination";
 import { interpose } from "./utils/interpose";
+import { points } from "./utils/points";
 
 export default function(){
   let x = d => d[0],

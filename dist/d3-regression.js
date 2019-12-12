@@ -46,6 +46,46 @@
   // Adapted from vega-statistics by Jeffrey Heer
   // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
   // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
+  function points(data, x, y, sort) {
+    data = data.filter(function (d) {
+      var u = x(d),
+          v = y(d);
+      return u != null && isFinite(u) && v != null && isFinite(v);
+    });
+
+    if (sort) {
+      data.sort(function (a, b) {
+        return x(a) - x(b);
+      });
+    }
+
+    var n = data.length,
+        X = new Float64Array(n),
+        Y = new Float64Array(n); // extract values, calculate means
+
+    var ux = 0,
+        uy = 0,
+        xv,
+        yv,
+        d;
+
+    for (var i = 0; i < n;) {
+      d = data[i];
+      X[i] = xv = +x(d);
+      Y[i] = yv = +y(d);
+      ++i;
+      ux += (xv - ux) / i;
+      uy += (yv - uy) / i;
+    } // mean center the data
+
+
+    for (var _i = 0; _i < n; ++_i) {
+      X[_i] -= ux;
+      Y[_i] -= uy;
+    }
+
+    return [X, Y, ux, uy];
+  }
   function visitPoints(data, x, y, cb) {
     var iterations = 0;
 
@@ -85,10 +125,10 @@
 
   // returns a smooth line.
 
-  function interpose(minX, maxX, predict) {
+  function interpose(xmin, xmax, predict) {
     var precision = .01,
         maxIter = 1e4;
-    var points = [px(minX), px(maxX)],
+    var points = [px(xmin), px(xmax)],
         iter = 0;
 
     while (find(points) && iter < maxIter) {
@@ -512,62 +552,58 @@
         domain;
 
     function quadratic(data) {
-      var n = data.length,
-          valid = 0,
-          xSum = 0,
-          ySum = 0,
-          x2Sum = 0,
-          x3Sum = 0,
-          x4Sum = 0,
-          xySum = 0,
-          x2ySum = 0,
-          minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity;
+      var _points = points(data, x, y),
+          _points2 = _slicedToArray(_points, 4),
+          xv = _points2[0],
+          yv = _points2[1],
+          ux = _points2[2],
+          uy = _points2[3],
+          n = xv.length;
 
-      for (var i = 0; i < n; i++) {
-        var d = data[i],
-            dx = x(d, i, data),
-            dy = y(d, i, data),
-            x2Val = Math.pow(dx, 2); // Filter out points with invalid x or y values
+      var X2 = 0,
+          X3 = 0,
+          X4 = 0,
+          XY = 0,
+          X2Y = 0,
+          i,
+          dx,
+          dy,
+          x2,
+          xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
 
-        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-          valid++;
-          xSum += dx;
-          ySum += dy;
-          x2Sum += x2Val;
-          x3Sum += Math.pow(dx, 3);
-          x4Sum += Math.pow(dx, 4);
-          xySum += dx * dy;
-          x2ySum += x2Val * dy;
+      for (i = 0; i < n;) {
+        dx = xv[i];
+        dy = yv[i++];
+        x2 = dx * dx;
+        X2 += (x2 - X2) / i;
+        X3 += (x2 * dx - X3) / i;
+        X4 += (x2 * x2 - X4) / i;
+        XY += (dx * dy - XY) / i;
+        X2Y += (x2 * dy - X2Y) / i;
 
-          if (!domain) {
-            if (dx < minX) minX = dx;
-            if (dx > maxX) maxX = dx;
-          }
+        if (!domain) {
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
         }
-      } // Update n in case there were invalid x or y values
+      }
 
-
-      n = valid;
-
-      var sumXX = x2Sum - Math.pow(xSum, 2) / n,
-          sumXY = xySum - xSum * ySum / n,
-          sumXX2 = x3Sum - x2Sum * xSum / n,
-          sumX2Y = x2ySum - x2Sum * ySum / n,
-          sumX2X2 = x4Sum - Math.pow(x2Sum, 2) / n,
-          a = (sumX2Y * sumXX - sumXY * sumXX2) / (sumXX * sumX2X2 - Math.pow(sumXX2, 2)),
-          b = (sumXY * sumX2X2 - sumX2Y * sumXX2) / (sumXX * sumX2X2 - Math.pow(sumXX2, 2)),
-          c = ySum / n - b * (xSum / n) - a * (x2Sum / n),
+      var X2X2 = X4 - X2 * X2,
+          d = X2 * X2X2 - X3 * X3,
+          a = (X2Y * X2 - XY * X3) / d,
+          b = (XY * X2X2 - X2Y * X3) / d,
+          c = -a * X2,
           fn = function fn(x) {
-        return a * Math.pow(x, 2) + b * x + c;
-      },
-          out = interpose(minX, maxX, fn);
+        x = x - ux;
+        return a * x * x + b * x + c + uy;
+      };
 
+      var out = interpose(xmin, xmax, fn);
       out.a = a;
-      out.b = b;
-      out.c = c;
+      out.b = b - 2 * a * ux;
+      out.c = c - b * ux + a * ux * ux + uy;
       out.predict = fn;
-      out.rSquared = determination(data, x, y, ySum, fn);
+      out.rSquared = determination(data, x, y, 0, fn);
       return out;
     }
 
