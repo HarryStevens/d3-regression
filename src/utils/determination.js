@@ -1,6 +1,6 @@
 import { visitPoints } from "./points";
 
-// Given a dataset, x- and y-accessors, the population mean of the y values, and a predict function,
+// Given a dataset, x- and y-accessors, the mean center of the y values, and a predict function,
 // return the coefficient of determination, or R squared.
 export function determination(data, x, y, uY, predict){
   let SSE = 0,

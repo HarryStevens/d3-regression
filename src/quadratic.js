@@ -1,67 +1,53 @@
-import {determination} from "./utils/determination";
-import {interpose} from "./utils/interpose";
+import { determination } from "./utils/determination";
+import { interpose } from "./utils/interpose";
 
 export default function(){
   let x = d => d[0],
       y = d => d[1],
       domain;
-  
-  function quadratic(data){
-    let n = data.length,
-        valid = 0,
-        xSum = 0,
-        ySum = 0,
-        x2Sum = 0,
-        x3Sum = 0,
-        x4Sum = 0,
-        xySum = 0,
-        x2ySum = 0,
-        minX = domain ? +domain[0] : Infinity,
-        maxX = domain ? +domain[1] : -Infinity;
 
-    for (let i = 0; i < n; i++){
-      const d = data[i],
-          dx = x(d, i, data),
-          dy = y(d, i, data),
-          x2Val = Math.pow(dx, 2);
+  function quadratic(data){
+    const [xv, yv, ux, uy] = points(data, x, y),
+          n = xv.length;
+
+    let X2 = 0, X3 = 0, X4 = 0, XY = 0, X2Y = 0,
+        i, dx, dy, x2,
+        xmin = domain ? +domain[0] : Infinity,
+        xmax = domain ? +domain[1] : -Infinity;
+
+    for (i = 0; i < n;) {
+      dx = xv[i];
+      dy = yv[i++];
+      x2 = dx * dx;
+      X2 += (x2 - X2) / i;
+      X3 += (x2 * dx - X3) / i;
+      X4 += (x2 * x2 - X4) / i;
+      XY += (dx * dy - XY) / i;
+      X2Y += (x2 * dy - X2Y) / i;
       
-      // Filter out points with invalid x or y values
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        valid++;
-        xSum += dx;
-        ySum += dy;
-        x2Sum += x2Val;
-        x3Sum += Math.pow(dx, 3);
-        x4Sum += Math.pow(dx, 4);
-        xySum += dx * dy;
-        x2ySum += x2Val * dy;
-        
-        if (!domain){
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
-        }
+      if (!domain){
+        if (dx < xmin) xmin = dx;
+        if (dx > xmax) xmax = dx;
       }
     }
 
-    // Update n in case there were invalid x or y values
-    n = valid;
-
-    const sumXX = x2Sum - (Math.pow(xSum, 2) / n),
-        sumXY = xySum - (xSum * ySum / n),
-        sumXX2 = x3Sum - (x2Sum * xSum / n),
-        sumX2Y = x2ySum - (x2Sum * ySum / n),
-        sumX2X2 = x4Sum - (Math.pow(x2Sum, 2) / n),
-        a = (sumX2Y * sumXX - sumXY * sumXX2) / (sumXX * sumX2X2 - Math.pow(sumXX2, 2)),
-        b = (sumXY * sumX2X2 - sumX2Y * sumXX2) / (sumXX * sumX2X2 - Math.pow(sumXX2, 2)),
-        c = (ySum / n) - (b * (xSum / n)) - (a * (x2Sum / n)),
-        fn = x => a * Math.pow(x, 2) + b * x + c,
-        out = interpose(minX, maxX, fn);
+    const X2X2 = X4 - (X2 * X2),
+          d = (X2 * X2X2 - X3 * X3),
+          a = (X2Y * X2 - XY * X3) / d,
+          b = (XY * X2X2 - X2Y * X3) / d,
+          c = -a * X2,
+          fn = x => {
+            x = x - ux;
+            return a * x * x + b * x + c + uy;
+          };
+    
+    const out = interpose(xmin, xmax, fn);
 
     out.a = a;
-    out.b = b;
-    out.c = c;
+    out.b = b - 2 * a * ux;
+    out.c = c - b * ux + a * ux * ux + uy;
     out.predict = fn;
-    out.rSquared = determination(data, x, y, ySum, fn);
+    out.rSquared = determination(data, x, y, 0, fn);
 
     return out;
   }

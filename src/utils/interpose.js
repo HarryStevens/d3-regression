@@ -2,9 +2,9 @@ import { angle, midpoint } from "./geometry";
 
 // Given a start point, an end point, and a prediciton function,
 // returns a smooth line.
-export function interpose(minX, maxX, predict){
+export function interpose(xmin, xmax, predict){
   const precision = .01, maxIter = 1e4;
-  let points = [px(minX), px(maxX)], iter = 0;
+  let points = [px(xmin), px(xmax)], iter = 0;
 
   while (find(points) && iter < maxIter);
 
