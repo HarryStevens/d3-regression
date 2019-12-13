@@ -11,10 +11,14 @@ export default function(){
     const [xv, yv, ux, uy] = points(data, x, y),
           n = xv.length;
 
-    let X2 = 0, X3 = 0, X4 = 0, XY = 0, X2Y = 0,
-        i, dx, dy, x2,
+    let X2 = 0,
+        X3 = 0,
+        X4 = 0,
+        XY = 0,
+        X2Y = 0,
         xmin = domain ? +domain[0] : Infinity,
-        xmax = domain ? +domain[1] : -Infinity;
+        xmax = domain ? +domain[1] : -Infinity,
+        i, dx, dy, x2;
 
     for (i = 0; i < n;) {
       dx = xv[i];

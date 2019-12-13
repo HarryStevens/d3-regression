@@ -27,7 +27,7 @@ tape("quad(data) calculates the the a, b, and c coefficients, R^2, and returns a
     (shuffle(data));
   
   test.equal(r.a.toFixed(3), "1.107");
-  test.equal(r.b, Math.round(1));
+  test.equal(Math.round(r.b), 1);
   test.equal(r.c.toFixed(3), "0.571");
   test.equal(r.rSquared.toFixed(3), "0.995");
 
