@@ -316,16 +316,8 @@
     return i % 1 === 0 ? (arr[i - 1] + arr[i]) / 2 : arr[Math.floor(i)];
   }
 
-  // Sort an array using an accessor.
-  function sort(arr, fn) {
-    return arr.sort(function (a, b) {
-      return fn(a) - fn(b);
-    });
-  }
-
-  // Source: https://github.com/jasondavies/science.js/blob/master/src/stats/loess.js
-  // License: https://github.com/jasondavies/science.js/blob/master/LICENSE
-
+  var maxiters = 2,
+      epsilon = 1e-12;
   function loess () {
     var x = function x(d) {
       return d[0];
@@ -333,94 +325,75 @@
         y = function y(d) {
       return d[1];
     },
-        bandwidth = .3,
-        robustnessIters = 2,
-        accuracy = 1e-12;
+        bandwidth = .3;
 
     function loess(data) {
-      var n = data.length,
+      var _points = points(data, x, y, true),
+          _points2 = _slicedToArray(_points, 4),
+          xv = _points2[0],
+          yv = _points2[1],
+          ux = _points2[2],
+          uy = _points2[3],
+          n = xv.length,
           bw = Math.max(2, ~~(bandwidth * n)),
-          // # Nearest neighbors
-      xval = [],
-          yval = [],
-          yhat = [],
-          residuals = [],
-          robustWeights = []; // Slice before sort to avoid modifying input
+          yhat = new Float64Array(n),
+          residuals = new Float64Array(n),
+          robustWeights = new Float64Array(n).fill(1);
 
-      sort(data = data.slice(), x);
-
-      for (var i = 0, j = 0; i < n; ++i) {
-        var d = data[i],
-            xi = x(d, i, data),
-            yi = y(d, i, data); // Filter out points with invalid x or y values
-
-        if (xi != null && isFinite(xi) && yi != null && isFinite(yi)) {
-          xval[j] = xi;
-          yval[j] = yi;
-          yhat[j] = 0;
-          residuals[j] = 0;
-          robustWeights[j] = 1;
-          ++j;
-        }
-      }
-
-      var m = xval.length; // # LOESS input points
-
-      for (var iter = -1; ++iter <= robustnessIters;) {
+      for (var iter = -1; ++iter <= maxiters;) {
         var interval = [0, bw - 1];
 
-        for (var _i = 0; _i < m; ++_i) {
-          var dx = xval[_i],
+        for (var i = 0; i < n; ++i) {
+          var dx = xv[i],
               i0 = interval[0],
               i1 = interval[1],
-              edge = dx - xval[i0] > xval[i1] - dx ? i0 : i1;
-          var sumWeights = 0,
-              sumX = 0,
-              sumXSquared = 0,
-              sumY = 0,
-              sumXY = 0,
-              denom = 1 / Math.abs(xval[edge] - dx || 1); // Avoid singularity!
+              edge = dx - xv[i0] > xv[i1] - dx ? i0 : i1;
+          var W = 0,
+              X = 0,
+              Y = 0,
+              XY = 0,
+              X2 = 0,
+              denom = 1 / Math.abs(xv[edge] - dx || 1); // Avoid singularity
 
           for (var k = i0; k <= i1; ++k) {
-            var xk = xval[k],
-                yk = yval[k],
+            var xk = xv[k],
+                yk = yv[k],
                 w = tricube(Math.abs(dx - xk) * denom) * robustWeights[k],
                 xkw = xk * w;
-            sumWeights += w;
-            sumX += xkw;
-            sumXSquared += xk * xkw;
-            sumY += yk * w;
-            sumXY += yk * xkw;
+            W += w;
+            X += xkw;
+            Y += yk * w;
+            XY += yk * xkw;
+            X2 += xk * xkw;
           } // Linear regression fit
 
 
-          var meanX = sumX / sumWeights,
-              meanY = sumY / sumWeights,
-              meanXY = sumXY / sumWeights,
-              meanXSquared = sumXSquared / sumWeights,
-              beta = Math.sqrt(Math.abs(meanXSquared - meanX * meanX)) < accuracy ? 0 : (meanXY - meanX * meanY) / (meanXSquared - meanX * meanX),
-              alpha = meanY - beta * meanX;
-          yhat[_i] = beta * dx + alpha;
-          residuals[_i] = Math.abs(yval[_i] - yhat[_i]);
-          updateInterval(xval, _i + 1, interval);
+          var _ols = ols(X / W, Y / W, XY / W, X2 / W),
+              _ols2 = _slicedToArray(_ols, 2),
+              a = _ols2[0],
+              b = _ols2[1];
+
+          yhat[i] = a + b * dx;
+          residuals[i] = Math.abs(yv[i] - yhat[i]);
+          updateInterval(xv, i + 1, interval);
         }
 
-        if (iter === robustnessIters) {
+        if (iter === maxiters) {
           break;
         }
 
         var medianResidual = median(residuals);
-        if (Math.abs(medianResidual) < accuracy) break;
+        if (Math.abs(medianResidual) < epsilon) break;
 
-        for (var _i2 = 0, arg, _w; _i2 < m; ++_i2) {
-          arg = residuals[_i2] / (6 * medianResidual); // Default to accuracy epsilon (rather than zero) for large deviations
-          // keeping weights tiny but non-zero prevents singularites
+        for (var _i = 0, arg, _w; _i < n; ++_i) {
+          arg = residuals[_i] / (6 * medianResidual); // Default to epsilon (rather than zero) for large deviations
+          // Keeping weights tiny but non-zero prevents singularites
 
-          robustWeights[_i2] = arg >= 1 ? accuracy : (_w = 1 - arg * arg) * _w;
+          robustWeights[_i] = arg >= 1 ? epsilon : (_w = 1 - arg * arg) * _w;
         }
       }
 
-      return output(xval, yhat);
+      return output(xv, yhat, ux, uy);
     }
 
     loess.bandwidth = function (bw) {
@@ -443,28 +416,32 @@
   } // Advance sliding window interval of nearest neighbors
 
 
-  function updateInterval(xval, i, interval) {
-    var val = xval[i],
+  function updateInterval(xv, i, interval) {
+    var val = xv[i],
         left = interval[0],
         right = interval[1] + 1;
-    if (right >= xval.length) return; // Step right if distance to new right edge is <= distance to old left edge.
-    // Step when distance is equal to ensure movement over duplicate x values.
+    if (right >= xv.length) return; // Step right if distance to new right edge is <= distance to old left edge
+    // Step when distance is equal to ensure movement over duplicate x values
 
-    while (i > left && xval[right] - val <= val - xval[left]) {
+    while (i > left && xv[right] - val <= val - xv[left]) {
       interval[0] = ++left;
       interval[1] = right;
       ++right;
     }
-  } // Generate smoothed output points.
-  // Average points with repeated x values.
+  } // Generate smoothed output points
+  // Average points with repeated x values
 
 
-  function output(xval, yhat) {
-    var n = xval.length,
+  function output(xv, yhat, ux, uy) {
+    var n = xv.length,
         out = [];
+    var i = 0,
+        cnt = 0,
+        prev = [],
+        v;
 
-    for (var i = 0, cnt = 0, prev = [], v; i < n; ++i) {
-      v = xval[i];
+    for (; i < n; ++i) {
+      v = xv[i] + ux;
 
       if (prev[0] === v) {
         // Average output values via online update
@@ -472,11 +449,13 @@
       } else {
         // Add new output point
         cnt = 0;
+        prev[1] += uy;
         prev = [v, yhat[i]];
         out.push(prev);
       }
     }
 
+    prev[1] += uy;
     return out;
   }
 
