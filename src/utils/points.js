@@ -41,8 +41,8 @@ export function visitPoints(data, x, y, cb){
 
   for (let i = 0, n = data.length; i < n; i++) {
     const d = data[i],
-          dx = x(d),
-          dy = y(d);
+          dx = +x(d),
+          dy = +y(d);
     
     if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
       cb(dx, dy, iterations++);
