@@ -1,18 +1,22 @@
 import { determination } from "./utils/determination";
 import { interpose } from "./utils/interpose";
+import { points, visitPoints } from "./utils/points";
 import linear from "./linear";
 import quad from "./quadratic";
 
 // Adapted from regression-js by Tom Alexander
 // Source: https://github.com/Tom-Alexander/regression-js/blob/master/src/regression.js#L246
 // License: https://github.com/Tom-Alexander/regression-js/blob/master/LICENSE
+// ...with ideas from vega-statistics by Jeffrey Heer
+// Source: https://github.com/vega/vega/blob/f21cb8792b4e0cbe2b1a3fd44b0f5db370dbaadb/packages/vega-statistics/src/regression/poly.js
+// License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
 export default function(){
   let x = d => d[0],
       y = d => d[1],
       order = 3,
       domain;
   
-  function polynomial(data) {
+  function polynomial(data) {    
     // Use more efficient methods for lower orders
     if (order === 1) {
       const o = linear().x(x).y(y).domain(domain)(data);
@@ -26,69 +30,58 @@ export default function(){
       delete o.a; delete o.b; delete o.c;
       return o;
     }
-
-    // First pass through the data
-    let arr = [],
-        ySum = 0,
-        minX = domain ? +domain[0] : Infinity,
-        maxX = domain ? +domain[1] : -Infinity,
-        n = data.length;
     
-    for (let i = 0; i < n; i++){
-      const d = data[i],
-          dx = x(d, i, data),
-          dy = y(d, i, data);
-      
-      // Filter out points with invalid x or y values
-      if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-        arr[i] = [dx, dy];
-        ySum += dy;
-        
-        if (!domain){
-          if (dx < minX) minX = dx;
-          if (dx > maxX) maxX = dx;
-        }
-      }
-    }
-
-    // Update n in case there were invalid x or y values
-    n = arr.length;
-
-    // Calculate the coefficients
-    const lhs = [],
+    const [xv, yv, ux, uy] = points(data, x, y),
+        n = xv.length,
+        lhs = [],
         rhs = [],
         k = order + 1;
+
+    let Y = 0, n0 = 0,
+        xmin = domain ? +domain[0] : Infinity,
+        xmax = domain ? +domain[1] : -Infinity;
     
-    let a = 0,
-        b = 0;
-    
-    for (let i = 0; i < k; i++) { 
-      for (let l = 0; l < n; l++) {
-        a += Math.pow(arr[l][0], i) * arr[l][1];
+    visitPoints(data, x, y, (dx, dy) => {
+      ++n0
+      Y += (dy - Y) / n0;
+      if (!domain){
+        if (dx < xmin) xmin = dx;
+        if (dx > xmax) xmax = dx;        
       }
+    });
 
-      lhs.push(a);
-      a = 0;
+    let i, j, l, v, c;
 
-      const c = [];
-      for (let j = 0; j < k; j++) {
-        for (let l = 0; l < n; l++) {
-          b += Math.pow(arr[l][0], i + j);
+    for (i = 0; i < k; ++i) {
+      for (l = 0, v = 0; l < n; ++l) {
+        v += Math.pow(xv[l], i) * yv[l];
+      }
+      lhs.push(v);
+
+      c = new Float64Array(k);
+      for (j=0; j<k; ++j) {
+        for (l=0, v=0; l<n; ++l) {
+          v += Math.pow(xv[l], i + j);
         }
-        c[j] = b;
-        b = 0;
+        c[j] = v;
       }
       rhs.push(c);
     }
     rhs.push(lhs);
 
-    const coefficients = gaussianElimination(rhs, k),
-        fn = x => coefficients.reduce((sum, coeff, power) => sum + (coeff * Math.pow(x, power)), 0),
-        out = interpose(minX, maxX, fn);
-    
-    out.coefficients = coefficients;
+    const coef = gaussianElimination(rhs),
+          fn = x => {
+            x -= ux;
+            let y = uy + coef[0] + coef[1] * x + coef[2] * x * x;
+            for (i = 3; i < k; ++i) y += coef[i] * Math.pow(x, i);
+            return y;
+          },
+          out = interpose(xmin, xmax, fn);
+
+    out.coefficients = uncenter(k, coef, -ux, uy);
     out.predict = fn;
-    out.rSquared = determination(data, x, y, ySum, fn);
+    out.rSquared = determination(data, x, y, Y, fn);
+    
     return out;
   }
 
@@ -111,43 +104,66 @@ export default function(){
   return polynomial;
 }
 
-// Given an array representing a two-dimensional matrix,
-// and an order parameter representing how many degrees to solve for,
-// determine the solution of a system of linear equations A * x = b using
-// Gaussian elimination.
-function gaussianElimination(matrix, order) {
-  const n = matrix.length - 1,
-      coefficients = [order];
+function uncenter(k, a, x, y) {
+  const z = Array(k);
+  let i, j, v, c;
 
-  for (let i = 0; i < n; i++) {
-    let maxrow = i;
-    for (let j = i + 1; j < n; j++) {
-      if (Math.abs(matrix[i][j]) > Math.abs(matrix[i][maxrow])) {
-        maxrow = j;
+  // initialize to zero
+  for (i = 0; i < k; ++i) z[i] = 0;
+
+  // polynomial expansion
+  for (i = k - 1; i >= 0; --i) {
+    v = a[i];
+    c = 1;
+    z[i] += v;
+    for (j = 1; j <= i; ++j) {
+      c *= (i + 1 - j) / j; // binomial coefficent
+      z[i-j] += v * Math.pow(x, j) * c;
+    }
+  }
+
+  // bias term
+  z[0] += y;
+
+  return z;
+}
+
+// Given an array for a two-dimensional matrix and the polynomial order,
+// solve A * x = b using Gaussian elimination.
+function gaussianElimination(matrix) {
+  const n = matrix.length - 1,
+        coef = [];
+
+  let i, j, k, r, t;
+
+  for (i = 0; i < n; ++i) {
+    r = i; // max row
+    for (j = i + 1; j < n; ++j) {
+      if (Math.abs(matrix[i][j]) > Math.abs(matrix[i][r])) {
+        r = j;
       }
     }
 
-    for (let k = i; k < n + 1; k++) {
-      const tmp = matrix[k][i];
-      matrix[k][i] = matrix[k][maxrow];
-      matrix[k][maxrow] = tmp;
+    for (k = i; k < n + 1; ++k) {
+      t = matrix[k][i];
+      matrix[k][i] = matrix[k][r];
+      matrix[k][r] = t;
     }
 
-    for (let j = i + 1; j < n; j++) {
-      for (let k = n; k >= i; k--) {
+    for (j = i + 1; j < n; ++j) {
+      for (k = n; k >= i; k--) {
         matrix[k][j] -= (matrix[k][i] * matrix[i][j]) / matrix[i][i];
       }
     }
   }
 
-  for (let j = n - 1; j >= 0; j--) {
-    let total = 0;
-    for (let k = j + 1; k < n; k++) {
-      total += matrix[k][j] * coefficients[k];
+  for (j = n - 1; j >= 0; --j) {
+    t = 0;
+    for (k = j + 1; k < n; ++k) {
+      t += matrix[k][j] * coef[k];
     }
-
-    coefficients[j] = (matrix[n][j] - total) / matrix[j][j];
+    coef[j] = (matrix[n][j] - t) / matrix[j][j];
   }
 
-  return coefficients;
+  return coef;
 }

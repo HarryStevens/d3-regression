@@ -133,21 +133,21 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em>, <em>b</em>, and <e>c</e>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="quad_x" href="#quad_x">#</a> <i>quad</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L64 "Source")
+<a name="quad_x" href="#quad_x">#</a> <i>quad</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L71 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="quad_y" href="#quad_y">#</a> <i>quad</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L68 "Source")
+<a name="quad_y" href="#quad_y">#</a> <i>quad</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L75 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="quad_domain" href="#quad_domain">#</a> <i>quad</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L60 "Source")
+<a name="quad_domain" href="#quad_domain">#</a> <i>quad</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js#L67 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
 <a name="regressionPoly" href="#regressionPoly">#</a> d3.<b>regressionPoly</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js "Source"), [Example](https://observablehq.com/@harrystevens/polynomial-regression "Example")
 
-Creates a new polynomial regression generator with default [<em>x</em>-](#quad_x) and [<em>y</em>-](#quad_y) accessors, a null [domain](#quad_domain), and an [order](#poly_order) of 3. This implementation was adapted from [regression-js](https://github.com/Tom-Alexander/regression-js/).
+Creates a new polynomial regression generator with default [<em>x</em>-](#poly_x) and [<em>y</em>-](#poly_y) accessors, a null [domain](#poly_domain), and an [order](#poly_order) of 3. This implementation was adapted from [regression-js](https://github.com/Tom-Alexander/regression-js/).
 
 [<img alt="Polynomial regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/polynomial.png" width="250">](https://observablehq.com/@harrystevens/polynomial-regression)
 
@@ -159,19 +159,19 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns three properties: <em>coefficients</em>, an array representing the equation's coefficients with the intercept as the first item and nth degree coefficient as the last item; <em>rSquared</em>, representing the coefficient of determination; and <em>predict</em>, a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="poly_x" href="#poly_x">#</a> <i>poly</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L83 "Source")
+<a name="poly_x" href="#poly_x">#</a> <i>poly</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L92 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="poly_y" href="#poly_y">#</a> <i>poly</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L87 "Source")
+<a name="poly_y" href="#poly_y">#</a> <i>poly</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L96 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="poly_domain" href="#poly_domain">#</a> <i>poly</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L79 "Source")
+<a name="poly_domain" href="#poly_domain">#</a> <i>poly</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L88 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="poly_order" href="#poly_order">#</a> <i>poly</i>.<b>order</b>([<i>order</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L91 "Source")
+<a name="poly_order" href="#poly_order">#</a> <i>poly</i>.<b>order</b>([<i>order</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/polynomial.js#L100 "Source")
 
 If <em>order</em> is specified, sets the regression's order to the specified number. For example, if <em>order</em> is set to 4, the regression generator will perform a fourth-degree polynomial regression. Likewise, if <em>order</em> is set to 2, the regression generator will perform a quadratic regression. Be careful about attempting to fit your data with higher order polynomials; though the regression line will fit your data with a high determination coefficient, it may have little predictive power for data outside of your domain.
 
@@ -215,14 +215,14 @@ Computes the LOESS regression for the specified *data* points, ignoring points w
 
 Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates.
 
-<a name="loess_x" href="#loess_x">#</a> <i>loess</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L105 "Source")
+<a name="loess_x" href="#loess_x">#</a> <i>loess</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L81 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="loess_y" href="#loess_y">#</a> <i>loess</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L109 "Source")
+<a name="loess_y" href="#loess_y">#</a> <i>loess</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L85 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="loess_bandwidth" href="#loess_bandwidth">#</a> <i>loess</i>.<b>bandwidth</b>([<i>bandwidth</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L101 "Source")
+<a name="loess_bandwidth" href="#loess_bandwidth">#</a> <i>loess</i>.<b>bandwidth</b>([<i>bandwidth</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L77 "Source")
 
 If <em>bandwidth</em> is specified, sets the LOESS regression's bandwidth, or smoothing parameter, to the specific number between 0 and 1. The bandwidth represents the share of the total data points that are used to calculate each local fit. Higher bandwidths produce smoother lines, and vice versa. If <em>bandwidth</em> is not specified, returns a copy of the regression generator’s current bandwidth, which defaults to .3.

@@ -544,8 +544,6 @@
           X4 = 0,
           XY = 0,
           X2Y = 0,
-          xmin = domain ? +domain[0] : Infinity,
-          xmax = domain ? +domain[1] : -Infinity,
           i,
           dx,
           dy,
@@ -560,12 +558,21 @@
         X4 += (x2 * x2 - X4) / i;
         XY += (dx * dy - XY) / i;
         X2Y += (x2 * dy - X2Y) / i;
+      }
+
+      var Y = 0,
+          n0 = 0,
+          xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
+      visitPoints(data, x, y, function (dx, dy) {
+        n0++;
+        Y += (dy - Y) / n0;
 
         if (!domain) {
           if (dx < xmin) xmin = dx;
           if (dx > xmax) xmax = dx;
         }
-      }
+      });
 
       var X2X2 = X4 - X2 * X2,
           d = X2 * X2X2 - X3 * X3,
@@ -582,7 +589,7 @@
       out.b = b - 2 * a * ux;
       out.c = c - b * ux + a * ux * ux + uy;
       out.predict = fn;
-      out.rSquared = determination(data, x, y, 0, fn);
+      out.rSquared = determination(data, x, y, Y, fn);
       return out;
     }
 
@@ -603,6 +610,9 @@
 
   // Source: https://github.com/Tom-Alexander/regression-js/blob/master/src/regression.js#L246
   // License: https://github.com/Tom-Alexander/regression-js/blob/master/LICENSE
+  // ...with ideas from vega-statistics by Jeffrey Heer
+  // Source: https://github.com/vega/vega/blob/f21cb8792b4e0cbe2b1a3fd44b0f5db370dbaadb/packages/vega-statistics/src/regression/poly.js
+  // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
 
   function polynomial () {
     var x = function x(d) {
@@ -632,56 +642,48 @@
         delete _o.b;
         delete _o.c;
         return _o;
-      } // First pass through the data
+      }
 
-
-      var arr = [],
-          ySum = 0,
-          minX = domain ? +domain[0] : Infinity,
-          maxX = domain ? +domain[1] : -Infinity,
-          n = data.length;
-
-      for (var i = 0; i < n; i++) {
-        var d = data[i],
-            dx = x(d, i, data),
-            dy = y(d, i, data); // Filter out points with invalid x or y values
-
-        if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-          arr[i] = [dx, dy];
-          ySum += dy;
-
-          if (!domain) {
-            if (dx < minX) minX = dx;
-            if (dx > maxX) maxX = dx;
-          }
-        }
-      } // Update n in case there were invalid x or y values
-
-
-      n = arr.length; // Calculate the coefficients
-
-      var lhs = [],
+      var _points = points(data, x, y),
+          _points2 = _slicedToArray(_points, 4),
+          xv = _points2[0],
+          yv = _points2[1],
+          ux = _points2[2],
+          uy = _points2[3],
+          n = xv.length,
+          lhs = [],
           rhs = [],
           k = order + 1;
-      var a = 0,
-          b = 0;
 
-      for (var _i = 0; _i < k; _i++) {
-        for (var l = 0; l < n; l++) {
-          a += Math.pow(arr[l][0], _i) * arr[l][1];
+      var Y = 0,
+          n0 = 0,
+          xmin = domain ? +domain[0] : Infinity,
+          xmax = domain ? +domain[1] : -Infinity;
+      visitPoints(data, x, y, function (dx, dy) {
+        ++n0;
+        Y += (dy - Y) / n0;
+
+        if (!domain) {
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
+        }
+      });
+      var i, j, l, v, c;
+
+      for (i = 0; i < k; ++i) {
+        for (l = 0, v = 0; l < n; ++l) {
+          v += Math.pow(xv[l], i) * yv[l];
         }
 
-        lhs.push(a);
-        a = 0;
-        var c = [];
+        lhs.push(v);
+        c = new Float64Array(k);
 
-        for (var j = 0; j < k; j++) {
-          for (var _l = 0; _l < n; _l++) {
-            b += Math.pow(arr[_l][0], _i + j);
+        for (j = 0; j < k; ++j) {
+          for (l = 0, v = 0; l < n; ++l) {
+            v += Math.pow(xv[l], i + j);
           }
 
-          c[j] = b;
-          b = 0;
+          c[j] = v;
         }
 
         rhs.push(c);
@@ -689,17 +691,22 @@
 
       rhs.push(lhs);
 
-      var coefficients = gaussianElimination(rhs, k),
+      var coef = gaussianElimination(rhs),
           fn = function fn(x) {
-        return coefficients.reduce(function (sum, coeff, power) {
-          return sum + coeff * Math.pow(x, power);
-        }, 0);
-      },
-          out = interpose(minX, maxX, fn);
+        x -= ux;
+        var y = uy + coef[0] + coef[1] * x + coef[2] * x * x;
 
-      out.coefficients = coefficients;
+        for (i = 3; i < k; ++i) {
+          y += coef[i] * Math.pow(x, i);
+        }
+
+        return y;
+      },
+          out = interpose(xmin, xmax, fn);
+
+      out.coefficients = uncenter(k, coef, -ux, uy);
       out.predict = fn;
-      out.rSquared = determination(data, x, y, ySum, fn);
+      out.rSquared = determination(data, x, y, Y, fn);
       return out;
     }
 
@@ -720,48 +727,74 @@
     };
 
     return polynomial;
-  } // Given an array representing a two-dimensional matrix,
-  // and an order parameter representing how many degrees to solve for,
-  // determine the solution of a system of linear equations A * x = b using
-  // Gaussian elimination.
+  }
 
-  function gaussianElimination(matrix, order) {
+  function uncenter(k, a, x, y) {
+    var z = Array(k);
+    var i, j, v, c; // initialize to zero
+
+    for (i = 0; i < k; ++i) {
+      z[i] = 0;
+    } // polynomial expansion
+
+
+    for (i = k - 1; i >= 0; --i) {
+      v = a[i];
+      c = 1;
+      z[i] += v;
+
+      for (j = 1; j <= i; ++j) {
+        c *= (i + 1 - j) / j; // binomial coefficent
+
+        z[i - j] += v * Math.pow(x, j) * c;
+      }
+    } // bias term
+
+
+    z[0] += y;
+    return z;
+  } // Given an array for a two-dimensional matrix and the polynomial order,
+  // solve A * x = b using Gaussian elimination.
+
+
+  function gaussianElimination(matrix) {
     var n = matrix.length - 1,
-        coefficients = [order];
+        coef = [];
+    var i, j, k, r, t;
 
-    for (var i = 0; i < n; i++) {
-      var maxrow = i;
+    for (i = 0; i < n; ++i) {
+      r = i; // max row
 
-      for (var j = i + 1; j < n; j++) {
-        if (Math.abs(matrix[i][j]) > Math.abs(matrix[i][maxrow])) {
-          maxrow = j;
+      for (j = i + 1; j < n; ++j) {
+        if (Math.abs(matrix[i][j]) > Math.abs(matrix[i][r])) {
+          r = j;
         }
       }
 
-      for (var k = i; k < n + 1; k++) {
-        var tmp = matrix[k][i];
-        matrix[k][i] = matrix[k][maxrow];
-        matrix[k][maxrow] = tmp;
+      for (k = i; k < n + 1; ++k) {
+        t = matrix[k][i];
+        matrix[k][i] = matrix[k][r];
+        matrix[k][r] = t;
       }
 
-      for (var _j = i + 1; _j < n; _j++) {
-        for (var _k = n; _k >= i; _k--) {
-          matrix[_k][_j] -= matrix[_k][i] * matrix[i][_j] / matrix[i][i];
+      for (j = i + 1; j < n; ++j) {
+        for (k = n; k >= i; k--) {
+          matrix[k][j] -= matrix[k][i] * matrix[i][j] / matrix[i][i];
         }
       }
     }
 
-    for (var _j2 = n - 1; _j2 >= 0; _j2--) {
-      var total = 0;
+    for (j = n - 1; j >= 0; --j) {
+      t = 0;
 
-      for (var _k2 = _j2 + 1; _k2 < n; _k2++) {
-        total += matrix[_k2][_j2] * coefficients[_k2];
+      for (k = j + 1; k < n; ++k) {
+        t += matrix[k][j] * coef[k];
       }
 
-      coefficients[_j2] = (matrix[n][_j2] - total) / matrix[_j2][_j2];
+      coef[j] = (matrix[n][j] - t) / matrix[j][j];
     }
 
-    return coefficients;
+    return coef;
   }
 
   function power () {

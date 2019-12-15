@@ -1,6 +1,6 @@
 import { determination } from "./utils/determination";
 import { interpose } from "./utils/interpose";
-import { points } from "./utils/points";
+import { points, visitPoints } from "./utils/points";
 
 export default function(){
   let x = d => d[0],
@@ -10,14 +10,12 @@ export default function(){
   function quadratic(data){
     const [xv, yv, ux, uy] = points(data, x, y),
           n = xv.length;
-
+    
     let X2 = 0,
         X3 = 0,
         X4 = 0,
         XY = 0,
         X2Y = 0,
-        xmin = domain ? +domain[0] : Infinity,
-        xmax = domain ? +domain[1] : -Infinity,
         i, dx, dy, x2;
 
     for (i = 0; i < n;) {
@@ -29,13 +27,22 @@ export default function(){
       X4 += (x2 * x2 - X4) / i;
       XY += (dx * dy - XY) / i;
       X2Y += (x2 * dy - X2Y) / i;
-      
+    }
+    
+    let Y = 0,
+        n0 = 0,
+        xmin = domain ? +domain[0] : Infinity,
+        xmax = domain ? +domain[1] : -Infinity;
+    
+    visitPoints(data, x, y, (dx, dy) => {
+      n0++;
+      Y += (dy - Y) / n0;
       if (!domain){
         if (dx < xmin) xmin = dx;
         if (dx > xmax) xmax = dx;
       }
-    }
-
+    });
+    
     const X2X2 = X4 - (X2 * X2),
           d = (X2 * X2X2 - X3 * X3),
           a = (X2Y * X2 - XY * X3) / d,
@@ -52,7 +59,7 @@ export default function(){
     out.b = b - 2 * a * ux;
     out.c = c - b * ux + a * ux * ux + uy;
     out.predict = fn;
-    out.rSquared = determination(data, x, y, 0, fn);
+    out.rSquared = determination(data, x, y, Y, fn);
 
     return out;
   }
