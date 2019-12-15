@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 1.3.1. Copyright 2019 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 1.3.4. Copyright 2019 Harry Stevens.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -91,8 +91,8 @@
 
     for (var i = 0, n = data.length; i < n; i++) {
       var d = data[i],
-          dx = x(d),
-          dy = y(d);
+          dx = +x(d),
+          dy = +y(d);
 
       if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
         cb(dx, dy, iterations++);
