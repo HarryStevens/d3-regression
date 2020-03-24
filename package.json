@@ -24,7 +24,7 @@
   },
   "main": "dist/d3-regression.js",
   "module": "index",
-  "license": "GPL-3.0",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/HarryStevens/d3-regression/issues"
   },
