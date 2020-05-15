@@ -12,7 +12,7 @@
     "pretest": "rm -rf dist && mkdir dist && rollup -c --banner \"$(preamble)\"",
     "test": "tape 'test/**/*-test.js'",
     "prepublish": "npm run test && uglifyjs dist/d3-regression.js -c -m -o dist/d3-regression.min.js",
-    "postpublish": "zip -j dist/d3-regression.zip -- LICENSE README.md dist/d3-regression.js dist/d3-regression.min.js"
+    "postpublish": "zip -j dist/d3-regression.zip -- LICENSE README.md dist/d3-regression.js dist/d3-regression.min.js dist/d3-regression.cjs.js dist/d3-regression.esm.js"
   },
   "repository": {
     "type": "git",
@@ -22,8 +22,9 @@
     "name": "Harry Stevens",
     "url": "http://harryjstevens.com/"
   },
-  "main": "dist/d3-regression.js",
-  "module": "index",
+  "browser": "dist/d3-regression.js",
+  "module": "dist/d3-regression.esm.js",
+  "main": "dist/d3-regression.cjs.js",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/HarryStevens/d3-regression/issues"
@@ -34,8 +35,10 @@
     "@babel/preset-env": "^7.4.4",
     "babel": "^6.23.0",
     "package-preamble": "^0.1.0",
-    "rollup": "^1.11.0",
-    "rollup-plugin-babel": "^4.3.2",
+    "rollup": "^2.10.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "tape": "^4.10.1",
     "uglify-js": "^2.8.29"
   },
