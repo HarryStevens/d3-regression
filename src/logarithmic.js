@@ -6,6 +6,7 @@ import { visitPoints } from "./utils/points";
 export default function() {
   let x = d => d[0],
       y = d => d[1],
+      base = Math.E,
       domain;
   
   function logarithmic(data){
@@ -15,10 +16,11 @@ export default function() {
         XY = 0,
         X2 = 0,
         xmin = domain ? +domain[0] : Infinity,
-        xmax = domain ? +domain[1] : -Infinity;
+        xmax = domain ? +domain[1] : -Infinity,
+        lb = Math.log(base);
     
     visitPoints(data, x, y, (dx, dy) => {
-      const lx = Math.log(dx);
+      const lx = Math.log(dx) / lb;
       ++n;
       X += (lx - X) / n;
       Y += (dy - Y) / n;
@@ -32,7 +34,7 @@ export default function() {
     });
     
     const [intercept, slope] = ols(X, Y, XY, X2),
-        fn = x => slope * Math.log(x) + intercept,
+        fn = x => slope * Math.log(x) / lb + intercept,
         out = interpose(xmin, xmax, fn);
         
     out.a = slope;
@@ -53,6 +55,10 @@ export default function() {
 
   logarithmic.y = function(fn){
     return arguments.length ? (y = fn, logarithmic) : y;
+  }
+
+  logarithmic.base = function(n){
+    return arguments.length ? (base = n, logarithmic) : base;
   }
   
   return logarithmic;
