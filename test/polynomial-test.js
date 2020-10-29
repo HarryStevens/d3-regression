@@ -19,8 +19,8 @@ tape("polynomial.domain(domain) sets the domain explicitly", function(test) {
 });
 
 tape("polynomial.order(order) sets the order explicitly", function(test) {
-  const r = d3.regressionPoly().domain(3);
-  test.equal(r.domain(), 3);
+  const r = d3.regressionPoly().order(3);
+  test.equal(r.order(), 3);
   test.end();
 });
 
