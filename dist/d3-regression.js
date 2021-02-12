@@ -2,8 +2,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.d3 = global.d3 || {}));
-}(this, function (exports) { 'use strict';
+  (global = global || self, factory(global.d3 = {}));
+}(this, (function (exports) { 'use strict';
 
   function _slicedToArray(arr, i) {
     return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
@@ -882,4 +882,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
