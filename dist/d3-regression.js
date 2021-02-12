@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 1.3.5. Copyright 2020 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 1.3.5. Copyright 2021 Harry Stevens.
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -467,6 +467,7 @@
         y = function y(d) {
       return d[1];
     },
+        base = Math.E,
         domain;
 
     function logarithmic(data) {
@@ -476,9 +477,10 @@
           XY = 0,
           X2 = 0,
           xmin = domain ? +domain[0] : Infinity,
-          xmax = domain ? +domain[1] : -Infinity;
+          xmax = domain ? +domain[1] : -Infinity,
+          lb = Math.log(base);
       visitPoints(data, x, y, function (dx, dy) {
-        var lx = Math.log(dx);
+        var lx = Math.log(dx) / lb;
         ++n;
         X += (lx - X) / n;
         Y += (dy - Y) / n;
@@ -496,7 +498,7 @@
           intercept = _ols2[0],
           slope = _ols2[1],
           fn = function fn(x) {
-        return slope * Math.log(x) + intercept;
+        return slope * Math.log(x) / lb + intercept;
       },
           out = interpose(xmin, xmax, fn);
 
@@ -517,6 +519,10 @@
 
     logarithmic.y = function (fn) {
       return arguments.length ? (y = fn, logarithmic) : y;
+    };
+
+    logarithmic.base = function (n) {
+      return arguments.length ? (base = n, logarithmic) : base;
     };
 
     return logarithmic;

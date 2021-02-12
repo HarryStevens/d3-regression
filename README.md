@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data. [![Build Status](ht
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.3.4/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.3.6/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
@@ -99,7 +99,7 @@ Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x
 
 [<img alt="Logarithmic regression" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/logarithmic.png" width="250">](https://observablehq.com/@harrystevens/logarithmic-regression)
 
-<a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L10 "Source")
+<a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L12 "Source")
 
 Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
 
@@ -107,17 +107,21 @@ Returns a smooth line represented as an array of points, where each point is an 
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
-<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L50 "Source")
+<a name="log_x" href="#log_x">#</a> <i>log</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L52 "Source")
 
 See [<em>linear</em>.x()](#linear_x).
 
-<a name="log_y" href="#log_y">#</a> <i>log</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L54 "Source")
+<a name="log_y" href="#log_y">#</a> <i>log</i>.<b>y</b>([<i>y</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L56 "Source")
 
 See [<em>linear</em>.y()](#linear_y).
 
-<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L46 "Source")
+<a name="log_domain" href="#log_domain">#</a> <i>log</i>.<b>domain</b>([<i>domain</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L48 "Source")
 
 See [<em>linear</em>.domain()](#linear_domain).
+
+<a name="log_base" href="#log_base">#</a> <i>log</i>.<b>base</b>([<i>base</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L60 "Source")
+
+If <i>base</i> is specified, sets the base of the logarithmic regression. If <i>base</i> is not specified, returns the current base, which defaults to [Euler's number](https://en.wikipedia.org/wiki/E_(mathematical_constant)).
 
 <a name="regressionQuad" href="#regressionQuad">#</a> d3.<b>regressionQuad</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/quadratic.js "Source"), [Example](https://observablehq.com/@harrystevens/quadratic-regression "Example")
 
