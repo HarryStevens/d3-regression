@@ -1,5 +1,5 @@
 # d3-regression
-Calculate statistical regressions from two-dimensional data. [![Build Status](https://travis-ci.org/HarryStevens/d3-regression.svg?branch=master)](https://travis-ci.org/HarryStevens/d3-regression)
+Calculate statistical regressions from two-dimensional data.
 
 [<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882">](https://observablehq.com/@harrystevens/introducing-d3-regression)
 
@@ -7,7 +7,7 @@ Calculate statistical regressions from two-dimensional data. [![Build Status](ht
 If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.3.7/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.3.8/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()
