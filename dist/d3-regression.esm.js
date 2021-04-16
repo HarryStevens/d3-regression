@@ -41,9 +41,9 @@ function _nonIterableRest() {
 // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
 // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
 function points(data, x, y, sort) {
-  data = data.filter(function (d) {
-    var u = x(d),
-        v = y(d);
+  data = data.filter(function (d, i) {
+    var u = x(d, i),
+        v = y(d, i);
     return u != null && isFinite(u) && v != null && isFinite(v);
   });
 
@@ -65,8 +65,8 @@ function points(data, x, y, sort) {
 
   for (var i = 0; i < n;) {
     d = data[i];
-    X[i] = xv = +x(d);
-    Y[i] = yv = +y(d);
+    X[i] = xv = +x(d, i);
+    Y[i] = yv = +y(d, i);
     ++i;
     ux += (xv - ux) / i;
     uy += (yv - uy) / i;
@@ -85,8 +85,8 @@ function visitPoints(data, x, y, cb) {
 
   for (var i = 0, n = data.length; i < n; i++) {
     var d = data[i],
-        dx = +x(d),
-        dy = +y(d);
+        dx = +x(d, i),
+        dy = +y(d, i);
 
     if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
       cb(dx, dy, iterations++);
