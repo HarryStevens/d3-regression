@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 1.3.8. Copyright 2021 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 1.3.9. Copyright 2021 Harry Stevens.
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
@@ -65,8 +65,8 @@ function points(data, x, y, sort) {
 
   for (var i = 0; i < n;) {
     d = data[i];
-    X[i] = xv = +x(d, i);
-    Y[i] = yv = +y(d, i);
+    X[i] = xv = +x(d, i, data);
+    Y[i] = yv = +y(d, i, data);
     ++i;
     ux += (xv - ux) / i;
     uy += (yv - uy) / i;
@@ -85,8 +85,8 @@ function visitPoints(data, x, y, cb) {
 
   for (var i = 0, n = data.length; i < n; i++) {
     var d = data[i],
-        dx = +x(d, i),
-        dy = +y(d, i);
+        dx = +x(d, i, data),
+        dy = +y(d, i, data);
 
     if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
       cb(dx, dy, iterations++);
