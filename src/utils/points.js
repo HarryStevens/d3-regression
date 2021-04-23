@@ -19,8 +19,8 @@ export function points(data, x, y, sort) {
   let ux = 0, uy = 0, xv, yv, d;
   for (let i = 0; i < n; ) {
     d = data[i];
-    X[i] = xv = +x(d, i);
-    Y[i] = yv = +y(d, i);
+    X[i] = xv = +x(d, i, data);
+    Y[i] = yv = +y(d, i, data);
     ++i;
     ux += (xv - ux) / i;
     uy += (yv - uy) / i;
@@ -41,8 +41,8 @@ export function visitPoints(data, x, y, cb){
 
   for (let i = 0, n = data.length; i < n; i++) {
     const d = data[i],
-          dx = +x(d, i),
-          dy = +y(d, i);
+          dx = +x(d, i, data),
+          dy = +y(d, i, data);
 
     if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
       cb(dx, dy, iterations++);
