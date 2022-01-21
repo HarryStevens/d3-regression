@@ -11,7 +11,7 @@
   "scripts": {
     "pretest": "rm -rf dist && mkdir dist && rollup -c --banner \"$(preamble)\"",
     "test": "tape 'test/**/*-test.js'",
-    "prepublish": "npm run test && uglifyjs dist/d3-regression.js -c -m -o dist/d3-regression.min.js",
+    "prepublishOnly": "npm run test && uglifyjs dist/d3-regression.js -c -m -o dist/d3-regression.min.js",
     "postpublish": "zip -j dist/d3-regression.zip -- LICENSE README.md dist/d3-regression.js dist/d3-regression.min.js dist/d3-regression.cjs.js dist/d3-regression.esm.js"
   },
   "repository": {

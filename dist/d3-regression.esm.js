@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 1.3.9. Copyright 2021 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 1.3.9. Copyright 2022 Harry Stevens.
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
