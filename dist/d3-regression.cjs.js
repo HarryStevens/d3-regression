@@ -1,4 +1,4 @@
-// https://github.com/HarryStevens/d3-regression#readme Version 1.3.9. Copyright 2022 Harry Stevens.
+// https://github.com/HarryStevens/d3-regression#readme Version 1.3.10. Copyright 2022 Harry Stevens.
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
