@@ -18,6 +18,12 @@ const regression = d3.regressionLinear()
 </script>
 ```
 
+
+## Demos 
+- [Angular](https://stackblitz.com/edit/angular-ivy-dksajy?file=src/app/app.component.ts)
+
+- [Standalone NodeJS](/examples/linear.js)
+
 ## API Reference
 - [Linear](#regressionLinear)
 - [Exponential](#regressionExp)
