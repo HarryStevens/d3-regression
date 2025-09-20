@@ -20,7 +20,7 @@ export type PolynomialOutput = [DataPoint, DataPoint] & {
 };
 
 
-export interface PolynomialRegression<T>  {
+export interface PolynomialRegression<T> {
   (data: T[]): PolynomialOutput;
 
   domain(): Domain;
@@ -38,9 +38,9 @@ export interface PolynomialRegression<T>  {
 
 export default function polynomial<T = DataPoint>(): PolynomialRegression<T> {
   let x: Accessor<T> = (d: T) => (d as DataPoint)[0],
-      y: Accessor<T> = (d: T) => (d as DataPoint)[1],
-      order = 3,
-      domain: Domain;
+    y: Accessor<T> = (d: T) => (d as DataPoint)[1],
+    order = 3,
+    domain: Domain;
 
   const polynomialRegression = function polynomialRegression(data: T[]): PolynomialOutput {
     // Shortcut for lower-order polynomials:
@@ -60,7 +60,7 @@ export default function polynomial<T = DataPoint>(): PolynomialRegression<T> {
       result.rSquared = o.rSquared;
       return result;
     }
-    
+
     const [xv, yv, ux, uy] = points(data, x, y);
     const n = xv.length;
     const k = order + 1;
@@ -71,7 +71,7 @@ export default function polynomial<T = DataPoint>(): PolynomialRegression<T> {
       n0 = 0,
       xmin = domain ? +domain[0] : Infinity,
       xmax = domain ? +domain[1] : -Infinity;
-    
+
     visitPoints(data, x, y, (dx, dy) => {
       n0++;
       Y += (dy - Y) / n0;
@@ -112,15 +112,15 @@ export default function polynomial<T = DataPoint>(): PolynomialRegression<T> {
       }
       return val;
     };
-    
+
     const out = <PolynomialOutput>interpose(xmin, xmax, fn);
     out.coefficients = uncenter(k, coef, -ux, uy);
     out.predict = fn;
     out.rSquared = determination(data, x, y, Y, fn);
-    
+
     return out;
   } as PolynomialRegression<T>;
-  
+
   polynomialRegression.domain = function (arr?: [number, number]) {
     if (!arguments.length) return domain;
     domain = arr;
@@ -190,7 +190,7 @@ function gaussianElimination(matrix: Float64Array[]): number[] {
       }
     }
   }
-  
+
   for (let j = n - 1; j >= 0; j--) {
     let t = 0;
     for (let k = j + 1; k < n; k++) {
@@ -198,6 +198,6 @@ function gaussianElimination(matrix: Float64Array[]): number[] {
     }
     coef[j] = (matrix[n][j] - t) / matrix[j][j];
   }
-  
+
   return coef;
 }
