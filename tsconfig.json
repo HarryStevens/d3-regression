@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "es2015",
     "module": "ESNext",
     "declaration": true,
     "declarationDir": "./dist/types",
