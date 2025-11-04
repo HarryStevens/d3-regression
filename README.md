@@ -41,6 +41,17 @@ Returns a line represented as an array of two points, where each point is an arr
 
 Also returns properties <em>a</em> and <em>b</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
+```js
+[
+  0: [x1, x2],
+  1: [y1, y2],
+  2: a,
+  3: b,
+  4: rSquared,
+  5: predict
+]
+```
+
 <a name="linear_x" href="#linear_x">#</a> <i>linear</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/linear.js#L47 "Source")
 
 If <em>x</em> is specified, sets the <em>x</em>-coordinate accessor, which is passed passed the current datum (<em>d</em>), the current index (<em>i</em>), and the entire data array (<em>data</em>). If <em>x</em> is not specified, returns the current <em>x</em>-coordinate accessor, which defaults to:
