@@ -4,10 +4,21 @@ Calculate statistical regressions from two-dimensional data.
 [<img alt="Stastical Regressions" src="https://raw.githubusercontent.com/harrystevens/d3-regression/master/img/cover.png" width="882">](https://observablehq.com/@harrystevens/introducing-d3-regression)
 
 ## Installing
-If you use NPM, `npm install d3-regression`. Otherwise, download the [latest release](https://github.com/HarryStevens/d3-regression/raw/master/dist/d3-regression.zip). AMD, CommonJS, and vanilla environments are supported. In vanilla, a d3 global is exported:
+If you use NPM, `npm install d3-regression`.
+
+```js
+import { regressionLinear } from "d3-regression";
+
+const regression = regressionLinear()
+  .x(d => d.x)
+  .y(d => d.y)
+  .domain([0, 100]);
+```
+
+You can also load the UMD bundle from a CDN; in vanilla, a d3 global is exported:
 
 ```html
-<script src="https://unpkg.com/d3-regression@1.3.10/dist/d3-regression.min.js"></script>
+<script src="https://unpkg.com/d3-regression@2/dist/d3-regression.min.js"></script>
 <script>
 
 const regression = d3.regressionLinear()

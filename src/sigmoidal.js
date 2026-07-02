@@ -15,7 +15,7 @@ export default function() {
   let x = d => d[0],
       y = d => d[1],
       domain;
-   
+
   function sigmoidal(data){
     let n = 0,
         Xmean = 0,
@@ -34,7 +34,7 @@ export default function() {
       Y += (dy - Y) / n;
       if (dy < Ymin) Ymin = dy;
       if (dy > Ymax) Ymax = dy;
-      
+
       if (!domain){
         if (dx < Xmin) Xmin = dx;
         if (dx > Xmax) Xmax = dx;
@@ -53,21 +53,21 @@ export default function() {
           M = Xmean + best.M * Xscale,
           fn = x => predict(A, B, C, M, x),
           out = interpose(Xmin, Xmax, fn);
-    
+
     out.A = A;
     out.B = B;
     out.C = C;
     out.M = M;
     out.predict = fn;
     out.rSquared = determination(points, pointX, pointY, Y, fn);
-    
-    return out;  
+
+    return out;
   }
 
   sigmoidal.domain = function(arr){
     return arguments.length ? (domain = arr, sigmoidal) : domain;
-  }  
-  
+  }
+
   sigmoidal.x = function(fn){
     return arguments.length ? (x = fn, sigmoidal) : x;
   }
@@ -75,7 +75,7 @@ export default function() {
   sigmoidal.y = function(fn){
     return arguments.length ? (y = fn, sigmoidal) : y;
   }
-  
+
   return sigmoidal;
 }
 

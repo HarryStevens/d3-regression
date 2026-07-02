@@ -34,7 +34,7 @@ it("sigmoidal(data) fits an increasing shifted sigmoid", () => {
     .x(d => d.x)
     .y(d => d.y)
     .domain([-6, 8])(shuffle(data(100, 1.25, 20, 1.5)));
-  
+
   assert.ok(Math.abs(r.A - 100) < .001);
   assert.ok(Math.abs(r.B - 1.25) < .001);
   assert.ok(Math.abs(r.C - 20) < .001);
@@ -49,7 +49,7 @@ it("sigmoidal(data) fits a decreasing shifted sigmoid", () => {
   const r = d3.regressionSigmoidal()
     .x(d => d.x)
     .y(d => d.y)(shuffle(data(80, -.8, 10, 2)));
-  
+
   assert.ok(Math.abs(r.A - 80) < .001);
   assert.ok(Math.abs(r.B + .8) < .001);
   assert.ok(Math.abs(r.C - 10) < .001);
@@ -66,7 +66,7 @@ it("sigmoidal(data) fits a noisy shifted sigmoid trend", () => {
   const r = d3.regressionSigmoidal()
     .x(d => d.x)
     .y(d => d.y)(shuffle(noisy));
-  
+
   assert.ok(Math.abs(r.A - 100.17) < .01);
   assert.ok(Math.abs(r.B - 1.23) < .01);
   assert.ok(Math.abs(r.C - 20) < .01);
@@ -83,7 +83,7 @@ it("sigmoidal(data) ignores invalid values", () => {
   const r = d3.regressionSigmoidal()
     .x(d => d.x)
     .y(d => d.y)(shuffle(dirty));
-  
+
   assert.ok(Math.abs(r.A - 100) < .001);
   assert.ok(Math.abs(r.B - 1.25) < .001);
   assert.ok(Math.abs(r.C - 20) < .001);

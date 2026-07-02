@@ -14,7 +14,7 @@ export default function() {
   let x = d => d[0],
       y = d => d[1],
       domain;
-   
+
   function logistic(data){
     let n = 0,
         Y = 0,
@@ -30,7 +30,7 @@ export default function() {
         ++n;
         Y += (dy - Y) / n;
         if (dy > ymax) ymax = dy;
-        
+
         if (!domain){
           if (dx < xmin) xmin = dx;
           if (dx > xmax) xmax = dx;
@@ -84,14 +84,14 @@ export default function() {
     const {L, k, x0} = best,
           fn = x => predict(L, k, x0, x),
           out = interpose(xmin, xmax, fn);
-    
+
     out.L = L;
     out.k = k;
     out.x0 = x0;
     out.predict = fn;
     out.rSquared = determination(points, pointX, pointY, Y, fn);
-    
-    return out;  
+
+    return out;
 
     function fit(logL){
       const L = Math.exp(logL);
@@ -131,8 +131,8 @@ export default function() {
 
   logistic.domain = function(arr){
     return arguments.length ? (domain = arr, logistic) : domain;
-  }  
-  
+  }
+
   logistic.x = function(fn){
     return arguments.length ? (x = fn, logistic) : x;
   }
@@ -140,6 +140,6 @@ export default function() {
   logistic.y = function(fn){
     return arguments.length ? (y = fn, logistic) : y;
   }
-  
+
   return logistic;
 }

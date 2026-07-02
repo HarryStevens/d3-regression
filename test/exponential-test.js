@@ -23,7 +23,7 @@ it("exp(data) calculates the the a and b coefficients, R^2, and returns a line r
     .x(d => d.x)
     .y(d => d.y)
     .domain([-2, 5.06])(shuffle(data));
-  
+
   assert.strictEqual(r.a.toFixed(3), "3.033");
   assert.strictEqual(r.b.toFixed(3), "0.691");
   assert.strictEqual(r.rSquared.toFixed(3), "0.998");
@@ -50,7 +50,7 @@ it("exp(data) ignores nonpositive y values", () => {
   const r = d3.regressionExp()
     .x(d => d.x)
     .y(d => d.y)(shuffle(data));
-  
+
   assert.strictEqual(r.a.toFixed(3), "3.033");
   assert.strictEqual(r.b.toFixed(3), "0.691");
   assert.strictEqual(r.rSquared.toFixed(3), "0.998");
