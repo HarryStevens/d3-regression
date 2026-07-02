@@ -71,7 +71,10 @@ export default function() {
       }
     }
 
-    return output(xv, yhat, ux, uy);
+    const out = output(xv, yhat, ux, uy);
+    out.predict = predict(out);
+    out.rSquared = determination(yv, yhat);
+    return out;
   }
 
   loess.bandwidth = function(bw) {
@@ -133,4 +136,38 @@ function output(xv, yhat, ux, uy) {
   prev[1] += uy;
 
   return out;
+}
+
+function determination(yv, yhat) {
+  let SSE = 0,
+      SST = 0;
+
+  for (let i = 0, n = yv.length; i < n; ++i) {
+    const sse = yv[i] - yhat[i];
+    SSE += sse * sse;
+    SST += yv[i] * yv[i];
+  }
+
+  return 1 - SSE / SST;
+}
+
+function predict(points) {
+  return x => {
+    const n = points.length;
+    if (!n) return NaN;
+    if (n === 1) return points[0][1];
+
+    let i = 0;
+    while (i < n && points[i][0] < x) ++i;
+
+    if (i === 0) return interpolate(points[0], points[1], x);
+    if (i === n) return interpolate(points[n - 2], points[n - 1], x);
+    if (points[i][0] === x) return points[i][1];
+    return interpolate(points[i - 1], points[i], x);
+  };
+}
+
+function interpolate(a, b, x) {
+  const dx = b[0] - a[0];
+  return dx ? a[1] + (b[1] - a[1]) * (x - a[0]) / dx : a[1];
 }

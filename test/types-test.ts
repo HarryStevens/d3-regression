@@ -77,3 +77,5 @@ const loess = regressionLoess<Datum>().x(d => d.x).y(d => d.y).bandwidth(0.5);
 loess.bandwidth().toFixed();
 const loessResult = loess(data);
 loessResult[0][0].toFixed();
+loessResult.rSquared.toFixed();
+loessResult.predict(1.5).toFixed();

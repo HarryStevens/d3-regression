@@ -35,4 +35,8 @@ it("loess(data) calculates the LOESS regression", () => {
   samples.forEach(([i, p]) => {
     assert.deepStrictEqual(r[i].map(d => d.toFixed(6)), p.map(d => d.toFixed(6)));
   });
+  assert.strictEqual(r.rSquared.toFixed(6), "0.537051");
+  assert.strictEqual(r.predict(1900).toFixed(6), r[0][1].toFixed(6));
+  assert.strictEqual(r.predict(2017).toFixed(6), r[r.length - 1][1].toFixed(6));
+  assert.strictEqual(r.predict(1900.5).toFixed(6), ((r[0][1] + r[1][1]) / 2).toFixed(6));
 });

@@ -230,7 +230,7 @@ Creates a new [LOESS regression](https://en.wikipedia.org/wiki/Local_regression)
 
 Computes the LOESS regression for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
 
-Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates.
+Returns a line represented as an array of <em>n</em> points, where each point is an array of two numbers representing the point's coordinates. Also returns <em>rSquared</em>, representing the coefficient of determination for the smoothed fitted values, and a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate for a given <em>x</em>-coordinate by interpolating along the smoothed regression line.
 
 <a name="loess_x" href="#loess_x">#</a> <i>loess</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/loess.js#L81 "Source")
 

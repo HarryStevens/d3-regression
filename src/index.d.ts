@@ -49,7 +49,10 @@ export interface RegressionPolynomialResult extends RegressionResult {
   coefficients: number[];
 }
 
-export interface RegressionLoessResult extends Array<RegressionPoint> {}
+export interface RegressionLoessResult extends Array<RegressionPoint> {
+  rSquared: number;
+  predict(x: number): number;
+}
 
 export interface RegressionDomain<T, R> {
   (data: T[]): R;
