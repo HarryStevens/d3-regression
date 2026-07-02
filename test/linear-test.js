@@ -30,3 +30,15 @@ it("linear(data) calculates the slope, y-intercept, and R^2, and returns a line 
   assert.strictEqual(Math.round(r.b), 2);
   assert.strictEqual(r.rSquared, 1);
 });
+
+it("linear(data) ignores invalid values before coercion", () => {
+  const clean = [[0, 2], [1, 1], [2, 0]],
+        dirty = clean.concat([[null, 100], [100, null], [NaN, 100], [100, Infinity]]),
+        a = d3.regressionLinear()(clean),
+        b = d3.regressionLinear()(dirty);
+
+  assert.deepStrictEqual(b.map(p => p.map(d => d.toFixed(6))), a.map(p => p.map(d => d.toFixed(6))));
+  assert.strictEqual(b.a.toFixed(6), a.a.toFixed(6));
+  assert.strictEqual(b.b.toFixed(6), a.b.toFixed(6));
+  assert.strictEqual(b.rSquared.toFixed(6), a.rSquared.toFixed(6));
+});

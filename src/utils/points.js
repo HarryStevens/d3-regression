@@ -46,11 +46,11 @@ export function visitPoints(data, x, y, cb){
 
   for (let i = 0, n = data.length; i < n; i++) {
     const d = data[i],
-          dx = +x(d, i, data),
-          dy = +y(d, i, data);
+          ux = x(d, i, data),
+          uy = y(d, i, data);
 
-    if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-      cb(dx, dy, iterations++);
+    if (ux != null && isFinite(ux) && uy != null && isFinite(uy)) {
+      cb(+ux, +uy, iterations++);
     }
   }
 }
