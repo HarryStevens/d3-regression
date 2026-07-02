@@ -1,8 +1,8 @@
-import { determination } from "./utils/determination";
-import { interpose } from "./utils/interpose";
-import { points, visitPoints } from "./utils/points";
-import linear from "./linear";
-import quad from "./quadratic";
+import { determination } from "./utils/determination.js";
+import { interpose } from "./utils/interpose.js";
+import { points, visitPoints } from "./utils/points.js";
+import linear from "./linear.js";
+import quad from "./quadratic.js";
 
 // Adapted from regression-js by Tom Alexander
 // Source: https://github.com/Tom-Alexander/regression-js/blob/master/src/regression.js#L246

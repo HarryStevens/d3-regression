@@ -1,4 +1,4 @@
-import { visitPoints } from "./points";
+import { visitPoints } from "./points.js";
 
 // Given a dataset, x- and y-accessors, the mean center of the y values, and a predict function,
 // return the coefficient of determination, or R squared.

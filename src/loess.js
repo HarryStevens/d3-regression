@@ -4,9 +4,9 @@
 // Adapted from vega-statistics by Jeffrey Heer
 // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
 // Source: https://github.com/vega/vega/blob/f21cb8792b4e0cbe2b1a3fd44b0f5db370dbaadb/packages/vega-statistics/src/regression/loess.js
-import { median } from "./utils/median";
-import { ols } from "./utils/ols";
-import { points } from "./utils/points";
+import { median } from "./utils/median.js";
+import { ols } from "./utils/ols.js";
+import { points } from "./utils/points.js";
 
 const maxiters = 2, epsilon = 1e-12;
 

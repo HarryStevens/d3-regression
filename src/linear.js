@@ -1,6 +1,6 @@
-import { determination } from "./utils/determination";
-import { ols } from "./utils/ols";
-import { visitPoints } from "./utils/points";
+import { determination } from "./utils/determination.js";
+import { ols } from "./utils/ols.js";
+import { visitPoints } from "./utils/points.js";
 
 export default function(){
   let x = d => d[0],

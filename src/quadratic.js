@@ -1,6 +1,6 @@
-import { determination } from "./utils/determination";
-import { interpose } from "./utils/interpose";
-import { points, visitPoints } from "./utils/points";
+import { determination } from "./utils/determination.js";
+import { interpose } from "./utils/interpose.js";
+import { points, visitPoints } from "./utils/points.js";
 
 export default function(){
   let x = d => d[0],
