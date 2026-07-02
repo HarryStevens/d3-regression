@@ -3,9 +3,11 @@ import {
   regressionLinear,
   regressionLoess,
   regressionLog,
+  regressionLogistic,
   regressionPoly,
   regressionPow,
-  regressionQuad
+  regressionQuad,
+  regressionSigmoidal
 } from "../src/index.js";
 
 type Datum = {x: number; y: number};
@@ -42,6 +44,19 @@ log.base().toFixed();
 const logResult = log(data);
 logResult.a.toFixed();
 logResult.b.toFixed();
+
+const logisticResult = regressionLogistic<Datum>().x(d => d.x).y(d => d.y)(data);
+logisticResult.L.toFixed();
+logisticResult.k.toFixed();
+logisticResult.x0.toFixed();
+logisticResult.predict(3).toFixed();
+
+const sigmoidalResult = regressionSigmoidal<Datum>().x(d => d.x).y(d => d.y)(data);
+sigmoidalResult.A.toFixed();
+sigmoidalResult.B.toFixed();
+sigmoidalResult.C.toFixed();
+sigmoidalResult.M.toFixed();
+sigmoidalResult.predict(3).toFixed();
 
 const poly = regressionPoly<Datum>().x(d => d.x).y(d => d.y).order(3);
 poly.order().toFixed();

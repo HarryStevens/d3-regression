@@ -26,6 +26,19 @@ export interface RegressionPowerResult extends RegressionResult {
   b: number;
 }
 
+export interface RegressionLogisticResult extends RegressionResult {
+  L: number;
+  k: number;
+  x0: number;
+}
+
+export interface RegressionSigmoidalResult extends RegressionResult {
+  A: number;
+  B: number;
+  C: number;
+  M: number;
+}
+
 export interface RegressionQuadraticResult extends RegressionResult {
   a: number;
   b: number;
@@ -51,6 +64,8 @@ export interface RegressionDomain<T, R> {
 export interface RegressionLinear<T> extends RegressionDomain<T, RegressionLinearResult> {}
 export interface RegressionExponential<T> extends RegressionDomain<T, RegressionExponentialResult> {}
 export interface RegressionPower<T> extends RegressionDomain<T, RegressionPowerResult> {}
+export interface RegressionLogistic<T> extends RegressionDomain<T, RegressionLogisticResult> {}
+export interface RegressionSigmoidal<T> extends RegressionDomain<T, RegressionSigmoidalResult> {}
 export interface RegressionQuadratic<T> extends RegressionDomain<T, RegressionQuadraticResult> {}
 
 export interface RegressionLogarithmic<T> extends RegressionDomain<T, RegressionLogarithmicResult> {
@@ -77,6 +92,8 @@ export function regressionExp<T = RegressionPoint>(): RegressionExponential<T>;
 export function regressionLinear<T = RegressionPoint>(): RegressionLinear<T>;
 export function regressionLoess<T = RegressionPoint>(): RegressionLoess<T>;
 export function regressionLog<T = RegressionPoint>(): RegressionLogarithmic<T>;
+export function regressionLogistic<T = RegressionPoint>(): RegressionLogistic<T>;
 export function regressionPoly<T = RegressionPoint>(): RegressionPolynomial<T>;
 export function regressionPow<T = RegressionPoint>(): RegressionPower<T>;
 export function regressionQuad<T = RegressionPoint>(): RegressionQuadratic<T>;
+export function regressionSigmoidal<T = RegressionPoint>(): RegressionSigmoidal<T>;
