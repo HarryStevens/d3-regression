@@ -5,8 +5,8 @@ export const pointX = d => d[0];
 export const pointY = d => d[1];
 
 export function points(data, x, y, sort) {
-  data = data.filter((d, i) => {
-    let u = x(d, i), v = y(d, i);
+  data = arrayify(data).filter((d, i, data) => {
+    let u = x(d, i, data), v = y(d, i, data);
     return u != null && isFinite(u) && v != null && isFinite(v);
   });
 
@@ -40,6 +40,8 @@ export function points(data, x, y, sort) {
 
 
 export function visitPoints(data, x, y, cb){
+  data = arrayify(data);
+
   let iterations = 0;
 
   for (let i = 0, n = data.length; i < n; i++) {
@@ -51,4 +53,9 @@ export function visitPoints(data, x, y, cb){
       cb(dx, dy, iterations++);
     }
   }
+}
+
+
+function arrayify(data) {
+  return Array.isArray(data) ? data : Array.from(data);
 }

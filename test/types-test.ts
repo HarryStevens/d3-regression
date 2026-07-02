@@ -7,7 +7,8 @@ import {
   regressionPoly,
   regressionPow,
   regressionQuad,
-  regressionSigmoidal
+  regressionSigmoidal,
+  type RegressionPoint
 } from "../src/index.js";
 
 type Datum = {x: number; y: number};
@@ -79,3 +80,10 @@ const loessResult = loess(data);
 loessResult[0][0].toFixed();
 loessResult.rSquared.toFixed();
 loessResult.predict(1.5).toFixed();
+
+const mapData = new Map<number, number>([[0, 1], [1, 3], [2, 5]]);
+regressionLinear()(mapData).predict(3).toFixed();
+const setData = new Set<RegressionPoint>([[0, 1], [1, 3], [2, 5]]);
+regressionLinear()(setData).predict(3).toFixed();
+const numberSet = new Set<number>([1, 3, 5]);
+regressionLinear<number>().x((d, i) => i).y(d => d)(numberSet).predict(3).toFixed();

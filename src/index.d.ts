@@ -55,7 +55,7 @@ export interface RegressionLoessResult extends Array<RegressionPoint> {
 }
 
 export interface RegressionDomain<T, R> {
-  (data: T[]): R;
+  (data: Iterable<T>): R;
   domain(): [number, number] | undefined;
   domain(domain: [number, number]): this;
   x(): RegressionAccessor<T>;
@@ -82,7 +82,7 @@ export interface RegressionPolynomial<T> extends RegressionDomain<T, RegressionP
 }
 
 export interface RegressionLoess<T> {
-  (data: T[]): RegressionLoessResult;
+  (data: Iterable<T>): RegressionLoessResult;
   bandwidth(): number;
   bandwidth(bandwidth: number): this;
   x(): RegressionAccessor<T>;

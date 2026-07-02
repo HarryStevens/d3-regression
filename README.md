@@ -19,6 +19,8 @@ const regression = d3.regressionLinear()
 ```
 
 ## API Reference
+All regression generators accept any iterable of data, including arrays, Maps, and Sets. Maps work with the default accessors when their entries are two-element [<em>x</em>, <em>y</em>] pairs; Sets work with the default accessors when their values are two-element [<em>x</em>, <em>y</em>] arrays.
+
 - [Linear](#regressionLinear)
 - [Exponential](#regressionExp)
 - [Logarithmic](#regressionLog)
