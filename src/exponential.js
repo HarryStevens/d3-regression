@@ -1,7 +1,7 @@
 import { determination } from "./utils/determination.js";
 import { interpose } from "./utils/interpose.js";
 import { ols } from "./utils/ols.js";
-import { visitPoints } from "./utils/points.js";
+import { pointX, pointY, visitPoints } from "./utils/points.js";
 
 export default function() {
   let x = d => d[0],
@@ -18,18 +18,23 @@ export default function() {
         xmin = domain ? +domain[0] : Infinity,
         xmax = domain ? +domain[1] : -Infinity;
 
+    const points = [];
+
     visitPoints(data, x, y, (dx, dy) => {
-      const ly = Math.log(dy), xy = dx * dy;
-      ++n;
-      Y += (dy - Y) / n;
-      XY += (xy - XY) / n;
-      X2Y += (dx * xy - X2Y) / n;
-      YL += (dy * ly - YL) / n;
-      XYL += (xy * ly - XYL) / n;
-      
-      if (!domain){
-        if (dx < xmin) xmin = dx;
-        if (dx > xmax) xmax = dx;
+      if (dy > 0) {
+        const ly = Math.log(dy), xy = dx * dy;
+        points.push([dx, dy]);
+        ++n;
+        Y += (dy - Y) / n;
+        XY += (xy - XY) / n;
+        X2Y += (dx * xy - X2Y) / n;
+        YL += (dy * ly - YL) / n;
+        XYL += (xy * ly - XYL) / n;
+        
+        if (!domain){
+          if (dx < xmin) xmin = dx;
+          if (dx > xmax) xmax = dx;
+        }
       }
     });
     
@@ -41,7 +46,7 @@ export default function() {
     out.a = a;
     out.b = b;
     out.predict = fn;
-    out.rSquared = determination(data, x, y, Y, fn);
+    out.rSquared = determination(points, pointX, pointY, Y, fn);
     
     return out;  
   }

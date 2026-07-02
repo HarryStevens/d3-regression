@@ -88,7 +88,7 @@ Creates a new exponential regression generator with default [<em>x</em>-](#exp_x
 
 <a name="_exponential" href="#_exponential">#</a> <i>exp</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/exponential.js#L10 "Source")
 
-Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
+Computes the exponential regression, which takes the form <em>y</em> = <em>ae</em><sup><em>bx</em></sup>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity) and nonpositive <em>y</em>-values.
 
 Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
@@ -114,7 +114,7 @@ Creates a new logarithmic regression generator with default [<em>x</em>-](#log_x
 
 <a name="_log" href="#_log">#</a> <i>log</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logarithmic.js#L12 "Source")
 
-Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
+Computes the logarithmic regression, which takes the form <em>y</em> = <em>a</em> · ln(<em>x</em>) + <em>b</em>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity) and nonpositive <em>x</em>-values.
 
 Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
@@ -202,7 +202,7 @@ Creates a new power law regression generator with default [<em>x</em>-](#pow_x) 
 
 <a name="_pow" href="#_pow">#</a> <i>pow</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/power.js#L10 "Source")
 
-Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity).
+Computes the power law regression, which takes the form <em>y</em> = <em>a</em><em>x</em><sup><em>b</em></sup>, for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity) and nonpositive <em>x</em>- or <em>y</em>-values.
 
 Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 

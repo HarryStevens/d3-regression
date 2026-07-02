@@ -1,6 +1,9 @@
 // Adapted from vega-statistics by Jeffrey Heer
 // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
 // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
+export const pointX = d => d[0];
+export const pointY = d => d[1];
+
 export function points(data, x, y, sort) {
   data = data.filter((d, i) => {
     let u = x(d, i), v = y(d, i);

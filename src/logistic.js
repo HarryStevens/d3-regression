@@ -1,12 +1,10 @@
 import { determination } from "./utils/determination.js";
 import { interpose } from "./utils/interpose.js";
 import { ols } from "./utils/ols.js";
-import { visitPoints } from "./utils/points.js";
+import { pointX, pointY, visitPoints } from "./utils/points.js";
 import { sigmoid } from "./utils/sigmoid.js";
 
-const pointX = d => d[0],
-      pointY = d => d[1],
-      tolerance = 1e-12;
+const tolerance = 1e-12;
 
 function predict(L, k, x0, x){
   return L * sigmoid(k * (x - x0));

@@ -1,11 +1,9 @@
 import { determination } from "./utils/determination.js";
 import { interpose } from "./utils/interpose.js";
-import { visitPoints } from "./utils/points.js";
+import { pointX, pointY, visitPoints } from "./utils/points.js";
 import { sigmoid } from "./utils/sigmoid.js";
 
-const pointX = d => d[0],
-      pointY = d => d[1],
-      starts = [1, -1, 2, -2, .5, -.5].map(B => ({A: 1, B, C: 0, M: 0}))
+const starts = [1, -1, 2, -2, .5, -.5].map(B => ({A: 1, B, C: 0, M: 0}))
         .concat([{A: .9, B: 1, C: .05, M: 0}, {A: 1.1, B: 1, C: -.05, M: 0},
           {A: .9, B: -1, C: .05, M: 0}, {A: 1.1, B: -1, C: -.05, M: 0}]);
 

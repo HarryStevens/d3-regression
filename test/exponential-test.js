@@ -33,3 +33,25 @@ it("exp(data) calculates the the a and b coefficients, R^2, and returns a line r
     assert.deepStrictEqual(r[i].map(d => d.toFixed(4)), p.map(d => d.toFixed(4)));
   });
 });
+
+it("exp(data) ignores nonpositive y values", () => {
+  const data = [
+    {x: 0, y: 3},
+    {x: 1, y: 7},
+    {x: 2, y: 10},
+    {x: 3, y: 24},
+    {x: 4, y: 50},
+    {x: 5, y: 95},
+    {x: 6, y: 0},
+    {x: 7, y: -1},
+    {x: 8, y: NaN},
+    {x: 9, y: Infinity}
+  ];
+  const r = d3.regressionExp()
+    .x(d => d.x)
+    .y(d => d.y)(shuffle(data));
+  
+  assert.strictEqual(r.a.toFixed(3), "3.033");
+  assert.strictEqual(r.b.toFixed(3), "0.691");
+  assert.strictEqual(r.rSquared.toFixed(3), "0.998");
+});
