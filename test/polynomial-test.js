@@ -39,3 +39,21 @@ it("polynomial(data) calculates the the a and b coefficients, R^2, and returns a
     assert.deepStrictEqual(r[i].map(d => d.toFixed(4)), p.map(d => d.toFixed(4)));
   });
 });
+
+it("polynomial(data) handles large values without freezing", () => {
+  const data = [
+    {x: 1, y: 18539}, {x: 2, y: 20695}, {x: 3, y: 21848},
+    {x: 4, y: 19121}, {x: 5, y: 23501}, {x: 6, y: 28724},
+    {x: 7, y: 28061}, {x: 8, y: 36222}, {x: 9, y: 37756},
+    {x: 10, y: 38212}, {x: 11, y: 31629}, {x: 12, y: 32282}
+  ];
+  const r = d3.regressionPoly()
+    .x(d => d.x)
+    .y(d => d.y)
+    .order(3)(data);
+
+  assert.ok(r.length < 10000);
+  assert.ok(r.rSquared > 0.8);
+  r.coefficients.forEach(c => assert.ok(Number.isFinite(c)));
+  assert.ok(Number.isFinite(r.predict(6.5)));
+});

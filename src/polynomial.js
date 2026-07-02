@@ -33,9 +33,13 @@ export default function(){
     
     const [xv, yv, ux, uy] = points(data, x, y),
         n = xv.length,
+        k = order + 1,
+        xScale = maxAbs(xv) || 1,
+        yScale = maxAbs(yv) || 1,
+        sx = xv.map(d => d / xScale),
+        sy = yv.map(d => d / yScale),
         lhs = [],
-        rhs = [],
-        k = order + 1;
+        rhs = [];
 
     let Y = 0, n0 = 0,
         xmin = domain ? +domain[0] : Infinity,
@@ -54,14 +58,14 @@ export default function(){
 
     for (i = 0; i < k; ++i) {
       for (l = 0, v = 0; l < n; ++l) {
-        v += Math.pow(xv[l], i) * yv[l];
+        v += Math.pow(sx[l], i) * sy[l];
       }
       lhs.push(v);
 
       c = new Float64Array(k);
       for (j=0; j<k; ++j) {
         for (l=0, v=0; l<n; ++l) {
-          v += Math.pow(xv[l], i + j);
+          v += Math.pow(sx[l], i + j);
         }
         c[j] = v;
       }
@@ -70,15 +74,19 @@ export default function(){
     rhs.push(lhs);
 
     const coef = gaussianElimination(rhs),
-          fn = x => {
-            x -= ux;
-            let y = uy + coef[0] + coef[1] * x + coef[2] * x * x;
+          predictScaled = x => {
+            let y = coef[0] + coef[1] * x + coef[2] * x * x;
             for (i = 3; i < k; ++i) y += coef[i] * Math.pow(x, i);
             return y;
           },
-          out = interpose(xmin, xmax, fn);
+          fn = x => predictScaled((x - ux) / xScale) * yScale + uy,
+          rescale = xScale > 1e3 || yScale > 1e3,
+          out = rescale
+            ? interpose((xmin - ux) / xScale, (xmax - ux) / xScale, predictScaled)
+              .map(([x, y]) => [x * xScale + ux, y * yScale + uy])
+            : interpose(xmin, xmax, fn);
 
-    out.coefficients = uncenter(k, coef, -ux, uy);
+    out.coefficients = uncenter(k, coef.map((d, i) => d * yScale / Math.pow(xScale, i)), -ux, uy);
     out.predict = fn;
     out.rSquared = determination(data, x, y, Y, fn);
     
@@ -102,6 +110,15 @@ export default function(){
   }
   
   return polynomial;
+}
+
+function maxAbs(values) {
+  let max = 0;
+  for (let i = 0, n = values.length; i < n; ++i) {
+    const v = Math.abs(values[i]);
+    if (v > max) max = v;
+  }
+  return max;
 }
 
 function uncenter(k, a, x, y) {
