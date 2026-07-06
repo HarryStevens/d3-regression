@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="592" height="590" viewBox="0 0 592 590" role="img" aria-label="Example of d3.regressionLinear()" style="overflow: visible">
+<rect width="100%" height="100%" fill="white"/>
+<style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #222; }
+    .title { font-size: 32px; font-weight: 400; }
+    .call { font-size: 32px; fill: #888; }
+    .tick { font-size: 20px; fill: #333; }
+    .grid { stroke: #ddd; stroke-width: 2; shape-rendering: crispEdges; }
+    .zero { stroke: #666; stroke-width: 2; shape-rendering: crispEdges; }
+    .dot { fill: #1f1f1f; fill-opacity: .9; stroke: #000; stroke-width: 1; }
+    .line { fill: none; stroke: #000; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+  </style>
+<defs><clipPath id="plot-0"><rect x="40" y="15" width="540" height="530"/></clipPath></defs>
+<line class="grid" x1="40" y1="15" x2="40" y2="555"/>
+<text class="tick" x="40" y="577" text-anchor="middle">-4</text>
+<line class="grid" x1="94" y1="15" x2="94" y2="555"/>
+<text class="tick" x="94" y="577" text-anchor="middle">-2</text>
+<line class="zero" x1="148" y1="15" x2="148" y2="555"/>
+<text class="tick" x="148" y="577" text-anchor="middle">0</text>
+<line class="grid" x1="202" y1="15" x2="202" y2="555"/>
+<text class="tick" x="202" y="577" text-anchor="middle">2</text>
+<line class="grid" x1="256" y1="15" x2="256" y2="555"/>
+<text class="tick" x="256" y="577" text-anchor="middle">4</text>
+<line class="grid" x1="310" y1="15" x2="310" y2="555"/>
+<text class="tick" x="310" y="577" text-anchor="middle">6</text>
+<line class="grid" x1="364" y1="15" x2="364" y2="555"/>
+<text class="tick" x="364" y="577" text-anchor="middle">8</text>
+<line class="grid" x1="418" y1="15" x2="418" y2="555"/>
+<text class="tick" x="418" y="577" text-anchor="middle">10</text>
+<line class="grid" x1="472" y1="15" x2="472" y2="555"/>
+<text class="tick" x="472" y="577" text-anchor="middle">12</text>
+<line class="grid" x1="526" y1="15" x2="526" y2="555"/>
+<text class="tick" x="526" y="577" text-anchor="middle">14</text>
+<line class="grid" x1="580" y1="15" x2="580" y2="555"/>
+<text class="tick" x="580" y="577" text-anchor="middle">16</text>
+<line class="grid" x1="30.5" y1="545" x2="580" y2="545"/>
+<text class="tick" x="22.5" y="552" text-anchor="end">-4</text>
+<line class="zero" x1="30.5" y1="439" x2="580" y2="439"/>
+<text class="tick" x="22.5" y="446" text-anchor="end">0</text>
+<line class="grid" x1="30.5" y1="333" x2="580" y2="333"/>
+<text class="tick" x="22.5" y="340" text-anchor="end">4</text>
+<line class="grid" x1="30.5" y1="227" x2="580" y2="227"/>
+<text class="tick" x="22.5" y="234" text-anchor="end">8</text>
+<line class="grid" x1="30.5" y1="121" x2="580" y2="121"/>
+<text class="tick" x="22.5" y="128" text-anchor="end">12</text>
+<line class="grid" x1="30.5" y1="15" x2="580" y2="15"/>
+<text class="tick" x="22.5" y="22" text-anchor="end">16</text>
+<g clip-path="url(#plot-0)">
+<path class="line" d="M102.1,16.007L580,534.973"/>
+</g>
+<circle class="dot" r="6" cx="364" cy="359.5"/>
+<circle class="dot" r="6" cx="202" cy="174"/>
+<circle class="dot" r="6" cx="445" cy="359.5"/>
+<circle class="dot" r="6" cx="310" cy="280"/>
+<circle class="dot" r="6" cx="283" cy="227"/>
+<circle class="dot" r="6" cx="256" cy="121"/>
+<circle class="dot" r="6" cx="472" cy="412.5"/>
+<circle class="dot" r="6" cx="391" cy="333"/>
+<circle class="dot" r="6" cx="310" cy="200.5"/>
+<circle class="dot" r="6" cx="175" cy="68"/>
+</svg>

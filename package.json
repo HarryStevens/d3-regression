@@ -47,7 +47,10 @@
   },
   "scripts": {
     "test": "mocha 'test/**/*-test.js' && eslint src test rollup.config.js && tsc --noEmit",
-    "prepublishOnly": "rm -rf dist && npm test && rollup -c"
+    "prepublishOnly": "rm -rf dist && npm test && rollup -c",
+    "generate-cover": "node scripts/generate-cover.mjs",
+    "generate-charts": "node scripts/generate-charts.mjs",
+    "generate-images": "npm run generate-cover && npm run generate-charts"
   },
   "engines": {
     "node": ">=12"
