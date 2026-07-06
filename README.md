@@ -257,7 +257,7 @@ See [<em>linear</em>.y()](#linear_y).
 
 If <em>bandwidth</em> is specified, sets the LOESS regression's bandwidth, or smoothing parameter, to the specific number between 0 and 1. The bandwidth represents the share of the total data points that are used to calculate each local fit. Higher bandwidths produce smoother lines, and vice versa. If <em>bandwidth</em> is not specified, returns a copy of the regression generator’s current bandwidth, which defaults to .3.
 
-<a name="regressionLogistic" href="#regressionLogistic">#</a> d3.<b>regressionLogistic</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/main/src/logistic.js "Source")
+<a name="regressionLogistic" href="#regressionLogistic">#</a> d3.<b>regressionLogistic</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/main/src/logistic.js "Source"), [Example](https://observablehq.com/@harrystevens/logistic-regression "Example")
 
 Creates a new logistic regression generator with default [<em>x</em>-](#logistic_x) and [<em>y</em>-](#logistic_y) accessors and a null [domain](#logistic_domain). Use [sigmoidal regression](#regressionSigmoidal) instead when the curve has a nonzero lower asymptote.
 
@@ -281,7 +281,7 @@ See [<em>linear</em>.y()](#linear_y).
 
 See [<em>linear</em>.domain()](#linear_domain).
 
-<a name="regressionSigmoidal" href="#regressionSigmoidal">#</a> d3.<b>regressionSigmoidal</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/main/src/sigmoidal.js "Source")
+<a name="regressionSigmoidal" href="#regressionSigmoidal">#</a> d3.<b>regressionSigmoidal</b>() · [Source](https://github.com/harrystevens/d3-regression/blob/main/src/sigmoidal.js "Source"), [Example](https://observablehq.com/@harrystevens/sigmoidal-regression "Example")
 
 Creates a new sigmoidal regression generator with default [<em>x</em>-](#sigmoidal_x) and [<em>y</em>-](#sigmoidal_y) accessors and a null [domain](#sigmoidal_domain). Use [logistic regression](#regressionLogistic) instead when the lower asymptote is known to be zero.
 
