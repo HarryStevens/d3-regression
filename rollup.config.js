@@ -1,6 +1,7 @@
 import {readFileSync} from "fs";
-import {terser} from "rollup-plugin-terser";
-import * as meta from "./package.json";
+import terser from "@rollup/plugin-terser";
+
+const meta = JSON.parse(readFileSync("./package.json", "utf-8"));
 
 const copyright = readFileSync("./LICENSE", "utf-8")
   .split(/\n/g)
