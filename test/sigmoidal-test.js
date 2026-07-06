@@ -35,10 +35,10 @@ it("sigmoidal(data) fits an increasing shifted sigmoid", () => {
     .y(d => d.y)
     .domain([-6, 8])(shuffle(data(100, 1.25, 20, 1.5)));
 
-  assert.ok(Math.abs(r.A - 100) < .001);
-  assert.ok(Math.abs(r.B - 1.25) < .001);
-  assert.ok(Math.abs(r.C - 20) < .001);
-  assert.ok(Math.abs(r.M - 1.5) < .001);
+  assert.ok(Math.abs(r.b - 100) < .001);
+  assert.ok(Math.abs(r.c - 1.25) < .001);
+  assert.ok(Math.abs(r.a - 20) < .001);
+  assert.ok(Math.abs(r.d - 1.5) < .001);
   assert.ok(r.rSquared > .999999999);
   assert.ok(Math.abs(r.predict(1.5) - 70) < .001);
   assert.deepStrictEqual(r[0].map(d => d.toFixed(6)), [-6, r.predict(-6)].map(d => d.toFixed(6)));
@@ -50,10 +50,10 @@ it("sigmoidal(data) fits a decreasing shifted sigmoid", () => {
     .x(d => d.x)
     .y(d => d.y)(shuffle(data(80, -.8, 10, 2)));
 
-  assert.ok(Math.abs(r.A - 80) < .001);
-  assert.ok(Math.abs(r.B + .8) < .001);
-  assert.ok(Math.abs(r.C - 10) < .001);
-  assert.ok(Math.abs(r.M - 2) < .001);
+  assert.ok(Math.abs(r.b - 80) < .001);
+  assert.ok(Math.abs(r.c + .8) < .001);
+  assert.ok(Math.abs(r.a - 10) < .001);
+  assert.ok(Math.abs(r.d - 2) < .001);
   assert.ok(r.rSquared > .999999999);
   assert.ok(Math.abs(r.predict(2) - 50) < .001);
 });
@@ -67,10 +67,10 @@ it("sigmoidal(data) fits a noisy shifted sigmoid trend", () => {
     .x(d => d.x)
     .y(d => d.y)(shuffle(noisy));
 
-  assert.ok(Math.abs(r.A - 100.17) < .01);
-  assert.ok(Math.abs(r.B - 1.23) < .01);
-  assert.ok(Math.abs(r.C - 20) < .01);
-  assert.ok(Math.abs(r.M - 1.51) < .01);
+  assert.ok(Math.abs(r.b - 100.17) < .01);
+  assert.ok(Math.abs(r.c - 1.23) < .01);
+  assert.ok(Math.abs(r.a - 20) < .01);
+  assert.ok(Math.abs(r.d - 1.51) < .01);
   assert.ok(r.rSquared > .998);
 });
 
@@ -84,8 +84,8 @@ it("sigmoidal(data) ignores invalid values", () => {
     .x(d => d.x)
     .y(d => d.y)(shuffle(dirty));
 
-  assert.ok(Math.abs(r.A - 100) < .001);
-  assert.ok(Math.abs(r.B - 1.25) < .001);
-  assert.ok(Math.abs(r.C - 20) < .001);
-  assert.ok(Math.abs(r.M - 1.5) < .001);
+  assert.ok(Math.abs(r.b - 100) < .001);
+  assert.ok(Math.abs(r.c - 1.25) < .001);
+  assert.ok(Math.abs(r.a - 20) < .001);
+  assert.ok(Math.abs(r.d - 1.5) < .001);
 });

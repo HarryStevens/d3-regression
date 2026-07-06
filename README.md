@@ -263,11 +263,11 @@ Creates a new logistic regression generator with default [<em>x</em>-](#logistic
 
 <a name="_logistic" href="#_logistic">#</a> <i>logistic</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logistic.js#L20 "Source")
 
-Computes the logistic regression, which takes the form <em>y</em> = <em>L</em> / (1 + <em>e</em><sup>-<em>k</em>(<em>x</em> - <em>x0</em>)</sup>), for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity) and nonpositive <em>y</em>-values. This is the right choice for logistic growth or decay whose lower asymptote is zero; for shifted sigmoid curves of the form <em>C</em> + <em>A</em> / (1 + <em>e</em><sup>-<em>B</em>(<em>x</em> - <em>M</em>)</sup>), use [regressionSigmoidal](#regressionSigmoidal).
+Computes the logistic regression, which takes the form <em>y</em> = <em>a</em> / (1 + <em>e</em><sup>-<em>b</em>(<em>x</em> - <em>c</em>)</sup>), for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity) and nonpositive <em>y</em>-values. This is the right choice for logistic growth or decay whose lower asymptote is zero; for shifted sigmoid curves of the form <em>a</em> + <em>b</em> / (1 + <em>e</em><sup>-<em>c</em>(<em>x</em> - <em>d</em>)</sup>), use [regressionSigmoidal](#regressionSigmoidal).
 
 Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
-Also returns properties <em>L</em>, <em>k</em>, and <em>x0</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
+Also returns properties <em>a</em>, <em>b</em>, and <em>c</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
 <a name="logistic_x" href="#logistic_x">#</a> <i>logistic</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/logistic.js#L138 "Source")
 
@@ -287,11 +287,11 @@ Creates a new sigmoidal regression generator with default [<em>x</em>-](#sigmoid
 
 <a name="_sigmoidal" href="#_sigmoidal">#</a> <i>sigmoidal</i>(<i>data</i>) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/sigmoidal.js#L20 "Source")
 
-Computes the sigmoidal regression, which takes the form <em>y</em> = <em>C</em> + <em>A</em> / (1 + <em>e</em><sup>-<em>B</em>(<em>x</em> - <em>M</em>)</sup>), for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity). This four-parameter model fits shifted sigmoid curves with a baseline offset; for ordinary logistic growth or decay from zero to <em>L</em>, use [regressionLogistic](#regressionLogistic).
+Computes the sigmoidal regression, which takes the form <em>y</em> = <em>a</em> + <em>b</em> / (1 + <em>e</em><sup>-<em>c</em>(<em>x</em> - <em>d</em>)</sup>), for the specified *data* points, ignoring points with invalid values (null, undefined, NaN, Infinity). This four-parameter model fits shifted sigmoid curves with a baseline offset; for ordinary logistic growth or decay from zero to <em>a</em>, use [regressionLogistic](#regressionLogistic).
 
 Returns a smooth line represented as an array of points, where each point is an array of two numbers representing the point's coordinates.
 
-Also returns properties <em>A</em>, <em>B</em>, <em>C</em>, and <em>M</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
+Also returns properties <em>a</em>, <em>b</em>, <em>c</em>, and <em>d</em>, representing the equation's coefficients, and <em>rSquared</em>, representing the coefficient of determination. Lastly, returns a <em>predict</em> property, which is a function that outputs a <em>y</em>-coordinate given an input <em>x</em>-coordinate.
 
 <a name="sigmoidal_x" href="#sigmoidal_x">#</a> <i>sigmoidal</i>.<b>x</b>([<i>x</i>]) · [Source](https://github.com/harrystevens/d3-regression/blob/master/src/sigmoidal.js#L72 "Source")
 

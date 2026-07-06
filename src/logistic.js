@@ -85,9 +85,9 @@ export default function() {
           fn = x => predict(L, k, x0, x),
           out = interpose(xmin, xmax, fn);
 
-    out.L = L;
-    out.k = k;
-    out.x0 = x0;
+    out.a = L;
+    out.b = k;
+    out.c = x0;
     out.predict = fn;
     out.rSquared = determination(points, pointX, pointY, Y, fn);
 

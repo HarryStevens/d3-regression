@@ -47,16 +47,16 @@ logResult.a.toFixed();
 logResult.b.toFixed();
 
 const logisticResult = regressionLogistic<Datum>().x(d => d.x).y(d => d.y)(data);
-logisticResult.L.toFixed();
-logisticResult.k.toFixed();
-logisticResult.x0.toFixed();
+logisticResult.a.toFixed();
+logisticResult.b.toFixed();
+logisticResult.c.toFixed();
 logisticResult.predict(3).toFixed();
 
 const sigmoidalResult = regressionSigmoidal<Datum>().x(d => d.x).y(d => d.y)(data);
-sigmoidalResult.A.toFixed();
-sigmoidalResult.B.toFixed();
-sigmoidalResult.C.toFixed();
-sigmoidalResult.M.toFixed();
+sigmoidalResult.a.toFixed();
+sigmoidalResult.b.toFixed();
+sigmoidalResult.c.toFixed();
+sigmoidalResult.d.toFixed();
 sigmoidalResult.predict(3).toFixed();
 
 const poly = regressionPoly<Datum>().x(d => d.x).y(d => d.y).order(3);

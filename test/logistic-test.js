@@ -29,29 +29,29 @@ it("logistic.domain(domain) sets the domain explicitly", () => {
   assert.deepStrictEqual(r.domain(), [0, 50]);
 });
 
-it("logistic(data) calculates L, k, x0, R^2, and returns a line representing an increasing logistic regression", () => {
+it("logistic(data) calculates a, b, c, R^2, and returns a line representing an increasing logistic regression", () => {
   const r = d3.regressionLogistic()
     .x(d => d.x)
     .y(d => d.y)
     .domain([-6, 8])(shuffle(data(100, 1.25, 1.5)));
 
-  assert.strictEqual(r.L.toFixed(6), "100.000000");
-  assert.strictEqual(r.k.toFixed(6), "1.250000");
-  assert.strictEqual(r.x0.toFixed(6), "1.500000");
+  assert.strictEqual(r.a.toFixed(6), "100.000000");
+  assert.strictEqual(r.b.toFixed(6), "1.250000");
+  assert.strictEqual(r.c.toFixed(6), "1.500000");
   assert.strictEqual(r.rSquared.toFixed(6), "1.000000");
   assert.strictEqual(r.predict(1.5).toFixed(6), "50.000000");
   assert.deepStrictEqual(r[0].map(d => d.toFixed(6)), [-6, logistic(100, 1.25, 1.5, -6)].map(d => d.toFixed(6)));
   assert.deepStrictEqual(r[r.length - 1].map(d => d.toFixed(6)), [8, logistic(100, 1.25, 1.5, 8)].map(d => d.toFixed(6)));
 });
 
-it("logistic(data) calculates L, k, x0, and R^2 for a decreasing logistic regression", () => {
+it("logistic(data) calculates a, b, c, and R^2 for a decreasing logistic regression", () => {
   const r = d3.regressionLogistic()
     .x(d => d.x)
     .y(d => d.y)(shuffle(data(80, -.8, 2)));
 
-  assert.strictEqual(r.L.toFixed(6), "80.000000");
-  assert.strictEqual(r.k.toFixed(6), "-0.800000");
-  assert.strictEqual(r.x0.toFixed(6), "2.000000");
+  assert.strictEqual(r.a.toFixed(6), "80.000000");
+  assert.strictEqual(r.b.toFixed(6), "-0.800000");
+  assert.strictEqual(r.c.toFixed(6), "2.000000");
   assert.strictEqual(r.rSquared.toFixed(6), "1.000000");
   assert.strictEqual(r.predict(2).toFixed(6), "40.000000");
 });
@@ -65,9 +65,9 @@ it("logistic(data) fits a noisy logistic trend", () => {
     .x(d => d.x)
     .y(d => d.y)(shuffle(noisy));
 
-  assert.ok(Math.abs(r.L - 102.453207) < 1e-6);
-  assert.ok(Math.abs(r.k - 1.226651) < 1e-6);
-  assert.ok(Math.abs(r.x0 - 1.576985) < 1e-6);
+  assert.ok(Math.abs(r.a - 102.453207) < 1e-6);
+  assert.ok(Math.abs(r.b - 1.226651) < 1e-6);
+  assert.ok(Math.abs(r.c - 1.576985) < 1e-6);
   assert.ok(r.rSquared > .998);
 });
 
@@ -83,7 +83,7 @@ it("logistic(data) ignores invalid and nonpositive y values", () => {
     .x(d => d.x)
     .y(d => d.y)(shuffle(dirty));
 
-  assert.strictEqual(r.L.toFixed(6), "100.000000");
-  assert.strictEqual(r.k.toFixed(6), "1.250000");
-  assert.strictEqual(r.x0.toFixed(6), "1.500000");
+  assert.strictEqual(r.a.toFixed(6), "100.000000");
+  assert.strictEqual(r.b.toFixed(6), "1.250000");
+  assert.strictEqual(r.c.toFixed(6), "1.500000");
 });

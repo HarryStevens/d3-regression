@@ -27,16 +27,16 @@ export interface RegressionPowerResult extends RegressionResult {
 }
 
 export interface RegressionLogisticResult extends RegressionResult {
-  L: number;
-  k: number;
-  x0: number;
+  a: number;
+  b: number;
+  c: number;
 }
 
 export interface RegressionSigmoidalResult extends RegressionResult {
-  A: number;
-  B: number;
-  C: number;
-  M: number;
+  a: number;
+  b: number;
+  c: number;
+  d: number;
 }
 
 export interface RegressionQuadraticResult extends RegressionResult {
