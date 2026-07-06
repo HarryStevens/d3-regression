@@ -8,4 +8,6 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 
+dist/
+
 .DS_Store

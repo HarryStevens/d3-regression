@@ -1,4 +1,4 @@
-import { angle, midpoint } from "./geometry";
+import { angle, midpoint } from "./geometry.js";
 
 // Given a start point, an end point, and a prediciton function,
 // returns a smooth line.

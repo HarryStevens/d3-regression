@@ -1,9 +1,12 @@
 // Adapted from vega-statistics by Jeffrey Heer
 // License: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/LICENSE
 // Source: https://github.com/vega/vega/blob/f058b099decad9db78301405dd0d2e9d8ba3d51a/packages/vega-statistics/src/regression/points.js
+export const pointX = d => d[0];
+export const pointY = d => d[1];
+
 export function points(data, x, y, sort) {
-  data = data.filter((d, i) => {
-    let u = x(d, i), v = y(d, i);
+  data = arrayify(data).filter((d, i, data) => {
+    let u = x(d, i, data), v = y(d, i, data);
     return u != null && isFinite(u) && v != null && isFinite(v);
   });
 
@@ -37,15 +40,22 @@ export function points(data, x, y, sort) {
 
 
 export function visitPoints(data, x, y, cb){
+  data = arrayify(data);
+
   let iterations = 0;
 
   for (let i = 0, n = data.length; i < n; i++) {
     const d = data[i],
-          dx = +x(d, i, data),
-          dy = +y(d, i, data);
+          ux = x(d, i, data),
+          uy = y(d, i, data);
 
-    if (dx != null && isFinite(dx) && dy != null && isFinite(dy)) {
-      cb(dx, dy, iterations++);
+    if (ux != null && isFinite(ux) && uy != null && isFinite(uy)) {
+      cb(+ux, +uy, iterations++);
     }
   }
+}
+
+
+function arrayify(data) {
+  return Array.isArray(data) ? data : Array.from(data);
 }

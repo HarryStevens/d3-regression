@@ -1,5 +1,5 @@
-const tape = require("tape"),
-      d3 = require("../");
+import assert from "assert";
+import * as d3 from "../src/index.js";
 
 function shuffle(arr){
   var m = arr.length, t, i;
@@ -13,23 +13,32 @@ function shuffle(arr){
 }
 
 
-tape("linear.domain(domain) sets the domain explicitly", function(test) {
+it("linear.domain(domain) sets the domain explicitly", () => {
   const r = d3.regressionLinear().domain([0, 50]);
-  test.deepEqual(r.domain(), [0, 50]);
-  test.end();
+  assert.deepStrictEqual(r.domain(), [0, 50]);
 });
 
-tape("linear(data) calculates the slope, y-intercept, and R^2, and returns a line representing the regression", function(test) {
+it("linear(data) calculates the slope, y-intercept, and R^2, and returns a line representing the regression", () => {
   const data = [[0, 2], [1, 1], [2, 0]];
   const r = d3.regressionLinear()
     .x(d => d[0])
-    .y(d => d[1])
-    (shuffle(data));
+    .y(d => d[1])(shuffle(data));
   
-  test.deepEqual(r[0].map(d => Math.round(d)), [0, 2]);
-  test.deepEqual(r[1].map(d => Math.round(d)), [2, 0]);
-  test.equal(Math.round(r.a), -1);
-  test.equal(Math.round(r.b), 2);
-  test.equal(r.rSquared, 1);
-  test.end();
+  assert.deepStrictEqual(r[0].map(d => Math.round(d)), [0, 2]);
+  assert.deepStrictEqual(r[1].map(d => Math.round(d) || 0), [2, 0]);
+  assert.strictEqual(Math.round(r.a), -1);
+  assert.strictEqual(Math.round(r.b), 2);
+  assert.strictEqual(r.rSquared, 1);
+});
+
+it("linear(data) ignores invalid values before coercion", () => {
+  const clean = [[0, 2], [1, 1], [2, 0]],
+        dirty = clean.concat([[null, 100], [100, null], [NaN, 100], [100, Infinity]]),
+        a = d3.regressionLinear()(clean),
+        b = d3.regressionLinear()(dirty);
+
+  assert.deepStrictEqual(b.map(p => p.map(d => d.toFixed(6))), a.map(p => p.map(d => d.toFixed(6))));
+  assert.strictEqual(b.a.toFixed(6), a.a.toFixed(6));
+  assert.strictEqual(b.b.toFixed(6), a.b.toFixed(6));
+  assert.strictEqual(b.rSquared.toFixed(6), a.rSquared.toFixed(6));
 });
