@@ -1,6 +1,6 @@
 {
   "name": "d3-regression",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Calculate statistical regressions for two-dimensional data",
   "homepage": "https://github.com/HarryStevens/d3-regression#readme",
   "repository": {

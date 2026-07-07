@@ -35,11 +35,7 @@ export default function(){
         n = xv.length,
         k = order + 1,
         xScale = maxAbs(xv) || 1,
-        yScale = maxAbs(yv) || 1,
-        sx = xv.map(d => d / xScale),
-        sy = yv.map(d => d / yScale),
-        lhs = [],
-        rhs = [];
+        yScale = maxAbs(yv) || 1;
 
     let Y = 0, n0 = 0,
         xmin = domain ? +domain[0] : Infinity,
@@ -54,31 +50,8 @@ export default function(){
       }
     });
 
-    let i, j, l, v, c;
-
-    for (i = 0; i < k; ++i) {
-      for (l = 0, v = 0; l < n; ++l) {
-        v += Math.pow(sx[l], i) * sy[l];
-      }
-      lhs.push(v);
-
-      c = new Float64Array(k);
-      for (j=0; j<k; ++j) {
-        for (l=0, v=0; l<n; ++l) {
-          v += Math.pow(sx[l], i + j);
-        }
-        c[j] = v;
-      }
-      rhs.push(c);
-    }
-    rhs.push(lhs);
-
-    const coef = gaussianElimination(rhs),
-          predictScaled = x => {
-            let y = coef[0] + coef[1] * x + coef[2] * x * x;
-            for (i = 3; i < k; ++i) y += coef[i] * Math.pow(x, i);
-            return y;
-          },
+    const coef = gaussianElimination(normalEquations(xv, yv, n, order, k, xScale, yScale)),
+          predictScaled = x => evaluatePolynomial(coef, x),
           fn = x => predictScaled((x - ux) / xScale) * yScale + uy,
           rescale = xScale > 1e3 || yScale > 1e3,
           out = rescale
@@ -119,6 +92,43 @@ function maxAbs(values) {
     if (v > max) max = v;
   }
   return max;
+}
+
+function normalEquations(xv, yv, n, order, k, xScale, yScale) {
+  const powers = new Float64Array(2 * order + 1),
+        lhs = new Float64Array(k),
+        rhs = [];
+
+  powers[0] = n;
+
+  for (let l = 0; l < n; ++l) {
+    const x = xv[l] / xScale,
+          y = yv[l] / yScale;
+
+    let p = 1;
+    lhs[0] += y;
+
+    for (let i = 1; i <= 2 * order; ++i) {
+      p *= x;
+      powers[i] += p;
+      if (i <= order) lhs[i] += p * y;
+    }
+  }
+
+  for (let i = 0; i < k; ++i) {
+    const c = new Float64Array(k);
+    for (let j = 0; j < k; ++j) c[j] = powers[i + j];
+    rhs.push(c);
+  }
+  rhs.push(lhs);
+
+  return rhs;
+}
+
+function evaluatePolynomial(coef, x) {
+  let y = coef[coef.length - 1];
+  for (let i = coef.length - 2; i >= 0; --i) y = y * x + coef[i];
+  return y;
 }
 
 function uncenter(k, a, x, y) {
